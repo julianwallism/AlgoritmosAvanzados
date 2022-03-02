@@ -1,0 +1,17 @@
+presetnacio,
+mvc
+
+pinti corva d'execucio de distints costs de complexitat asimptotica
+n -> for
+nlog(n) -> for(n) amb for de log(n) a dins
+n2 -> for n for n
+
+dos fils 
+
+mvc:
+	gui
+	control
+	no fa falta dades
+
+
+proces -> thread
