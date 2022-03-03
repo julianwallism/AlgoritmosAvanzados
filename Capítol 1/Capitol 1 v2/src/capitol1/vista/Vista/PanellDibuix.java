@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import capitol1.MeuError;
 import capitol1.model.Model;
+import java.awt.Color;
 
 /**
  *
@@ -68,6 +69,18 @@ public class PanellDibuix extends JPanel implements MouseListener {
 
     public void paint(Graphics gr) {
         // Dibuixar rectangles
+        if (this.getWidth() > 0) {
+            bima = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            bima.getGraphics().setColor(Color.white);
+            bima.getGraphics().fillRect(0, 0, this.getWidth(), this.getHeight());
+        }
+        gr.drawImage(bima, 0, 0, this);
+        gr.setColor(Color.red);
+        gr.drawRect(0, 0, this.getWidth()/5, 10);
+        gr.drawRect(this.getWidth()/5, 0, this.getWidth()/5, 10);
+        gr.drawRect(2*this.getWidth()/5, 0, this.getWidth()/5, 10);
+        gr.drawRect(3*this.getWidth()/5, 0, this.getWidth()/5, 10);
+        gr.drawRect(4*this.getWidth()/5, 0, this.getWidth()/5, 10);
     }
 }
 
