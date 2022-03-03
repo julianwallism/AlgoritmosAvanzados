@@ -15,7 +15,6 @@ import java.awt.Color;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JProgressBar;
 
 /**
  *
@@ -44,10 +43,6 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
         this.add(BorderLayout.NORTH, bots);
         PanellDibuix panell = new PanellDibuix(800, 400, prog.getModel(), this);
         this.add(BorderLayout.CENTER, panell);
-        JProgressBar barra = new JProgressBar();
-        barra.setOpaque(true);
-        barra.addChangeListener(this);
-        this.add(BorderLayout.SOUTH, barra);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 

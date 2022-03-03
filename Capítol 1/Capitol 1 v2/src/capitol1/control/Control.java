@@ -9,6 +9,7 @@ import capitol1.PerEsdeveniments;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Control extends Thread implements PerEsdeveniments {
+
     private final main prog;
     private boolean seguir;
 
@@ -20,7 +21,7 @@ public class Control extends Thread implements PerEsdeveniments {
     @Override
     public void run() {
         while (seguir) {
-            
+
         }
     }
 
@@ -35,9 +36,102 @@ public class Control extends Thread implements PerEsdeveniments {
     @Override
     public void notificar(String s) {
         if (s.startsWith("Executar")) {
-            if (!seguir) this.start();
+            if (!seguir) {
+                this.start();
+            }
             seguir = true;
+            switch (this.prog.getModel().getOpcioTriada()) {
+                case "n":
+                    this.n();
+                    break;
+                case "n^2":
+                    this.n2();
+                    break;
+                case "n*log(n)":
+                    this.nlogn();
+                    break;
+                case "log(n)":
+                    this.logn();
+                    break;
+                case "sqrt(n)":
+                    this.sqrtn();
+                    break;
+            }
             System.out.println("Programa executant-se amb l'opció " + this.prog.getModel().getOpcioTriada());
+        }
+    }
+
+    private void sqrtn() {
+        try {
+            for (int i : prog.getModel().ns) {
+                // començar a contar temps
+                for (int j = 0; j < Math.sqrt(i); j++) {
+                    Thread.sleep(1);
+                }
+                // notificar que n ha acabat
+            }
+        } catch (InterruptedException e) {
+            MeuError.informaError(e);
+        }
+    }
+
+    private void logn() {
+        try {
+            for (int i : prog.getModel().ns) {
+                // començar a contar temps
+                for (int j = 0; j < Math.log(i); j++) {
+                    Thread.sleep(1);
+                }
+                // notificar que n ha acabat
+            }
+        } catch (InterruptedException e) {
+            MeuError.informaError(e);
+        }
+    }
+
+    private void n() {
+        try {
+            for (int i : prog.getModel().ns) {
+                // començar a contar temps
+                for (int j = 0; j < i; j++) {
+                    Thread.sleep(1);
+                }
+                // notificar que n ha acabat
+            }
+        } catch (InterruptedException e) {
+            MeuError.informaError(e);
+        }
+    }
+
+    private void nlogn() {
+        try {
+            for (int i : prog.getModel().ns) {
+                // començar a contar temps
+                for (int j = 0; j < i; j++) {
+                    for (int k = 0; k < Math.log(i); k++) {
+                        Thread.sleep(1);
+                    }
+                }
+                // notificar que n ha acabat
+            }
+        } catch (InterruptedException e) {
+            MeuError.informaError(e);
+        }
+    }
+
+    private void n2() {
+        try {
+            for (int i : prog.getModel().ns) {
+                // començar a contar temps
+                for (int j = 0; j < i; j++) {
+                    for (int k = 0; k < i; k++) {
+                        Thread.sleep(1);
+                    }
+                }
+                // notificar que n ha acabat
+            }
+        } catch (InterruptedException e) {
+            MeuError.informaError(e);
         }
     }
 }

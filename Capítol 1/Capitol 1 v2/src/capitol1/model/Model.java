@@ -9,6 +9,7 @@ import capitol1.PerEsdeveniments;
  */
 public class Model implements PerEsdeveniments {
     public final String[] opcions = {"sqrt(n)", "log(n)", "n", "n*log(n)", "n^2"};
+    public final int[] ns = {100, 200, 300, 400};
     private main prog;
     private int x, y, x2, y2;
     private String opcioTriada;

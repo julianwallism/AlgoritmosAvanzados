@@ -75,12 +75,16 @@ public class PanellDibuix extends JPanel implements MouseListener {
             bima.getGraphics().fillRect(0, 0, this.getWidth(), this.getHeight());
         }
         gr.drawImage(bima, 0, 0, this);
-        gr.setColor(Color.red);
-        gr.drawRect(0, 0, this.getWidth()/5, 10);
-        gr.drawRect(this.getWidth()/5, 0, this.getWidth()/5, 10);
-        gr.drawRect(2*this.getWidth()/5, 0, this.getWidth()/5, 10);
-        gr.drawRect(3*this.getWidth()/5, 0, this.getWidth()/5, 10);
-        gr.drawRect(4*this.getWidth()/5, 0, this.getWidth()/5, 10);
+        gr.setColor(Color.black);
+        gr.fillRect(10, 10, 5, this.getHeight()-25);
+        gr.fillRect(10, this.getHeight()-20, this.getWidth()-25, 5);
+        //Aquests dos fors afegeix els strokes al gràfics.
+        for (int i = 1; i <= 4; i++) {
+            gr.fillRect(i*(this.getWidth()/4)-25, this.getHeight()-25, 4, 5);
+        }
+        for (int i = 1; i <= 7; i++) {
+            gr.fillRect(15,i*(this.getHeight()/8)-15, 5, 4);
+        }
     }
 }
 
