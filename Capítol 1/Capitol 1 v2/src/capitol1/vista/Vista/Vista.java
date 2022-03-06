@@ -21,6 +21,7 @@ import javax.swing.JLabel;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Vista extends JFrame implements ActionListener, PerEsdeveniments, ChangeListener {
+
     private main prog;
     private JComboBox selector;
 
@@ -35,7 +36,6 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
         bots.add(label);
         selector = new JComboBox();
         selector.setModel(new DefaultComboBoxModel(p.getModel().opcions));
-        selector.addActionListener(this);
         bots.add(selector);
         JButton boto1 = new JButton("Executar");
         boto1.addActionListener(this);
@@ -61,17 +61,25 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
     @Override
     public void actionPerformed(ActionEvent e) {
         // això vol dir que s'ha pitjat el botó d'executar
-        if (e.paramString().contains("Executar")) prog.notificar("Executar");
-        else if (e.paramString().contains("comboBoxChanged")) prog.notificar("Opció " + this.selector.getSelectedItem());
+        if (e.paramString().contains("Executar")) {
+            prog.getModel().setOpcioTriada(this.selector.getSelectedItem().toString());
+            prog.notificar("Executar");
+        }
     }
 
     @Override
     public void notificar(String s) {
-        
+        if (s.startsWith("Event iter")) {
+            s = s.replaceAll("Event iter ", "");
+            int n = Integer.parseInt(s.split(" ")[0]);
+            long temps = Long.parseLong(s.split(" ")[1]);
+            System.out.println("N: " + n + ", temps: " + temps);
+            // Crida a pintar linia segons n i temps
+        }
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        
+
     }
 }

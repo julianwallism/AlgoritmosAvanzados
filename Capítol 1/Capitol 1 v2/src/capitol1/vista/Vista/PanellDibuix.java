@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import capitol1.MeuError;
+import capitol1.PerEsdeveniments;
 import capitol1.model.Model;
 import java.awt.Color;
 
@@ -14,15 +15,16 @@ import java.awt.Color;
  *
  * @authors Dawid Roch & Julià Wallis
  */
-public class PanellDibuix extends JPanel implements MouseListener {
+public class PanellDibuix extends JPanel implements MouseListener, PerEsdeveniments {
 
     private int w;
     private int h;
     private Model mod;
     private Vista vis;
-    protected final int FPS = 24;  // 24 frames per segon
+    protected final int FPS = 144;  // 24 frames per segon
     private final ProcesPintat procpin;
     private BufferedImage bima;
+    private String opcioTriada;
 
     public PanellDibuix(int x, int y, Model m, Vista v) {
         w = x;
@@ -30,6 +32,7 @@ public class PanellDibuix extends JPanel implements MouseListener {
         mod = m;
         vis = v;
         bima = null;
+        opcioTriada = "";
         this.addMouseListener(this);
         this.setPreferredSize(new Dimension(w, h));
         procpin = new ProcesPintat(this);
@@ -66,6 +69,13 @@ public class PanellDibuix extends JPanel implements MouseListener {
             paint(this.getGraphics());
         }
     }
+    
+    @Override
+    public void notificar(String s) {
+        if (s.startsWith("Executar")) {
+            opcioTriada = mod.getOpcioTriada();
+        }
+    }
 
     public void paint(Graphics gr) {
         // Dibuixar rectangles
@@ -78,7 +88,7 @@ public class PanellDibuix extends JPanel implements MouseListener {
         gr.setColor(Color.black);
         gr.fillRect(10, 10, 5, this.getHeight()-25);
         gr.fillRect(10, this.getHeight()-20, this.getWidth()-25, 5);
-        //Aquests dos fors afegeix els strokes al gràfics.
+        // Aquests dos fors afegeix els strokes al gràfics.
         for (int i = 1; i <= 4; i++) {
             gr.fillRect(i*(this.getWidth()/4)-25, this.getHeight()-25, 4, 5);
         }

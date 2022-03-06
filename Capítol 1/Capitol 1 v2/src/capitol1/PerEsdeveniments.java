@@ -9,5 +9,5 @@ package capitol1;
  * @author mascport
  */
 public interface PerEsdeveniments {
-   public void notificar(String s); 
+   public void notificar(String s);
 }

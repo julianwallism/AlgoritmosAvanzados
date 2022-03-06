@@ -9,7 +9,6 @@ import capitol1.vista.Vista.Vista;
  * @authors Dawid Roch & Julià Wallis
  */
 public class main implements PerEsdeveniments {
-
     private Model mod;    // Punter al Model
     private Vista vis;    // Punter a la Vista
     private Control con;  // Punter al Control
@@ -29,8 +28,11 @@ public class main implements PerEsdeveniments {
     // Funció símple de la comunicació per Patró d'esdeveniments
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Executar")) con.notificar(s);
-        else if (s.startsWith("Opció")) mod.notificar(s);
+        if (s.startsWith("Executar")) {
+            con.notificar(s);
+        } else if (s.startsWith("Event iter")) {
+            vis.notificar(s);
+        }
     }
 
     // Mètode public de retorn de la instància del model de dades

@@ -13,7 +13,7 @@ public class Model implements PerEsdeveniments {
     private main prog;
     private int x, y, x2, y2;
     private String opcioTriada;
-
+    
     public Model(main p) {
         prog = p;
         x = y = x2 = y2 = 0;
@@ -50,11 +50,12 @@ public class Model implements PerEsdeveniments {
         return opcioTriada;
     }
 
+    public void setOpcioTriada(String opcioTriada) {
+        this.opcioTriada = opcioTriada;
+    }
+
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Opció")) {
-            this.opcioTriada = s.replace("Opció ", "");
-            System.out.println("Opció triada: " + this.opcioTriada);
-        }
+        
     }
 }
