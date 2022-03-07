@@ -2,20 +2,19 @@ package capitol1.vista.Vista;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import capitol1.MeuError;
 import capitol1.PerEsdeveniments;
 import capitol1.model.Model;
 import java.awt.Color;
+import java.awt.Graphics2D;
 
 /**
  *
  * @authors Dawid Roch & Julià Wallis
  */
-public class PanellDibuix extends JPanel implements MouseListener, PerEsdeveniments {
+public class PanellDibuix extends JPanel implements PerEsdeveniments {
 
     private int w;
     private int h;
@@ -31,37 +30,11 @@ public class PanellDibuix extends JPanel implements MouseListener, PerEsdevenime
         h = y;
         mod = m;
         vis = v;
-        bima = null;
         opcioTriada = "";
-        this.addMouseListener(this);
+        bima = null;
         this.setPreferredSize(new Dimension(w, h));
         procpin = new ProcesPintat(this);
         procpin.start();
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        
     }
 
     public void repaint() {
@@ -69,7 +42,7 @@ public class PanellDibuix extends JPanel implements MouseListener, PerEsdevenime
             paint(this.getGraphics());
         }
     }
-    
+
     @Override
     public void notificar(String s) {
         if (s.startsWith("Executar")) {
@@ -79,26 +52,31 @@ public class PanellDibuix extends JPanel implements MouseListener, PerEsdevenime
 
     public void paint(Graphics gr) {
         // Dibuixar rectangles
-        if (this.getWidth() > 0) {
-            bima = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        if (bima == null) {
+            bima = new BufferedImage(this.w, this.h, BufferedImage.TYPE_INT_ARGB);
             bima.getGraphics().setColor(Color.white);
-            bima.getGraphics().fillRect(0, 0, this.getWidth(), this.getHeight());
+            bima.getGraphics().fillRect(0, 0, this.w, this.h);
+            gr.drawImage(bima, 0, 0, this);
         }
-        gr.drawImage(bima, 0, 0, this);
         gr.setColor(Color.black);
-        gr.fillRect(10, 10, 5, this.getHeight()-25);
-        gr.fillRect(10, this.getHeight()-20, this.getWidth()-25, 5);
+        gr.fillRect(10, 10, 5, this.getHeight() - 25);
+        gr.fillRect(10, this.getHeight() - 20, this.getWidth() - 25, 5);
         // Aquests dos fors afegeix els strokes al gràfics.
         for (int i = 1; i <= 4; i++) {
-            gr.fillRect(i*(this.getWidth()/4)-25, this.getHeight()-25, 4, 5);
+            gr.fillRect(i * (this.getWidth() / 4) - 25, this.getHeight() - 25, 4, 5);
         }
         for (int i = 1; i <= 7; i++) {
-            gr.fillRect(15,i*(this.getHeight()/8)-15, 5, 4);
+            gr.fillRect(15, i * (this.getHeight() / 8) - 15, 5, 4);
         }
+    }
+
+    public void pintaGrafic(int n, long temps, int n_anterior, long temps_anterior) {
+        this.getGraphics().drawLine((n_anterior / 100) * (this.getWidth() / 4) - 25, (int) temps_anterior, (n / 100) * (this.getWidth() / 4) - 25, (int) temps);
     }
 }
 
 class ProcesPintat extends Thread {
+
     private PanellDibuix pan;
 
     public ProcesPintat(PanellDibuix pd) {

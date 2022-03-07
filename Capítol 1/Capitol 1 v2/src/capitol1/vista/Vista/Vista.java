@@ -24,6 +24,9 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
 
     private main prog;
     private JComboBox selector;
+    private int n_anterior = 0;
+    private long temps_anterior = 0;
+    private PanellDibuix panell;
 
     public Vista(String s, main p) {
         super(s);
@@ -39,9 +42,12 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
         bots.add(selector);
         JButton boto1 = new JButton("Executar");
         boto1.addActionListener(this);
+        JButton boto2 = new JButton("Aturar");
+        boto2.addActionListener(this);
         bots.add(boto1);
+        bots.add(boto2);
         this.add(BorderLayout.NORTH, bots);
-        PanellDibuix panell = new PanellDibuix(800, 400, prog.getModel(), this);
+        this.panell = new PanellDibuix(800, 400, prog.getModel(), this);
         this.add(BorderLayout.CENTER, panell);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -64,6 +70,8 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
         if (e.paramString().contains("Executar")) {
             prog.getModel().setOpcioTriada(this.selector.getSelectedItem().toString());
             prog.notificar("Executar");
+        } else if (e.paramString().contains("Aturar")) {
+            prog.notificar("Aturar");
         }
     }
 
@@ -75,6 +83,14 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
             long temps = Long.parseLong(s.split(" ")[1]);
             System.out.println("N: " + n + ", temps: " + temps);
             // Crida a pintar linia segons n i temps
+            panell.pintaGrafic(n, temps, n_anterior, temps_anterior);
+            if (n != 400) {
+                n_anterior = n;
+                temps_anterior = temps;
+            } else {
+                n_anterior = 0;
+                temps_anterior = 0;
+            }
         }
     }
 

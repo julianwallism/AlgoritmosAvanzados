@@ -32,6 +32,8 @@ public class main implements PerEsdeveniments {
             con.notificar(s);
         } else if (s.startsWith("Event iter")) {
             vis.notificar(s);
+        } else if (s.startsWith("Aturar")) {
+            con.notificar(s);
         }
     }
 

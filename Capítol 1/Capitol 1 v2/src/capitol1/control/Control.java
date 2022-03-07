@@ -14,13 +14,13 @@ public class Control extends Thread implements PerEsdeveniments {
     private boolean seguir;
 
     public Control(main p) {
-        prog = p;
-        seguir = false;
+        this.prog = p;
+        this.seguir = false;
     }
 
     @Override
     public void run() {
-        while (seguir) {
+        while (this.seguir) {
             System.out.println("Programa executant-se amb l'opció " + this.prog.getModel().getOpcioTriada());
             switch (this.prog.getModel().getOpcioTriada()) {
                 case "n":
@@ -53,10 +53,11 @@ public class Control extends Thread implements PerEsdeveniments {
     @Override
     public void notificar(String s) {
         if (s.startsWith("Executar")) {
-            if (!seguir) {
-                seguir = true;
-                this.start();
-            }
+            while (this.seguir) {}
+            this.seguir = true;
+            this.start();
+        } else if (s.startsWith("Aturar")) {
+            this.seguir = false;
         }
     }
 
