@@ -15,31 +15,32 @@ public class Control extends Thread implements PerEsdeveniments {
 
     public Control(main p) {
         this.prog = p;
-        this.seguir = false;
     }
 
     @Override
     public void run() {
-        while (this.seguir) {
-            System.out.println("Programa executant-se amb l'opció " + this.prog.getModel().getOpcioTriada());
-            switch (this.prog.getModel().getOpcioTriada()) {
-                case "n":
-                    this.n();
-                    break;
-                case "n^2":
-                    this.n2();
-                    break;
-                case "n*log(n)":
-                    this.nlogn();
-                    break;
-                case "log(n)":
-                    this.logn();
-                    break;
-                case "sqrt(n)":
-                    this.sqrtn();
-                    break;
+        while (true) {
+            while (this.seguir) {
+                System.out.println("Programa executant-se amb l'opció " + this.prog.getModel().getOpcioTriada());
+                switch (this.prog.getModel().getOpcioTriada()) {
+                    case "n":
+                        this.n();
+                        break;
+                    case "n^2":
+                        this.n2();
+                        break;
+                    case "n*log(n)":
+                        this.nlogn();
+                        break;
+                    case "log(n)":
+                        this.logn();
+                        break;
+                    case "sqrt(n)":
+                        this.sqrtn();
+                        break;
+                }
+                this.seguir = false;
             }
-            this.seguir = false;
         }
     }
 
@@ -55,7 +56,9 @@ public class Control extends Thread implements PerEsdeveniments {
     public void notificar(String s) {
         if (s.startsWith("Executar")) {
             this.seguir = true;
-            this.start();
+            try {
+                this.start();
+            } catch (Exception e) {}
         } else if (s.startsWith("Aturar")) {
             this.seguir = false;
         }
