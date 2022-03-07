@@ -39,6 +39,7 @@ public class Control extends Thread implements PerEsdeveniments {
                     this.sqrtn();
                     break;
             }
+            this.seguir = false;
         }
     }
 
@@ -53,7 +54,6 @@ public class Control extends Thread implements PerEsdeveniments {
     @Override
     public void notificar(String s) {
         if (s.startsWith("Executar")) {
-            while (this.seguir) {}
             this.seguir = true;
             this.start();
         } else if (s.startsWith("Aturar")) {
@@ -73,7 +73,6 @@ public class Control extends Thread implements PerEsdeveniments {
                 long tempsFinal = System.currentTimeMillis() - tempsInici;
                 prog.notificar("Event iter " + i + " " + tempsFinal);
             }
-            seguir = false;
         } catch (InterruptedException e) {
             MeuError.informaError(e);
         }
@@ -91,7 +90,6 @@ public class Control extends Thread implements PerEsdeveniments {
                 long tempsFinal = System.currentTimeMillis() - tempsInici;
                 prog.notificar("Event iter " + i + " " + tempsFinal);
             }
-            seguir = false;
         } catch (InterruptedException e) {
             MeuError.informaError(e);
         }
@@ -109,7 +107,6 @@ public class Control extends Thread implements PerEsdeveniments {
                 long tempsFinal = System.currentTimeMillis() - tempsInici;
                 prog.notificar("Event iter " + i + " " + tempsFinal);
             }
-            seguir = false;
         } catch (InterruptedException e) {
             MeuError.informaError(e);
         }
@@ -129,7 +126,6 @@ public class Control extends Thread implements PerEsdeveniments {
                 long tempsFinal = System.currentTimeMillis() - tempsInici;
                 prog.notificar("Event iter " + i + " " + tempsFinal);
             }
-            seguir = false;
         } catch (InterruptedException e) {
             MeuError.informaError(e);
         }
@@ -149,7 +145,6 @@ public class Control extends Thread implements PerEsdeveniments {
                 long tempsFinal = System.currentTimeMillis() - tempsInici;
                 prog.notificar("Event iter " + i + " " + tempsFinal);
             }
-            seguir = false;
         } catch (InterruptedException e) {
             MeuError.informaError(e);
         }

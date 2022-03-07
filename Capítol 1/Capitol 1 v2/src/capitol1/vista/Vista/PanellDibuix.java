@@ -8,7 +8,6 @@ import capitol1.MeuError;
 import capitol1.PerEsdeveniments;
 import capitol1.model.Model;
 import java.awt.Color;
-import java.awt.Graphics2D;
 
 /**
  *
@@ -70,8 +69,8 @@ public class PanellDibuix extends JPanel implements PerEsdeveniments {
         }
     }
 
-    public void pintaGrafic(int n, long temps, int n_anterior, long temps_anterior) {
-        this.getGraphics().drawLine((n_anterior / 100) * (this.getWidth() / 4) - 25, (int) temps_anterior, (n / 100) * (this.getWidth() / 4) - 25, (int) temps);
+    public void pintaGrafic(int n, long temps, int nAnterior, long tempsAnterior) {
+        this.getGraphics().drawLine((nAnterior / 100) * (this.getWidth() / 4) - 25, (int) tempsAnterior, (n / 100) * (this.getWidth() / 4) - 25, (int) temps);
     }
 }
 
