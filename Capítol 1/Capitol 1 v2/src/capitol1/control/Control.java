@@ -11,14 +11,16 @@ import capitol1.PerEsdeveniments;
 public class Control extends Thread implements PerEsdeveniments {
 
     private final main prog;
-    private boolean seguir;
+    private boolean seguir, executat;
 
     public Control(main p) {
         this.prog = p;
+        this.executat = false;
     }
 
     @Override
     public void run() {
+        this.executat = true;
         while (true) {
             while (this.seguir) {
                 System.out.println("Programa executant-se amb l'opció " + this.prog.getModel().getOpcioTriada());
@@ -56,9 +58,7 @@ public class Control extends Thread implements PerEsdeveniments {
     public void notificar(String s) {
         if (s.startsWith("Executar")) {
             this.seguir = true;
-            try {
-                this.start();
-            } catch (Exception e) {}
+            if (!this.executat) this.start();
         } else if (s.startsWith("Aturar")) {
             this.seguir = false;
         }
