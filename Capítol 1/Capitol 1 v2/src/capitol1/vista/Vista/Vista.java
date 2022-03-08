@@ -91,6 +91,9 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
                 n_anterior = 0;
                 temps_anterior = 0;
             }
+        } else if (s.startsWith("Aturar")) {
+            n_anterior = 0;
+            temps_anterior = 0;
         }
     }
 

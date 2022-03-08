@@ -34,6 +34,7 @@ public class main implements PerEsdeveniments {
             vis.notificar(s);
         } else if (s.startsWith("Aturar")) {
             con.notificar(s);
+            vis.notificar(s);
         }
     }
 

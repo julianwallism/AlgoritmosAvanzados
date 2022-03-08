@@ -60,6 +60,7 @@ public class Control extends Thread implements PerEsdeveniments {
             this.seguir = true;
             if (!this.executat) this.start();
         } else if (s.startsWith("Aturar")) {
+            System.out.println("Programa aturat");
             this.seguir = false;
         }
     }
@@ -69,12 +70,14 @@ public class Control extends Thread implements PerEsdeveniments {
             for (int i : prog.getModel().ns) {
                 // començar a contar temps
                 long tempsInici = System.currentTimeMillis();
-                for (int j = 0; j < Math.sqrt(i); j++) {
+                for (int j = 0; j < Math.sqrt(i) && this.seguir; j++) {
                     Thread.sleep(1);
                 }
                 // notificar que n ha acabat
-                long tempsFinal = System.currentTimeMillis() - tempsInici;
-                prog.notificar("Event iter " + i + " " + tempsFinal);
+                if (this.seguir) {
+                    long tempsFinal = System.currentTimeMillis() - tempsInici;
+                    prog.notificar("Event iter " + i + " " + tempsFinal);
+                }
             }
         } catch (InterruptedException e) {
             MeuError.informaError(e);
@@ -86,12 +89,14 @@ public class Control extends Thread implements PerEsdeveniments {
             for (int i : prog.getModel().ns) {
                 // començar a contar temps
                 long tempsInici = System.currentTimeMillis();
-                for (int j = 0; j < Math.log(i); j++) {
+                for (int j = 0; j < Math.log(i) && this.seguir; j++) {
                     Thread.sleep(1);
                 }
                 // notificar que n ha acabat
-                long tempsFinal = System.currentTimeMillis() - tempsInici;
-                prog.notificar("Event iter " + i + " " + tempsFinal);
+                if (this.seguir) {
+                    long tempsFinal = System.currentTimeMillis() - tempsInici;
+                    prog.notificar("Event iter " + i + " " + tempsFinal);
+                }
             }
         } catch (InterruptedException e) {
             MeuError.informaError(e);
@@ -103,12 +108,14 @@ public class Control extends Thread implements PerEsdeveniments {
             for (int i : prog.getModel().ns) {
                 // començar a contar temps
                 long tempsInici = System.currentTimeMillis();
-                for (int j = 0; j < i; j++) {
+                for (int j = 0; j < i && this.seguir; j++) {
                     Thread.sleep(1);
                 }
                 // notificar que n ha acabat
-                long tempsFinal = System.currentTimeMillis() - tempsInici;
-                prog.notificar("Event iter " + i + " " + tempsFinal);
+                if (this.seguir) {
+                    long tempsFinal = System.currentTimeMillis() - tempsInici;
+                    prog.notificar("Event iter " + i + " " + tempsFinal);
+                }
             }
         } catch (InterruptedException e) {
             MeuError.informaError(e);
@@ -121,13 +128,15 @@ public class Control extends Thread implements PerEsdeveniments {
                 // començar a contar temps
                 long tempsInici = System.currentTimeMillis();
                 for (int j = 0; j < i; j++) {
-                    for (int k = 0; k < Math.log(i); k++) {
+                    for (int k = 0; k < Math.log(i) && this.seguir; k++) {
                         Thread.sleep(1);
                     }
                 }
                 // notificar que n ha acabat
-                long tempsFinal = System.currentTimeMillis() - tempsInici;
-                prog.notificar("Event iter " + i + " " + tempsFinal);
+                if (this.seguir) {
+                    long tempsFinal = System.currentTimeMillis() - tempsInici;
+                    prog.notificar("Event iter " + i + " " + tempsFinal);
+                }
             }
         } catch (InterruptedException e) {
             MeuError.informaError(e);
@@ -140,13 +149,15 @@ public class Control extends Thread implements PerEsdeveniments {
                 // començar a contar temps
                 long tempsInici = System.currentTimeMillis();
                 for (int j = 0; j < i; j++) {
-                    for (int k = 0; k < i; k++) {
+                    for (int k = 0; k < i && this.seguir; k++) {
                         Thread.sleep(1);
                     }
                 }
                 // notificar que n ha acabat
-                long tempsFinal = System.currentTimeMillis() - tempsInici;
-                prog.notificar("Event iter " + i + " " + tempsFinal);
+                if (this.seguir) {
+                    long tempsFinal = System.currentTimeMillis() - tempsInici;
+                    prog.notificar("Event iter " + i + " " + tempsFinal);
+                }
             }
         } catch (InterruptedException e) {
             MeuError.informaError(e);
