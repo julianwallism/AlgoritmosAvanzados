@@ -20,7 +20,7 @@ public class PanellDibuix extends JPanel implements PerEsdeveniments {
     private int h;
     private Model mod;
     private Vista vis;
-    protected final int FPS = 144;  // 24 frames per segon
+    protected final int FPS = 24;  // 24 frames per segon
     private final ProcesPintat procpin;
     private BufferedImage bima;
     private String opcioTriada;
