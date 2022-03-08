@@ -25,7 +25,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
     private main prog;
     private JComboBox selector;
     private int n_anterior = 0;
-    private long temps_anterior = 0;
+    private long temps_anterior = 1;
     private PanellDibuix panell;
 
     public Vista(String s, main p) {
@@ -89,7 +89,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
                 temps_anterior = temps;
             } else {
                 n_anterior = 0;
-                temps_anterior = 0;
+                temps_anterior = 1;
             }
         } else if (s.startsWith("Aturar")) {
             n_anterior = 0;

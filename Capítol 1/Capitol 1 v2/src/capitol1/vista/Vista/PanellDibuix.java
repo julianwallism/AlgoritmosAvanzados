@@ -8,6 +8,7 @@ import capitol1.MeuError;
 import capitol1.PerEsdeveniments;
 import capitol1.model.Model;
 import java.awt.Color;
+import java.awt.Graphics2D;
 
 /**
  *
@@ -57,21 +58,37 @@ public class PanellDibuix extends JPanel implements PerEsdeveniments {
             bima.getGraphics().fillRect(0, 0, this.w, this.h);
             gr.drawImage(bima, 0, 0, this);
         }
-        gr.setColor(Color.black);
-        gr.fillRect(10, 10, 5, this.getHeight() - 25);
-        gr.fillRect(10, this.getHeight() - 20, this.getWidth() - 25, 5);
+        gr.setColor(Color.red);
+        gr.fillRect(0,0, 5, this.getHeight());
+        gr.fillRect(0, this.getHeight()-5, this.getWidth(), 5);
         // Aquests dos fors afegeix els strokes al gràfics.
         for (int i = 1; i <= 4; i++) {
-            gr.fillRect(i * (this.getWidth() / 4) - 25, this.getHeight() - 25, 4, 5);
+            gr.fillRect(i * (this.getWidth() / 4) - 10, this.getHeight() - 10, 4, 5);
         }
         for (int i = 1; i <= 7; i++) {
-            gr.fillRect(15, i * (this.getHeight() / 8) - 15, 5, 4);
+            gr.fillRect(5, i * (this.getHeight() / 8) - 15, 5, 4);
         }
+        gr.setColor(Color.black);
     }
 
     public void pintaGrafic(int n, long temps, int nAnterior, long tempsAnterior) {
-        this.getGraphics().drawLine((nAnterior / 100) * (this.getWidth() / 4) - 25, (int) tempsAnterior, (n / 100) * (this.getWidth() / 4) - 25, (int) temps);
+         Graphics2D grap = (Graphics2D) this.getGraphics();
+        if (mod.getOpcioTriada().equals("n*log(n)")) {   
+            grap.fillOval((n / 100) * (this.getWidth() / 4) - 10,
+                    this.getHeight() - (int) (this.getHeight() * ((double) temps / 4500)), 5, 5);
+            grap.drawLine((nAnterior / 100) * (this.getWidth() / 4) - 10,
+                    this.getHeight() - (int) (this.getHeight() * ((double) tempsAnterior / 4500)),
+                    (n / 100) * (this.getWidth() / 4) - 10,
+                    this.getHeight() - (int) (this.getHeight() * ((double) temps / 4500)));
+        } else {
+            grap.fillOval((n / 100) * (this.getWidth() / 4) - 25, this.getHeight() - (int) (this.getHeight() * ((double) temps / 1000)), 5, 5);
+            grap.drawLine((nAnterior / 100) * (this.getWidth() / 4) - 10,
+                    this.getHeight() - (int) (this.getHeight() * ((double) tempsAnterior / 1000)),
+                    (n / 100) * (this.getWidth() / 4) - 10,
+                    this.getHeight() - (int) (this.getHeight() * ((double) temps / 1000)));
+        }
     }
+
 }
 
 class ProcesPintat extends Thread {
