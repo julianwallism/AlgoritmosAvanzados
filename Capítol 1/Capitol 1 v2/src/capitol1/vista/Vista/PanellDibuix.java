@@ -15,7 +15,6 @@ import java.awt.Graphics2D;
  * @authors Dawid Roch & Julià Wallis
  */
 public class PanellDibuix extends JPanel implements PerEsdeveniments {
-
     private int w;
     private int h;
     private Model mod;
@@ -92,7 +91,6 @@ public class PanellDibuix extends JPanel implements PerEsdeveniments {
 }
 
 class ProcesPintat extends Thread {
-
     private PanellDibuix pan;
 
     public ProcesPintat(PanellDibuix pd) {

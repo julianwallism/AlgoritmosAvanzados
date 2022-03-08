@@ -34,6 +34,9 @@ public class main implements PerEsdeveniments {
             vis.notificar(s);
         } else if (s.startsWith("Aturar")) {
             con.notificar(s);
+        } else if (s.startsWith("Progrés")) {
+            mod.notificar(s);
+        } else if (s.startsWith("Barra")) {
             vis.notificar(s);
         }
     }

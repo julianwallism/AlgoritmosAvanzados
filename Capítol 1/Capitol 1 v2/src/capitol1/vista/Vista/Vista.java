@@ -15,6 +15,7 @@ import java.awt.Color;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 
 /**
  *
@@ -24,6 +25,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
 
     private main prog;
     private JComboBox selector;
+    private JProgressBar barra;
     private int n_anterior = 0;
     private long temps_anterior = 1;
     private PanellDibuix panell;
@@ -47,8 +49,11 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
         bots.add(boto1);
         bots.add(boto2);
         this.add(BorderLayout.NORTH, bots);
-        this.panell = new PanellDibuix(800, 400, prog.getModel(), this);
+        this.panell = new PanellDibuix(500, 500, prog.getModel(), this);
         this.add(BorderLayout.CENTER, panell);
+        this.barra = new JProgressBar();
+        this.barra.setStringPainted(true);
+        this.add(BorderLayout.SOUTH, this.barra);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
@@ -71,6 +76,8 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
             prog.getModel().setOpcioTriada(this.selector.getSelectedItem().toString());
             prog.notificar("Executar");
         } else if (e.paramString().contains("Aturar")) {
+            n_anterior = 0;
+            temps_anterior = 0;
             prog.notificar("Aturar");
         }
     }
@@ -91,9 +98,10 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
                 n_anterior = 0;
                 temps_anterior = 1;
             }
-        } else if (s.startsWith("Aturar")) {
-            n_anterior = 0;
-            temps_anterior = 0;
+        } else if (s.startsWith("Barra")) {
+            s = s.replaceAll("Barra ", "");
+            int valor = Integer.parseInt(s);
+            this.barra.setValue(valor);
         }
     }
 
