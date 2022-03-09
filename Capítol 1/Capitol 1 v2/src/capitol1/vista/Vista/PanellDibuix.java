@@ -9,12 +9,14 @@ import capitol1.PerEsdeveniments;
 import capitol1.model.Model;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 /**
  *
  * @authors Dawid Roch & Julià Wallis
  */
 public class PanellDibuix extends JPanel implements PerEsdeveniments {
+
     private int w;
     private int h;
     private Model mod;
@@ -58,39 +60,34 @@ public class PanellDibuix extends JPanel implements PerEsdeveniments {
             gr.drawImage(bima, 0, 0, this);
         }
         gr.setColor(Color.red);
-        gr.fillRect(0,0, 5, this.getHeight());
-        gr.fillRect(0, this.getHeight()-5, this.getWidth(), 5);
+        gr.fillRect(0, 0, 5, this.getHeight());
+        gr.fillRect(0, this.getHeight() - 5, this.getWidth(), 5);
         // Aquests dos fors afegeix els strokes al gràfics.
-        for (int i = 1; i <= 4; i++) {
-            gr.fillRect(i * (this.getWidth() / 4) - 10, this.getHeight() - 10, 4, 5);
+        for (int i = 1; i <= 8; i++) {
+            gr.fillRect(i * (this.getWidth() / 8) - 10, this.getHeight() - 10, 4, 5);
         }
-        for (int i = 1; i <= 7; i++) {
+        for (int i = 1; i <= 8; i++) {
             gr.fillRect(5, i * (this.getHeight() / 8) - 15, 5, 4);
         }
         gr.setColor(Color.black);
     }
 
-    public void pintaGrafic(int n, long temps, int nAnterior, long tempsAnterior) {
-         Graphics2D grap = (Graphics2D) this.getGraphics();
-        if (mod.getOpcioTriada().equals("n*log(n)")) {   
-            grap.fillOval((n / 100) * (this.getWidth() / 4) - 10,
-                    this.getHeight() - (int) (this.getHeight() * ((double) temps / 4500)), 5, 5);
-            grap.drawLine((nAnterior / 100) * (this.getWidth() / 4) - 10,
-                    this.getHeight() - (int) (this.getHeight() * ((double) tempsAnterior / 4500)),
-                    (n / 100) * (this.getWidth() / 4) - 10,
-                    this.getHeight() - (int) (this.getHeight() * ((double) temps / 4500)));
-        } else {
-            grap.fillOval((n / 100) * (this.getWidth() / 4) - 25, this.getHeight() - (int) (this.getHeight() * ((double) temps / 1000)), 5, 5);
-            grap.drawLine((nAnterior / 100) * (this.getWidth() / 4) - 10,
-                    this.getHeight() - (int) (this.getHeight() * ((double) tempsAnterior / 1000)),
-                    (n / 100) * (this.getWidth() / 4) - 10,
-                    this.getHeight() - (int) (this.getHeight() * ((double) temps / 1000)));
-        }
+    public void pintaGrafic(int n, double temps, int nAnterior, double tempsAnterior, int c) {
+        Graphics2D grap = (Graphics2D) this.getGraphics();
+        grap.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Color color = new Color(c);
+        grap.setColor(color);
+        grap.fillOval((n / 2) * (this.getWidth() / 8) - 10, this.getHeight() - (int) (this.getHeight() * (temps)) - 3, 6, 6);
+        grap.drawLine((nAnterior / 2) * (this.getWidth() / 8) - 10,
+                this.getHeight() - (int) (this.getHeight() * (tempsAnterior)),
+                (n / 2) * (this.getWidth() / 8) - 10,
+                this.getHeight() - (int) (this.getHeight() * (temps)));
     }
 
 }
 
 class ProcesPintat extends Thread {
+
     private PanellDibuix pan;
 
     public ProcesPintat(PanellDibuix pd) {
