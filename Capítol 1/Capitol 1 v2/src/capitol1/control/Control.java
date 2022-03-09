@@ -125,13 +125,16 @@ public class Control extends Thread implements PerEsdeveniments {
     private void nlogn() {
         try {
             for (int i : prog.getModel().ns) {
+                double percentChange = 1.0/i/Math.log(i);
+                double percentage = 0;
                 prog.notificar("Progrés 0");
                 // començar a contar temps
                 long tempsInici = System.currentTimeMillis();
                 for (int j = 1; j <= i; j++) {
                     for (int k = 1; k <= Math.log(i) && this.seguir; k++) {
-                        // int progres = (int) (100*((double)(double)j*(double)k/(double)((double)i*(double)Math.log(i))));
-                        // prog.notificar("Progrés "+progres);
+                        percentage += percentChange;
+                        int progres = (int) (100*percentage);
+                        prog.notificar("Progrés "+progres);
                         Thread.sleep(1);
                     }
                 }
@@ -150,13 +153,16 @@ public class Control extends Thread implements PerEsdeveniments {
     private void n2() {
         try {
             for (int i : prog.getModel().ns) {
+                double percentChange = 1.0/i/i;
+                double percentage = 0;
                 prog.notificar("Progrés 0");
                 // començar a contar temps
                 long tempsInici = System.currentTimeMillis();
                 for (int j = 1; j <= i; j++) {
                     for (int k = 1; k <= i && this.seguir; k++) {
-                        // int progres = (int) (100*(((double)j*(double)k)/((double)i*(double)i)));
-                        // prog.notificar("Progrés "+progres);
+                        percentage += percentChange;
+                        int progres = (int) (100*percentage);
+                        prog.notificar("Progrés "+progres);
                         Thread.sleep(1);
                     }
                 }

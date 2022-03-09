@@ -21,7 +21,7 @@ import javax.swing.JProgressBar;
  *
  * @authors Dawid Roch & Julià Wallis
  */
-public class Vista extends JFrame implements ActionListener, PerEsdeveniments, ChangeListener {
+public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
 
     private main prog;
     private JComboBox selector;
@@ -103,10 +103,5 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments, C
             int valor = Integer.parseInt(s);
             this.barra.setValue(valor);
         }
-    }
-
-    @Override
-    public void stateChanged(ChangeEvent e) {
-
     }
 }
