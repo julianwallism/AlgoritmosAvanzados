@@ -9,7 +9,6 @@ import capitol1.PerEsdeveniments;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Control extends Thread implements PerEsdeveniments {
-
     private final main prog;
     private boolean seguir, executat;
 

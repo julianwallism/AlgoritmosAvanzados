@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import capitol1.MeuError;
-import capitol1.PerEsdeveniments;
 import capitol1.model.Model;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -15,7 +14,7 @@ import java.awt.RenderingHints;
  *
  * @authors Dawid Roch & Julià Wallis
  */
-public class PanellDibuix extends JPanel implements PerEsdeveniments {
+public class PanellDibuix extends JPanel {
 
     private int w;
     private int h;
@@ -24,14 +23,12 @@ public class PanellDibuix extends JPanel implements PerEsdeveniments {
     protected final int FPS = 24;  // 24 frames per segon
     private final ProcesPintat procpin;
     private BufferedImage bima;
-    private String opcioTriada;
 
     public PanellDibuix(int x, int y, Model m, Vista v) {
         w = x;
         h = y;
         mod = m;
         vis = v;
-        opcioTriada = "";
         bima = null;
         this.setPreferredSize(new Dimension(w, h));
         procpin = new ProcesPintat(this);
@@ -41,13 +38,6 @@ public class PanellDibuix extends JPanel implements PerEsdeveniments {
     public void repaint() {
         if (this.getGraphics() != null) {
             paint(this.getGraphics());
-        }
-    }
-
-    @Override
-    public void notificar(String s) {
-        if (s.startsWith("Executar")) {
-            opcioTriada = mod.getOpcioTriada();
         }
     }
 
