@@ -1,0 +1,18 @@
+Backtracking. Exercici: Una variant del recorregut d'una peça d'escacs per un tauler de NxN.
+
+Es tracta de realitzar un programa que tingui definides 6 peces (o més; cavall, reina i torre més tres o més peces inventades pel programador), i que sigui capaç de realitzar un recorregut de casella única per un tauler d'escacs de nxn caselles. Un recorregut de casella única del tauler és aquell a on la peça visita totes les caselles, passant una sola vegada per cada una d'elles. Si no es possible, el programa ha de'informar del cas. Aquí però complicarem un poc el problema, de forma que el recorregut haurà de començar per la casella que esculli l'usuari.
+
+Opcional a lliurament ordinari: És possible fer-ho en lloc de amb un tipus de peça amb dues 0 més? I amb més tipus? Si és que sí, implementau-lo. Realitzar estudis de comportament de l'algorisme quan variem els paràmetres. I més ...
+
+Obligatori a la recuperació: És possible fer-ho en lloc de amb un tipus de peça amb dues 0 més? I amb més tipus? Si és que sí, implementau-lo.
+
+El programa elaborat ha de presentar una estructura de disseny MVC.
+
+A més cal que tingui les peces dissenyades en una jerarquia objecte
+  (Peça exten --> {cavall, torre, …})
+  El backtracking maneja peça
+  D'aquesta forma es fa molt simple afegir noves peces.
+
+El programa ha de presentar una IGU gràfica.
+
+Cal lliurar també una memòria amb les mateixes normes que las del primer exercici del curs.

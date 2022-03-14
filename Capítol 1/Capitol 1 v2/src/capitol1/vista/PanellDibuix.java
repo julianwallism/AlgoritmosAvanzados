@@ -1,4 +1,4 @@
-package capitol1.vista.Vista;
+package capitol1.vista;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

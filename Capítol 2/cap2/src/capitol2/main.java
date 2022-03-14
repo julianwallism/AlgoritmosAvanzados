@@ -1,8 +1,8 @@
-package capitol1;
+package capitol2;
 
-import capitol1.control.Control;
-import capitol1.model.Model;
-import capitol1.vista.Vista;
+import capitol2.control.Control;
+import capitol2.model.Model;
+import capitol2.vista.Vista;
 
 /**
  *
@@ -17,7 +17,7 @@ public class main implements PerEsdeveniments {
     private void inicio() {
         mod = new Model(this);
         con = new Control(this);
-        vis = new Vista("Pràctica capítol 1 - Dawid Roch i Julià Wallis", this);
+        vis = new Vista("Pràctica Capítol 2 - Dawid Roch i Julià Wallis", this);
         vis.mostrar();
     }
 
@@ -28,17 +28,7 @@ public class main implements PerEsdeveniments {
     // Funció símple de la comunicació per Patró d'esdeveniments
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Executar")) {
-            con.notificar(s);
-        } else if (s.startsWith("Event iter")) {
-            vis.notificar(s);
-        } else if (s.startsWith("Aturar")) {
-            con.notificar(s);
-        } else if (s.startsWith("Progrés")) {
-            mod.notificar(s);
-        } else if (s.startsWith("Barra")) {
-            vis.notificar(s);
-        }
+        
     }
 
     // Mètode public de retorn de la instància del model de dades
