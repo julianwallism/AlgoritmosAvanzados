@@ -12,7 +12,7 @@ public class Model implements PerEsdeveniments {
     public String[] tamanysTauler = {"4", "5", "6", "7", "8", "9", "10", "11", "12"};
     public Peça[] peces = {};
     private int progres = 0;
-    private int tamanyTriat = 6;
+    private int tamanyTriat = 8;
     private main prog;
     
     public Model(main p) {
@@ -26,11 +26,6 @@ public class Model implements PerEsdeveniments {
     public void setProgres(int progres) {
         this.progres = progres;
     }
-    
-    @Override
-    public void notificar(String s) {
-        
-    }
 
     public int getTamanyTriat() {
         return tamanyTriat;
@@ -38,5 +33,10 @@ public class Model implements PerEsdeveniments {
 
     public void setTamanyTriat(int tamanyTriat) {
         this.tamanyTriat = tamanyTriat;
+    }
+    
+    @Override
+    public void notificar(String s) {
+        
     }
 }

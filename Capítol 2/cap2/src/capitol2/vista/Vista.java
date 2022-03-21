@@ -32,7 +32,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
         prog = p;
 
         //Codi per el panell de dibuix
-        this.panell = new PanellDibuix(500, 500, prog.getModel(), this);
+        this.panell = new PanellDibuix(800, 800, prog.getModel(), this);
 
         //Codi per al panell dels botons
         JPanel panellSuperior = new JPanel();
@@ -46,7 +46,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
         titol.setFont(new Font("Times New Roman", Font.BOLD, 32));
         label.setFont(new Font("Poppins", Font.PLAIN, 18));
         label2.setFont(new Font("Poppins", Font.PLAIN, 18));
-        titol.setText("Recorregut Eulerìà");
+        titol.setText("Recorregut Eulerià");
         label.setText("Tamany tauler");
         label2.setText("Triar peça");
         selector.setModel(new DefaultComboBoxModel(p.getModel().tamanysTauler));
