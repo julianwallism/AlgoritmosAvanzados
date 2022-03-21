@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package capitol2.model.Peces;
 
 /**
  *
- * @author walli
+ * @author Dawid Roch & Julià Wallis
  */
 public abstract class Peça {
     public String imatge;
