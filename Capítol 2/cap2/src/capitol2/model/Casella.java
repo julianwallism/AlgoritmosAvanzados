@@ -4,6 +4,7 @@
  */
 package capitol2.model;
 
+import capitol2.model.Peces.Peça;
 import java.awt.Color;
 
 /**
@@ -11,9 +12,9 @@ import java.awt.Color;
  * @author walli
  */
 public class Casella {
-    public Peça peça=null;
+    public Peça peça = null;
     public Color color;
-    public boolean visitada=false;
+    public boolean visitada = false;
     
     public Casella(Color color){
         this.color = color;

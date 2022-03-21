@@ -50,7 +50,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
         label.setText("Tamany tauler");
         label2.setText("Triar peça");
         selector.setModel(new DefaultComboBoxModel(p.getModel().tamanysTauler));
-        selector.setSelectedIndex(2);
+        selector.setSelectedIndex(4);
         selector2.setModel(new DefaultComboBoxModel(p.getModel().peces));
 
         GroupLayout botsLayout = new GroupLayout(panellSuperior);
