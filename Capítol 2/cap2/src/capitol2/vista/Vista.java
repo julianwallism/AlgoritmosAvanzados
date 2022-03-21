@@ -11,7 +11,9 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
@@ -21,9 +23,13 @@ import javax.swing.JProgressBar;
  */
 public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
     private main prog;
-    private JComboBox selector, selector2;
+    private JButton selector, selector2;
+    private JDialog dialog;
     private JProgressBar barra;
     private PanellDibuix panell;
+    private boolean isTamanyDialog = false;
+    private JLabel textDialog = new JLabel();
+    private JComboBox comboBoxDialog = new JComboBox();
 
     public Vista(String s, main p) {
         super(s);
@@ -32,42 +38,34 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
         prog = p;
 
         //Codi per el panell de dibuix
-        this.panell = new PanellDibuix(800, 800, prog.getModel(), this);
+        this.panell = new PanellDibuix(800, 620, prog.getModel(), this);
 
         //Codi per al panell dels botons
         JPanel panellSuperior = new JPanel();
+        panellSuperior.setSize(800, 100);
         JLabel titol = new JLabel();
-        JLabel label = new JLabel();
-        JLabel label2 = new JLabel();
-        selector = new JComboBox();
-        selector2 = new JComboBox();
+        selector = new JButton();
+        selector.setText("Canviar tamany tauler");
+        selector.addActionListener(this);
+        selector2 = new JButton();
+        selector2.setText("Triar peça");
+        selector2.addActionListener(this);
 
         panellSuperior.setBackground(Color.lightGray);
         titol.setFont(new Font("Times New Roman", Font.BOLD, 32));
-        label.setFont(new Font("Poppins", Font.PLAIN, 18));
-        label2.setFont(new Font("Poppins", Font.PLAIN, 18));
         titol.setText("Recorregut Eulerià");
-        label.setText("Tamany tauler");
-        label2.setText("Triar peça");
-        selector.setModel(new DefaultComboBoxModel(p.getModel().tamanysTauler));
-        selector.setSelectedIndex(4);
-        selector2.setModel(new DefaultComboBoxModel(p.getModel().peces));
 
         GroupLayout botsLayout = new GroupLayout(panellSuperior);
         botsLayout.setHorizontalGroup(
                 botsLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGroup(botsLayout.createSequentialGroup()
-                                .addGap(60)
+                                .addGap(100)
                                 .addComponent(titol)
-                                .addGap(60)
-                                .addComponent(label)
-                                .addGap(10)
+                                .addGap(80)
                                 .addComponent(selector)
-                                .addGap(30)
-                                .addComponent(label2)
-                                .addGap(10)
+                                .addGap(20)
                                 .addComponent(selector2)
-                                .addGap(30))
+                                .addGap(100))
         );
         botsLayout.setVerticalGroup(
                 botsLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -75,9 +73,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
                                 .addGap(15)
                                 .addGroup(botsLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                                         .addComponent(titol)
-                                        .addComponent(label)
                                         .addComponent(selector)
-                                        .addComponent(label2)
                                         .addComponent(selector2))
                                 .addGap(15))
         );
@@ -85,6 +81,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
 
         //Codi per posar el panell de botons, el de dibuix i la barra de progres
         this.barra = new JProgressBar();
+        this.barra.setSize(800, 50);
         this.barra.setStringPainted(true);
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -119,7 +116,35 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+        if (e.getActionCommand().equals("Canviar tamany tauler")) {
+            isTamanyDialog = true;
+            this.dialog = new JDialog(this, "Canviar tamany tauler");
+            textDialog.setText("Tamany desitjat: ");
+            comboBoxDialog.setModel(new DefaultComboBoxModel(this.prog.getModel().tamanysTauler));
+            comboBoxDialog.setSelectedItem(this.prog.getModel().getTamanyTriat());
+            comboBoxDialog.addActionListener(this);
+            this.dialog.add(textDialog);
+            this.dialog.add(comboBoxDialog);
+            this.dialog.setSize(300,300);
+            this.dialog.setVisible(true);
+        } else if (e.getActionCommand().equals("Triar peça")) {
+            this.dialog = new JDialog(this, "Triar peça");
+            textDialog.setText("Peça desitjada: ");
+            comboBoxDialog.setModel(new DefaultComboBoxModel(this.prog.getModel().getPeces()));
+            comboBoxDialog.setSelectedItem(this.prog.getModel().getPeçaTriada());
+            comboBoxDialog.addActionListener(this);
+            this.dialog.add(textDialog);
+            this.dialog.add(comboBoxDialog);
+            this.dialog.setSize(300,300);
+            this.dialog.setVisible(true);
+        } else if (e.getActionCommand().equals("comboBoxChanged")) {
+            if (isTamanyDialog) {
+                this.prog.getModel().setTamanyTriat(Integer.parseInt(comboBoxDialog.getSelectedItem().toString()));
+                this.prog.notificar("Tamany canviat");
+            } else {
+                this.prog.getModel().setPeçaTriada(comboBoxDialog.getSelectedItem().toString());
+            }
+        }
     }
 
     @Override
