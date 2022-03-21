@@ -23,7 +23,7 @@ import javax.swing.JProgressBar;
 public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
     private main prog;
     private JComboBox selector;
-    private JProgressBar barra;
+    private JProgressBar barra_progres;
     private int n_anterior = 0;
     private double temps_anterior = 0;
     private PanellDibuix panell;
@@ -35,7 +35,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
         prog = p;
 
         //Codi per el panell de dibuix
-        this.panell = new PanellDibuix(500, 500, prog.getModel(), this);
+        this.panell = new PanellDibuix(500, 500, this);
 
         //Codi per al panell dels botons
         JPanel bots = new JPanel();
@@ -79,8 +79,8 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
         bots.setLayout(botsLayout);
 
         //Codi per posar el panell de botons, el de dibuix i la barra de progres
-        this.barra = new JProgressBar();
-        this.barra.setStringPainted(true);
+        this.barra_progres = new JProgressBar();
+        this.barra_progres.setStringPainted(true);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         layout.setHorizontalGroup(
@@ -90,7 +90,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
                                 .addComponent(panell)
                                 .addGap(50))
                         .addComponent(bots)
-                        .addComponent(this.barra)
+                        .addComponent(this.barra_progres)
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -99,7 +99,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
                                 .addGap(50)
                                 .addComponent(panell)
                                 .addGap(50)
-                                .addComponent(this.barra))
+                                .addComponent(this.barra_progres))
         );
         getContentPane().setLayout(layout);
     }
@@ -149,7 +149,7 @@ public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
         } else if (s.startsWith("Barra")) {
             s = s.replaceAll("Barra ", "");
             int valor = Integer.parseInt(s);
-            this.barra.setValue(valor);
+            this.barra_progres.setValue(valor);
         }
     }
 }

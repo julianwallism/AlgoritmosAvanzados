@@ -85,7 +85,7 @@ public class Control extends Thread implements PerEsdeveniments {
             for (int i : prog.getModel().ns) {
                 // començar a contar temps
                 long tempsInici = System.currentTimeMillis();
-                for (int j = 0; j < Math.log(i) && this.seguir; j++) {
+                for (int j = 0; (j <= Math.log(i)/Math.log(2)) && this.seguir; j++) {
                     int progres = (int) (100 * ((double) j / (double) Math.log(i)));
                     prog.notificar("Progrés " + progres);
                     Thread.sleep(40);

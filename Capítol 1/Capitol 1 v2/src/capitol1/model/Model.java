@@ -8,7 +8,7 @@ import capitol1.main;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
-    public final String[] opcions = {"sqrt(n)", "log(n)", "n", "n*log(n)", "n^2"};
+    public final String[] opcions = {"log(n)", "sqrt(n)", "n", "n*log(n)", "n^2"};
     public final int[] ns = {2, 4, 6, 8, 10, 12, 14, 16};
     private int progres = 0;
     private main prog;

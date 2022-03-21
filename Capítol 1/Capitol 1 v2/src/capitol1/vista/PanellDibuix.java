@@ -18,16 +18,14 @@ public class PanellDibuix extends JPanel {
 
     private int w;
     private int h;
-    private Model mod;
     private Vista vis;
     protected final int FPS = 24;  // 24 frames per segon
     private final ProcesPintat procpin;
     private BufferedImage bima;
 
-    public PanellDibuix(int x, int y, Model m, Vista v) {
+    public PanellDibuix(int x, int y, Vista v) {
         w = x;
         h = y;
-        mod = m;
         vis = v;
         bima = null;
         this.setPreferredSize(new Dimension(w, h));
@@ -63,12 +61,13 @@ public class PanellDibuix extends JPanel {
     }
 
     public void pintaGrafic(int n, double temps, int nAnterior, double tempsAnterior, int c) {
-        Graphics2D grap = (Graphics2D) this.getGraphics();
-        grap.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Graphics2D graph = (Graphics2D) this.getGraphics();
+        graph.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
         Color color = new Color(c);
-        grap.setColor(color);
-        grap.fillOval((n / 2) * (this.getWidth() / 8) - 10, this.getHeight() - (int) (this.getHeight() * (temps)) - 3, 6, 6);
-        grap.drawLine((nAnterior / 2) * (this.getWidth() / 8) - 10,
+        graph.setColor(color);
+        graph.fillOval((n / 2) * (this.getWidth() / 8) - 10, this.getHeight() - (int) (this.getHeight() * (temps)) - 3, 6, 6);
+        graph.drawLine((nAnterior / 2) * (this.getWidth() / 8) - 10,
                 this.getHeight() - (int) (this.getHeight() * (tempsAnterior)),
                 (n / 2) * (this.getWidth() / 8) - 10,
                 this.getHeight() - (int) (this.getHeight() * (temps)));
