@@ -2,22 +2,20 @@ package capitol2.model;
 
 import capitol2.PerEsdeveniments;
 import capitol2.main;
-import capitol2.model.Peces.Cavall;
-import capitol2.model.Peces.Peça;
-import capitol2.model.Peces.Reina;
-import capitol2.model.Peces.Torre;
+import capitol2.model.Peces.*;
 
 /**
  *
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
+
     private int tamanyTriat = 8;
     private Peça peçaTriada = new Reina();
     private int progres = 0;
     private main prog;
     private int x, y; // posició de la peça
-    
+
     public Model(main p) {
         prog = p;
     }
@@ -37,7 +35,7 @@ public class Model implements PerEsdeveniments {
     public void setTamanyTriat(int tamanyTriat) {
         this.tamanyTriat = tamanyTriat;
     }
-    
+
     @Override
     public void notificar(String s) {
         if (s.startsWith("Tamany tauler")) {
@@ -59,6 +57,15 @@ public class Model implements PerEsdeveniments {
                     break;
                 case "Torre":
                     this.peçaTriada = new Torre();
+                    break;
+                case "Cardenal":
+                    this.peçaTriada = new Cardenal();
+                    break;
+                case "Centauro":
+                    this.peçaTriada = new Centauro();
+                    break;
+                case "Somera":
+                    this.peçaTriada = new Somera();
                     break;
             }
             System.out.println(peçaTriada.imatge);
