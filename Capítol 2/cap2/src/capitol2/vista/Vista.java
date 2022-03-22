@@ -23,7 +23,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
     private JLabel[][] tablero;
     private final JPanel ventana, barraSuperior;
     private final JMenuBar barraBotones;
-    private final JButton resuelve;
+    private final JButton resuelve, aturar;
     private final JLabel label_peça, label_tamany;
     private final JSpinner tamany;
     private final JComboBox peces;
@@ -42,6 +42,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         label_peça = new JLabel();
         peces = new JComboBox();
         resuelve = new JButton("Resol");
+        aturar = new JButton("Atura");
 
         tamany.setValue(8);
         label_tamany.setText("Tria el tamany");
@@ -75,12 +76,20 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 prog.notificar("Resoldre");
             }
         });
+        
+        aturar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                prog.notificar("Aturar");
+            }
+        });
 
         barraSuperior.add(label_tamany);
         barraSuperior.add(tamany);
         barraSuperior.add(label_peça);
         barraSuperior.add(peces);
         barraBotones.add(resuelve);
+        barraBotones.add(aturar);
         barraBotones.setLayout(new GridBagLayout());
         dim = new Dimension(p.getModel().getTamanyTriat() * 80, p.getModel().getTamanyTriat() * 80 + 30);
         this.getContentPane().add(barraSuperior, BorderLayout.NORTH);
