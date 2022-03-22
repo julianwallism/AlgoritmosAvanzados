@@ -13,16 +13,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class Vista extends JFrame implements PerEsdeveniments {
+
     private main prog;
     private final ImageIcon logo = new ImageIcon("logo.png");
     private JLabel[][] tablero;
-    private final JPanel ventana;
-    private final JMenuBar barraMenu, barraBotones;
-    private final JMenu menu;
+    private final JPanel ventana, barraSuperior;
+    private final JMenuBar barraBotones;
     private final JButton resuelve;
-    private final JMenuItem tamany, peça;
+    private final JLabel label_peça, label_tamany;
+    private final JSpinner tamany;
+    private final JComboBox peces;
     private Dimension dim;
 
     public Vista(String titol, main p) {
@@ -31,29 +35,37 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.setIconImage(logo.getImage());
         ventana = new JPanel();
         ventana.setLayout(new GridLayout(p.getModel().getTamanyTriat(), p.getModel().getTamanyTriat()));
-        barraMenu = new JMenuBar();
+        barraSuperior = new JPanel();
         barraBotones = new JMenuBar();
-        menu = new JMenu("Menú");
-        tamany = new JMenuItem("Tria el tamany del tauler");
-        peça = new JMenuItem("Tria la peça per a resoldre el problema");
+        tamany = new JSpinner();
+        label_tamany = new JLabel();
+        label_peça = new JLabel();
+        peces = new JComboBox();
         resuelve = new JButton("Resol");
+
+        tamany.setValue(8);
+        label_tamany.setText("Tria el tamany");
+
+        peces.setModel(new DefaultComboBoxModel(prog.getModel().peces));
+        label_peça.setText("Tria la peça: ");
 
         inicializaTablero(p.getModel().getTamanyTriat());
 
-        tamany.addActionListener(new ActionListener() {
+        tamany.addChangeListener(new ChangeListener() {
             @Override
-            public void actionPerformed(ActionEvent ae) {
+            public void stateChanged(ChangeEvent e) {
                 removeListener();
-                String num = JOptionPane.showInputDialog(null, "Introdueix el nombre de files i columnes", prog.getModel().getTamanyTriat());
-                prog.notificar("Tamany tauler: "+num);
+                String num = tamany.getValue().toString();
+                prog.notificar("Tamany tauler: " + num);
             }
         });
-        
-        peça.addActionListener(new ActionListener() {
+
+        peces.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                String resposta = JOptionPane.showInputDialog(null, "Introdueix la peça que vols triar d'entre: Cavall, Reina i Torre", prog.getModel().getPeçaTriada().nom);
-                prog.notificar("Canvi peça a "+resposta);
+            public void actionPerformed(ActionEvent e) {
+                String resposta = peces.getSelectedItem().toString();
+                prog.notificar("Canvi peça a " + resposta);
+
             }
         });
 
@@ -64,17 +76,18 @@ public class Vista extends JFrame implements PerEsdeveniments {
             }
         });
 
-        menu.add(tamany);
-        menu.add(peça);
-        barraMenu.add(menu);
+        barraSuperior.add(label_tamany);
+        barraSuperior.add(tamany);
+        barraSuperior.add(label_peça);
+        barraSuperior.add(peces);
         barraBotones.add(resuelve);
         barraBotones.setLayout(new GridBagLayout());
         dim = new Dimension(p.getModel().getTamanyTriat() * 80, p.getModel().getTamanyTriat() * 80 + 30);
-        this.getContentPane().add(barraMenu, BorderLayout.NORTH);
+        this.getContentPane().add(barraSuperior, BorderLayout.NORTH);
         this.getContentPane().add(ventana, BorderLayout.CENTER);
         this.getContentPane().add(barraBotones, BorderLayout.SOUTH);
         this.pack();
-        this.setResizable(true);
+        this.setResizable(false);
         this.setVisible(true);
         this.setSize(dim);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -105,7 +118,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
                             for (int j = 0; j < dimension; j++) {
                                 if (me.getSource() == tablero[i][j]) {
                                     posarImatge(i, j);
-                                    prog.notificar("Peça "+i+", "+j);
+                                    prog.notificar("Peça " + i + ", " + j);
                                 }
                             }
                         }
@@ -138,7 +151,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         }
         tablero[i][j].setOpaque(true);
     }
-    
+
     private void posarImatge(int i, int j) {
         for (int fila = 0; fila < this.prog.getModel().getTamanyTriat(); fila++) {
             for (int columna = 0; columna < this.prog.getModel().getTamanyTriat(); columna++) {

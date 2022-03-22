@@ -12,6 +12,7 @@ public class Model implements PerEsdeveniments {
 
     private int tamanyTriat = 8;
     private Peça peçaTriada = new Reina();
+    public String[] peces = {"Reina", "Torre", "Cavall", "Cardenal", "Centauro", "Somera"};
     private int progres = 0;
     private main prog;
     private int x, y; // posició de la peça

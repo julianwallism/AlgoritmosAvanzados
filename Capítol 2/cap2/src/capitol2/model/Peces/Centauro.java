@@ -15,7 +15,7 @@ public class Centauro extends Peça {
     static int movimentsY[] = {2, -2, 2, -2, 1, -1, 1, -1, 1, -1, 0, 1, -1, 0, 1, -1};
 
     public Centauro() {
-        this.imatge = "centauro.jpg";
+        this.imatge = "centauro.png";
         this.nom = "Centauro";
 
     }

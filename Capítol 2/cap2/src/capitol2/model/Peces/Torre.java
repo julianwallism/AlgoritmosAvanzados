@@ -11,7 +11,6 @@ public class Torre extends Peça {
     static int movimentsY[] = {1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, 
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-
     public Torre() {
         this.imatge = "torre.png";
         this.nom = "Torre";
