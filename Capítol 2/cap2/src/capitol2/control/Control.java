@@ -1,22 +1,16 @@
 package capitol2.control;
 
 import capitol2.main;
-import capitol2.model.Peces.Peça;
-import capitol2.model.Tauler;
-import capitol2.model.Casella;
 import capitol2.PerEsdeveniments;
+import capitol2.model.Peces.Peça;
 
 /**
  *
  * @authors Dawid Roch & Julià Wallis
  */
 public class Control extends Thread implements PerEsdeveniments {
-
     private final main prog;
     private boolean seguir, executat;
-    private Peça peça = null;
-    private Tauler tauler = null;
-    private Casella[][] caselles = null;
 
     public Control(main p) {
         this.prog = p;
@@ -42,14 +36,17 @@ public class Control extends Thread implements PerEsdeveniments {
                 this.start();
             }
         } else if (s.startsWith("Aturar")) {
-            System.out.println("Programa aturat");
             this.seguir = false;
+            System.out.println("Programa aturat");
         }
     }
 
     private void resol() {
-        this.peça = this.prog.getModel().getPeçaTriada();
-        this.tauler = this.prog.getModel().getTauler();
-        this.caselles = this.tauler.getCaselles();
+        Peça p = this.prog.getModel().getPeçaTriada();
+        int x = this.prog.getModel().getX();
+        int y = this.prog.getModel().getY();
+        
+        // Algorisme backtracking per recòrrer el tauler
+        
     }
 }

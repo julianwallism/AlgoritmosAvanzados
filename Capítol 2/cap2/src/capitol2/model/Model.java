@@ -9,34 +9,17 @@ import capitol2.model.Peces.*;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
-
+    public final static String[] peces = {"Reina", "Torre", "Cavall", "Cardenal", "Centauro", "Somera"};
+    
     private int tamanyTriat = 8;
     private Peça peçaTriada = new Reina();
-    public String[] peces = {"Reina", "Torre", "Cavall", "Cardenal", "Centauro", "Somera"};
-    private int progres = 0;
     private main prog;
     private int x, y; // posició de la peça
 
     public Model(main p) {
         prog = p;
     }
-
-    public int getProgres() {
-        return progres;
-    }
-
-    public void setProgres(int progres) {
-        this.progres = progres;
-    }
-
-    public int getTamanyTriat() {
-        return tamanyTriat;
-    }
-
-    public void setTamanyTriat(int tamanyTriat) {
-        this.tamanyTriat = tamanyTriat;
-    }
-
+    
     @Override
     public void notificar(String s) {
         if (s.startsWith("Tamany tauler")) {
@@ -69,8 +52,15 @@ public class Model implements PerEsdeveniments {
                     this.peçaTriada = new Somera();
                     break;
             }
-            System.out.println(peçaTriada.imatge);
         }
+    }
+
+    public int getTamanyTriat() {
+        return tamanyTriat;
+    }
+
+    public void setTamanyTriat(int tamanyTriat) {
+        this.tamanyTriat = tamanyTriat;
     }
 
     public Peça getPeçaTriada() {
@@ -79,5 +69,13 @@ public class Model implements PerEsdeveniments {
 
     public void setPeçaTriada(Peça peçaTriada) {
         this.peçaTriada = peçaTriada;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }
