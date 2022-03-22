@@ -18,7 +18,6 @@ public class main implements PerEsdeveniments {
         mod = new Model(this);
         con = new Control(this);
         vis = new Vista("Pràctica Capítol 2 - Dawid Roch i Julià Wallis", this);
-        vis.mostrar();
     }
 
     public static void main(String[] args) {
@@ -28,7 +27,11 @@ public class main implements PerEsdeveniments {
     // Funció símple de la comunicació per Patró d'esdeveniments
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Tamany canviat")) {
+        if (s.startsWith("Resoldre")) {
+            con.notificar(s);
+        } else if (s.startsWith("Actualitzar tauler")) {
+            vis.notificar(s);
+        } else if (s.startsWith("Peça") || s.startsWith("Canvi peça") || s.startsWith("Tamany tauler")) {
             mod.notificar(s);
         }
     }

@@ -2,13 +2,15 @@ package capitol2.model;
 
 import capitol2.model.Peces.Peça;
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  *
  * @author Dawid Roch & Julià Wallis
  */
 public class Casella {
-    public Peça peça = null;
+    public Peça peça;
     public Color color;
     public boolean visitada = false;
     
@@ -39,6 +41,4 @@ public class Casella {
     public void setVisitada(boolean visitada) {
         this.visitada = visitada;
     }
-    
-    
 }

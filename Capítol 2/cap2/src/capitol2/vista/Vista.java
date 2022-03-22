@@ -1,154 +1,172 @@
 package capitol2.vista;
 
+import capitol2.PerEsdeveniments;
+import capitol2.main;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import capitol2.main;
-import capitol2.MeuError;
-import capitol2.PerEsdeveniments;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import javax.swing.*;
 
-/**
- *
- * @authors Dawid Roch & Julià Wallis
- */
-public class Vista extends JFrame implements ActionListener, PerEsdeveniments {
+public class Vista extends JFrame implements PerEsdeveniments {
     private main prog;
-    private JButton selector, selector2;
-    private JDialog dialog;
-    private JProgressBar barra;
-    private PanellDibuix panell;
-    private boolean isTamanyDialog = false;
-    private JLabel textDialog = new JLabel();
-    private JComboBox comboBoxDialog = new JComboBox();
+    private final ImageIcon logo = new ImageIcon("logo.png");
+    private JLabel[][] tablero;
+    private final JPanel ventana;
+    private final JMenuBar barraMenu, barraBotones;
+    private final JMenu menu;
+    private final JButton resuelve;
+    private final JMenuItem tamany, peça;
+    private Dimension dim;
 
-    public Vista(String s, main p) {
-        super(s);
-        this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        prog = p;
+    public Vista(String titol, main p) {
+        this.prog = p;
+        this.setTitle(titol);
+        this.setIconImage(logo.getImage());
+        ventana = new JPanel();
+        ventana.setLayout(new GridLayout(p.getModel().getTamanyTriat(), p.getModel().getTamanyTriat()));
+        barraMenu = new JMenuBar();
+        barraBotones = new JMenuBar();
+        menu = new JMenu("Menú");
+        tamany = new JMenuItem("Tria el tamany del tauler");
+        peça = new JMenuItem("Tria la peça per a resoldre el problema");
+        resuelve = new JButton("Resol");
 
-        //Codi per el panell de dibuix
-        this.panell = new PanellDibuix(800, 620, prog.getModel(), this);
+        inicializaTablero(p.getModel().getTamanyTriat());
 
-        //Codi per al panell dels botons
-        JPanel panellSuperior = new JPanel();
-        panellSuperior.setSize(800, 100);
-        JLabel titol = new JLabel();
-        selector = new JButton();
-        selector.setText("Canviar tamany tauler");
-        selector.addActionListener(this);
-        selector2 = new JButton();
-        selector2.setText("Triar peça");
-        selector2.addActionListener(this);
+        tamany.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                removeListener();
+                String num = JOptionPane.showInputDialog(null, "Introdueix el nombre de files i columnes", prog.getModel().getTamanyTriat());
+                prog.notificar("Tamany tauler: "+num);
+            }
+        });
+        
+        peça.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                String resposta = JOptionPane.showInputDialog(null, "Introdueix la peça que vols triar d'entre: Cavall, Reina i Torre", prog.getModel().getPeçaTriada().nom);
+                prog.notificar("Canvi peça a "+resposta);
+            }
+        });
 
-        panellSuperior.setBackground(Color.lightGray);
-        titol.setFont(new Font("Times New Roman", Font.BOLD, 32));
-        titol.setText("Recorregut Eulerià");
+        resuelve.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                prog.notificar("Resoldre");
+            }
+        });
 
-        GroupLayout botsLayout = new GroupLayout(panellSuperior);
-        botsLayout.setHorizontalGroup(
-                botsLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addGroup(botsLayout.createSequentialGroup()
-                                .addGap(100)
-                                .addComponent(titol)
-                                .addGap(80)
-                                .addComponent(selector)
-                                .addGap(20)
-                                .addComponent(selector2)
-                                .addGap(100))
-        );
-        botsLayout.setVerticalGroup(
-                botsLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addGroup(botsLayout.createSequentialGroup()
-                                .addGap(15)
-                                .addGroup(botsLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                        .addComponent(titol)
-                                        .addComponent(selector)
-                                        .addComponent(selector2))
-                                .addGap(15))
-        );
-        panellSuperior.setLayout(botsLayout);
-
-        //Codi per posar el panell de botons, el de dibuix i la barra de progres
-        this.barra = new JProgressBar();
-        this.barra.setSize(800, 50);
-        this.barra.setStringPainted(true);
-
-        GroupLayout layout = new GroupLayout(getContentPane());
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(panell))
-                        .addComponent(panellSuperior)
-                        .addComponent(this.barra)
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addGroup(GroupLayout.Alignment.CENTER, layout.createSequentialGroup()
-                                .addComponent(panellSuperior)
-                                .addComponent(panell)
-                                .addComponent(this.barra))
-        );
-        getContentPane().setLayout(layout);
-    }
-
-    public void mostrar() {
+        menu.add(tamany);
+        menu.add(peça);
+        barraMenu.add(menu);
+        barraBotones.add(resuelve);
+        barraBotones.setLayout(new GridBagLayout());
+        dim = new Dimension(p.getModel().getTamanyTriat() * 80, p.getModel().getTamanyTriat() * 80 + 30);
+        this.getContentPane().add(barraMenu, BorderLayout.NORTH);
+        this.getContentPane().add(ventana, BorderLayout.CENTER);
+        this.getContentPane().add(barraBotones, BorderLayout.SOUTH);
         this.pack();
+        this.setResizable(true);
         this.setVisible(true);
-        try {
-            Thread.sleep(500);
-        } catch (Exception e) {
-            MeuError.informaError(e);
-        }
-        this.revalidate();
-        this.repaint();
+        this.setSize(dim);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Canviar tamany tauler")) {
-            isTamanyDialog = true;
-            this.dialog = new JDialog(this, "Canviar tamany tauler");
-            textDialog.setText("Tamany desitjat: ");
-            comboBoxDialog.setModel(new DefaultComboBoxModel(this.prog.getModel().tamanysTauler));
-            comboBoxDialog.setSelectedItem(this.prog.getModel().getTamanyTriat());
-            comboBoxDialog.addActionListener(this);
-            this.dialog.add(textDialog);
-            this.dialog.add(comboBoxDialog);
-            this.dialog.setSize(300,300);
-            this.dialog.setVisible(true);
-        } else if (e.getActionCommand().equals("Triar peça")) {
-            this.dialog = new JDialog(this, "Triar peça");
-            textDialog.setText("Peça desitjada: ");
-            comboBoxDialog.setModel(new DefaultComboBoxModel(this.prog.getModel().getPeces()));
-            comboBoxDialog.setSelectedItem(this.prog.getModel().getPeçaTriada());
-            comboBoxDialog.addActionListener(this);
-            this.dialog.add(textDialog);
-            this.dialog.add(comboBoxDialog);
-            this.dialog.setSize(300,300);
-            this.dialog.setVisible(true);
-        } else if (e.getActionCommand().equals("comboBoxChanged")) {
-            if (isTamanyDialog) {
-                this.prog.getModel().setTamanyTriat(Integer.parseInt(comboBoxDialog.getSelectedItem().toString()));
-                this.prog.notificar("Tamany canviat");
-            } else {
-                this.prog.getModel().setPeçaTriada(comboBoxDialog.getSelectedItem().toString());
+    private void inicializaTablero(int dimension) {
+        ventana.removeAll();
+        tablero = new JLabel[dimension][dimension];
+        ventana.setLayout(new GridLayout(dimension, dimension));
+        dim = new Dimension(dimension * 80, dimension * 80 + 30);
+        ventana.setSize(dim);
+        initCasillas(dimension, tablero);
+        ventana.updateUI();
+    }
+
+    private void initCasillas(int dimension, JLabel[][] tablero) {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                tablero[i][j] = new JLabel();
+                tablero[i][j].addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseClicked(MouseEvent me) {
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent me) {
+                        for (int i = 0; i < dimension; i++) {
+                            for (int j = 0; j < dimension; j++) {
+                                if (me.getSource() == tablero[i][j]) {
+                                    posarImatge(i, j);
+                                    prog.notificar("Peça "+i+", "+j);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent me) {
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent me) {
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent me) {
+                    }
+                }
+                );
+                pintarCasillas(i, j);
+                ventana.add(tablero[i][j]);
+            }
+        }
+    }
+
+    private void pintarCasillas(int i, int j) {
+        if ((i + j) % 2 == 0) {
+            tablero[i][j].setBackground(new Color(232, 235, 239));
+        } else {
+            tablero[i][j].setBackground(new Color(125, 135, 150));
+        }
+        tablero[i][j].setOpaque(true);
+    }
+    
+    private void posarImatge(int i, int j) {
+        for (int fila = 0; fila < this.prog.getModel().getTamanyTriat(); fila++) {
+            for (int columna = 0; columna < this.prog.getModel().getTamanyTriat(); columna++) {
+                if (tablero[fila][columna].getIcon() != null) {
+                    tablero[fila][columna].setIcon(null);
+                    tablero[fila][columna].revalidate();
+                    pintarCasillas(fila, columna);
+                }
+            }
+        }
+        ImageIcon icon = new ImageIcon(new ImageIcon(this.prog.getModel().getPeçaTriada().imatge).getImage().getScaledInstance(tablero[i][j].getWidth(), tablero[i][j].getHeight(), Image.SCALE_DEFAULT));
+        tablero[i][j].setIcon(icon);
+    }
+
+    public void removeListener() {
+        for (int i = 0; i < prog.getModel().getTamanyTriat(); i++) {
+            for (int j = 0; j < prog.getModel().getTamanyTriat(); j++) {
+                for (MouseListener ml : tablero[i][j].getMouseListeners()) {
+                    tablero[i][j].removeMouseListener(ml);
+                }
             }
         }
     }
 
     @Override
     public void notificar(String s) {
-        
+        if (s.startsWith("Actualitzar tauler")) {
+            this.inicializaTablero(prog.getModel().getTamanyTriat());
+        }
     }
 }

@@ -2,37 +2,24 @@ package capitol2.model;
 
 import capitol2.PerEsdeveniments;
 import capitol2.main;
-import java.awt.Color;
+import capitol2.model.Peces.Cavall;
+import capitol2.model.Peces.Peça;
+import capitol2.model.Peces.Reina;
+import capitol2.model.Peces.Torre;
 
 /**
  *
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
-    public String[] tamanysTauler = {"4", "5", "6", "7", "8", "9", "10", "11", "12"};
-    private String[] peces = {"Cavall", "Reina", "Alfil"};
     private int tamanyTriat = 8;
-    private String peçaTriada = peces[0];
-    private Casella[][] tauler;
+    private Peça peçaTriada = new Reina();
     private int progres = 0;
     private main prog;
+    private int x, y; // posició de la peça
     
     public Model(main p) {
         prog = p;
-        inicialitzarCaselles();
-    }
-    
-    private void inicialitzarCaselles() {
-        tauler = new Casella[tamanyTriat][tamanyTriat];
-        for (int i = 0; i < tamanyTriat; i++) {
-            for (int j = 0; j < tamanyTriat; j++) {
-                if ((i + j) % 2 == 0) {
-                    tauler[i][j] = new Casella(Color.WHITE);
-                } else {
-                    tauler[i][j] = new Casella(Color.BLACK);
-                }
-            }
-        }
     }
 
     public int getProgres() {
@@ -53,24 +40,36 @@ public class Model implements PerEsdeveniments {
     
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Tamany canviat")) {
-            this.inicialitzarCaselles();
+        if (s.startsWith("Tamany tauler")) {
+            s = s.replaceAll("Tamany tauler: ", "");
+            this.tamanyTriat = Integer.parseInt(s);
+            prog.notificar("Actualitzar tauler");
+        } else if (s.startsWith("Peça")) {
+            String[] res = s.split(", ");
+            this.x = Integer.parseInt(res[0].replaceAll("Peça ", ""));
+            this.y = Integer.parseInt(res[1]);
+        } else if (s.startsWith("Canvi peça")) {
+            s = s.replaceAll("Canvi peça a ", "");
+            switch (s) {
+                case "Cavall":
+                    this.peçaTriada = new Cavall();
+                    break;
+                case "Reina":
+                    this.peçaTriada = new Reina();
+                    break;
+                case "Torre":
+                    this.peçaTriada = new Torre();
+                    break;
+            }
+            System.out.println(peçaTriada.imatge);
         }
     }
 
-    public String[] getPeces() {
-        return peces;
-    }
-
-    public String getPeçaTriada() {
+    public Peça getPeçaTriada() {
         return peçaTriada;
     }
 
-    public void setPeçaTriada(String peçaTriada) {
+    public void setPeçaTriada(Peça peçaTriada) {
         this.peçaTriada = peçaTriada;
-    }
-
-    public Casella[][] getTauler() {
-        return tauler;
     }
 }
