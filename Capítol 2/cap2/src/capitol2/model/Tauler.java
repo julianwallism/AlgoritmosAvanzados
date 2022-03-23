@@ -5,9 +5,8 @@ package capitol2.model;
  * @author Dawid Roch & Julià Wallis
  */
 public class Tauler {
-
-    public int dim;
-    public int[][] caselles;
+    private int dim;
+    private int[][] caselles;
 
     public Tauler(int dim) {
         this.dim = dim;
@@ -33,6 +32,10 @@ public class Tauler {
 
     public int getCasella(int i, int j) {
         return caselles[i][j];
+    }
+    
+    public int[][] getCaselles() {
+        return caselles;
     }
 
     public void clear() {

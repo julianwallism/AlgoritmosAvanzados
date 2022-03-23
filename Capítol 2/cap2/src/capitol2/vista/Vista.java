@@ -2,10 +2,9 @@ package capitol2.vista;
 
 import capitol2.PerEsdeveniments;
 import capitol2.main;
-import capitol2.model.Casella;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -13,13 +12,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class Vista extends JFrame implements PerEsdeveniments {
-
     private final ImageIcon logo = new ImageIcon("logo.png");
     private final PanellCentral panellCentral;
-    //private JLabel[][] tablero;
-    private final JPanel barraSuperior;
-    private final JMenuBar barraBotones;
-    private final JButton resuelve, aturar, grafica;
+    private final JPanel barraSuperior, barraSelectors, barraBotones;
+    private final JProgressBar barraInferior;
+    private final JButton resol, aturar, grafica;
     private final JLabel label_peça, label_tamany;
     private final JSpinner tamany;
     private final JComboBox peces;
@@ -32,18 +29,20 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.setTitle(titol);
         this.setIconImage(logo.getImage());
         panellCentral = new PanellCentral(p);
+        barraInferior = new JProgressBar();
+        barraSelectors = new JPanel();
         barraSuperior = new JPanel();
-        barraBotones = new JMenuBar();
+        barraBotones = new JPanel();
         tamany = new JSpinner(new SpinnerNumberModel(8, 3, 25, 1));
         label_tamany = new JLabel();
         label_peça = new JLabel();
         peces = new JComboBox();
-        resuelve = new JButton("Resol");
+        resol = new JButton("Resol");
         aturar = new JButton("Atura");
         grafica = new JButton("Grafica");
-        label_tamany.setText("Tria el tamany");
+        label_tamany.setText("Tamany:");
         peces.setModel(new DefaultComboBoxModel(prog.getModel().peces));
-        label_peça.setText("Tria la peça: ");
+        label_peça.setText("Peça:");
 
         tamany.addChangeListener(new ChangeListener() {
             @Override
@@ -59,11 +58,10 @@ public class Vista extends JFrame implements PerEsdeveniments {
             public void actionPerformed(ActionEvent e) {
                 String resposta = peces.getSelectedItem().toString();
                 prog.notificar("Canvi peça a " + resposta);
-
             }
         });
 
-        resuelve.addActionListener(new ActionListener() {
+        resol.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 prog.notificar("Resoldre");
@@ -90,24 +88,27 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 }
             }
         });
-
-        barraSuperior.add(label_tamany);
-        barraSuperior.add(tamany);
-        barraSuperior.add(label_peça);
-        barraSuperior.add(peces);
-
-        barraBotones.add(resuelve);
+        
+        barraBotones.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        barraBotones.add(resol);
         barraBotones.add(aturar);
         barraBotones.add(grafica);
-        barraBotones.setLayout(new GridBagLayout());
-        dim = new Dimension(p.getModel().getTamanyTriat() * 80, p.getModel().getTamanyTriat() * 80 + 30);
-
+        barraSelectors.setLayout(new FlowLayout(FlowLayout.LEFT));
+        barraSelectors.add(label_tamany);
+        barraSelectors.add(tamany);
+        barraSelectors.add(label_peça);
+        barraSelectors.add(peces);
+        barraSuperior.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
+        barraSuperior.add(barraSelectors);
+        barraSuperior.add(barraBotones);
+        
         this.getContentPane().add(barraSuperior, BorderLayout.NORTH);
         this.getContentPane().add(panellCentral, BorderLayout.CENTER);
-        this.getContentPane().add(barraBotones, BorderLayout.SOUTH);
+        this.getContentPane().add(barraInferior, BorderLayout.SOUTH);
         this.pack();
         this.setResizable(false);
         this.setVisible(true);
+        dim = new Dimension(p.getModel().getTamanyTriat() * 80, p.getModel().getTamanyTriat() * 80 + 30);
         this.setSize(dim);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -117,19 +118,20 @@ public class Vista extends JFrame implements PerEsdeveniments {
         if (s.startsWith("Actualitzar tauler")) {
             panellCentral.inicialitzarTauler();
         } else if (s.startsWith("Solució")) {
+            this.barraInferior.setIndeterminate(false);
             String[] sol = s.split(" ");
-            switch (sol[1]) {
-                case ("si"):
-                    solucio = true;
-                    panellCentral.solucio();
-                    break;
-                case ("no"):
-                    JOptionPane.showMessageDialog(null, "Solució no trobada, per favor torna a intentar-ho amb una altra posició i/o peça de les disponibles a la barra superior.", "Solució no trobada", JOptionPane.WARNING_MESSAGE);
-                    break;
+            if (sol[1].equals("si")) {
+                solucio = true;
+                panellCentral.pintarSolucio();
+            } else {
+                JOptionPane.showMessageDialog(null, "Solució no trobada, per favor torna a intentar-ho amb una altra posició i/o peça.", "Solució no trobada", JOptionPane.WARNING_MESSAGE);
             }
         } else if (s.startsWith("Error: PI")) {
             JOptionPane.showMessageDialog(null, "Posició inicial no especificada, per favor torna a intentar-ho fent click a la casella desitjada.", "Posició inicial no especificada", JOptionPane.ERROR_MESSAGE);
+        } else if (s.startsWith("Resoldre")) {
+            this.barraInferior.setIndeterminate(true);
+        } else if (s.startsWith("Aturar")) {
+            this.barraInferior.setIndeterminate(false);
         }
     }
-
 }

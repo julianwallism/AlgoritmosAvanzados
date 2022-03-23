@@ -19,7 +19,6 @@ import javax.swing.JPanel;
  * @author Dawid Roch & Julià Wallis
  */
 public class PanellCentral extends JPanel {
-
     public static final int FPS = 24;
 
     private JLabel[][] tauler;
@@ -64,6 +63,7 @@ public class PanellCentral extends JPanel {
 
                     @Override
                     public void mousePressed(MouseEvent me) {
+                        p.getModel().getTauler().clear();
                         for (int i = 0; i < dimension; i++) {
                             for (int j = 0; j < dimension; j++) {
                                 pintarCasella(i, j);
@@ -128,12 +128,15 @@ public class PanellCentral extends JPanel {
         }
     }
 
-    public void solucio() {
-        int[][] tauler_solucio = p.getModel().getTauler().caselles;
+    public void pintarSolucio() {
+        int[][] tauler_solucio = p.getModel().getTauler().getCaselles();
         for (int fila = 0; fila < p.getModel().getTamanyTriat(); fila++) {
             for (int columna = 0; columna < p.getModel().getTamanyTriat(); columna++) {
-                tauler[fila][columna].setFont(new Font("Arial", Font.BOLD, 15));
-                tauler[fila][columna].setText(Integer.toString(tauler_solucio[fila][columna]));
+                if (tauler_solucio[fila][columna] != 1) {
+                    tauler[fila][columna].setForeground(Color.RED);
+                    tauler[fila][columna].setFont(new Font("Times New Roman", Font.BOLD, 32));
+                    tauler[fila][columna].setText("   "+tauler_solucio[fila][columna]);
+                }
             }
         }
     }
@@ -156,21 +159,12 @@ public class PanellCentral extends JPanel {
             gr.drawLine(pre_x, pre_y, x, y);
             pre_x = x;
             pre_y = y;
-//            intentava cambiar imatge de lloc
-//            if(i>0){
-//                tauler[ordreX[i-1]][ordreY[i-1]].setIcon(null);
-//            }
-//            tauler[ordreX[i]][ordreY[i]].setIcon(icon);
-//            this.updateUI();
             Thread.sleep(200);
-            //pintarCasella(ordreX[i],ordreY[i]);
-
         }
     }
 }
 
 class ProcesPintat extends Thread {
-
     private PanellCentral pan;
 
     public ProcesPintat(PanellCentral pc) {

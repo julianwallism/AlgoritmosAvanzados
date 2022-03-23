@@ -9,13 +9,12 @@ import capitol2.model.Peces.*;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
-
     public final static String[] peces = {"Reina", "Torre", "Cavall", "Cardenal", "Centauro", "Somera"};
 
     private int tamanyTriat;
     private Peça peçaTriada;
     private main prog;
-    public Tauler tauler;
+    private Tauler tauler;
     private int x, y; // posició de la peça
 
     public Model(main p) {

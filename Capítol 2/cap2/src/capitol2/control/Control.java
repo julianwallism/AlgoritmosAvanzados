@@ -1,19 +1,15 @@
 package capitol2.control;
 
-import capitol2.MeuError;
 import capitol2.main;
 import capitol2.PerEsdeveniments;
-import capitol2.model.Casella;
 import capitol2.model.Tauler;
 import capitol2.model.Peces.Peça;
-import java.util.Random;
 
 /**
  *
  * @authors Dawid Roch & Julià Wallis
  */
 public class Control extends Thread implements PerEsdeveniments {
-
     private final main prog;
     private boolean seguir, executat;
     private Tauler tauler;
@@ -54,17 +50,22 @@ public class Control extends Thread implements PerEsdeveniments {
         tauler = this.prog.getModel().getTauler();
         x = this.prog.getModel().getX();
         y = this.prog.getModel().getY();
-        movX = p.getMovimentsX();
-        movY = p.getMovimentsY();
-        tauler.setCasella(x, y, 1);
-        long inici = System.nanoTime();
-        if (BT(x, y, 2)) {
-            prog.notificar("Solució si");
-        } else if (seguir) {
-            prog.notificar("Solució no");
+        if (x == -1 || y == -1) {
+            prog.notificar("Error: PI");
+            prog.notificar("Aturar");
+        } else {
+            movX = p.getMovimentsX();
+            movY = p.getMovimentsY();
+            tauler.setCasella(x, y, 1);
+            long inici = System.nanoTime();
+            if (BT(x, y, 2)) {
+                double end = (System.nanoTime() - inici)/1000000000.0;
+                System.out.println("L'algorisme ha tardat "+end+" segons");
+                prog.notificar("Solució si");
+            } else {
+                prog.notificar("Solució no");
+            }
         }
-        double end = (System.nanoTime() - inici)/1000000000.0;
-        System.out.println(end);
     }
 
     private boolean BT(int x, int y, int mov) {
@@ -84,7 +85,7 @@ public class Control extends Thread implements PerEsdeveniments {
                     if (BT(prox_x, prox_y, mov + 1)) {
                         return true;
                     } else {
-                        tauler.clearCasella(prox_x, prox_y); // backtracking
+                        tauler.clearCasella(prox_x, prox_y); // tornada enrera
                     }
                 }
             }
