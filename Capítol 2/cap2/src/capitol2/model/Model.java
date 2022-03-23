@@ -16,6 +16,7 @@ public class Model implements PerEsdeveniments {
     private main prog;
     private Tauler tauler;
     private int x, y; // posició de la peça
+    private double time;
 
     public Model(main p) {
         prog = p;
@@ -24,6 +25,7 @@ public class Model implements PerEsdeveniments {
         tauler.setDim(tamanyTriat);
         x = -1;
         y = -1;
+        time = 0.0;
         peçaTriada = new Reina();
     }
 
@@ -99,5 +101,13 @@ public class Model implements PerEsdeveniments {
 
     public void setTauler(Tauler tauler) {
         this.tauler = tauler;
+    }
+    
+     public double getTime() {
+        return time;
+    }
+
+    public void setTime(Double time) {
+        this.time = time;
     }
 }

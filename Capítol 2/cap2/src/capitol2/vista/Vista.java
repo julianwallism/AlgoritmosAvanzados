@@ -12,12 +12,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class Vista extends JFrame implements PerEsdeveniments {
+
     private final ImageIcon logo = new ImageIcon("logo.png");
     private final PanellCentral panellCentral;
-    private final JPanel barraSuperior, barraSelectors, barraBotones;
-    private final JProgressBar barraInferior;
+    private final JPanel barraSuperior, barraSelectors, barraBotones, barraInferior;
+    private final JProgressBar barraProgres;
     private final JButton resol, aturar, grafica;
-    private final JLabel label_peça, label_tamany;
+    private final JLabel label_peça, label_tamany, info;
     private final JSpinner tamany;
     private final JComboBox peces;
     private main prog;
@@ -29,20 +30,24 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.setTitle(titol);
         this.setIconImage(logo.getImage());
         panellCentral = new PanellCentral(p);
-        barraInferior = new JProgressBar();
+        barraProgres = new JProgressBar();
         barraSelectors = new JPanel();
         barraSuperior = new JPanel();
         barraBotones = new JPanel();
+        barraInferior = new JPanel();
         tamany = new JSpinner(new SpinnerNumberModel(8, 3, 25, 1));
         label_tamany = new JLabel();
         label_peça = new JLabel();
+        info = new JLabel();
         peces = new JComboBox();
         resol = new JButton("Resol");
         aturar = new JButton("Atura");
         grafica = new JButton("Grafica");
         label_tamany.setText("Tamany:");
-        peces.setModel(new DefaultComboBoxModel(prog.getModel().peces));
         label_peça.setText("Peça:");
+        info.setText(" ");
+        peces.setModel(new DefaultComboBoxModel(prog.getModel().peces));
+       
 
         tamany.addChangeListener(new ChangeListener() {
             @Override
@@ -64,6 +69,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         resol.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                info.setText(" ");
                 prog.notificar("Resoldre");
             }
         });
@@ -88,20 +94,27 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 }
             }
         });
-        
+
         barraBotones.setLayout(new FlowLayout(FlowLayout.RIGHT));
         barraBotones.add(resol);
         barraBotones.add(aturar);
         barraBotones.add(grafica);
+        
         barraSelectors.setLayout(new FlowLayout(FlowLayout.LEFT));
         barraSelectors.add(label_tamany);
         barraSelectors.add(tamany);
         barraSelectors.add(label_peça);
         barraSelectors.add(peces);
+        
         barraSuperior.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
         barraSuperior.add(barraSelectors);
         barraSuperior.add(barraBotones);
         
+        barraInferior.setLayout(new BorderLayout());
+        barraInferior.add(info, BorderLayout.NORTH);
+        barraInferior.add(barraProgres, BorderLayout.SOUTH);
+        
+
         this.getContentPane().add(barraSuperior, BorderLayout.NORTH);
         this.getContentPane().add(panellCentral, BorderLayout.CENTER);
         this.getContentPane().add(barraInferior, BorderLayout.SOUTH);
@@ -118,20 +131,21 @@ public class Vista extends JFrame implements PerEsdeveniments {
         if (s.startsWith("Actualitzar tauler")) {
             panellCentral.inicialitzarTauler();
         } else if (s.startsWith("Solució")) {
-            this.barraInferior.setIndeterminate(false);
+            barraProgres.setIndeterminate(false);
             String[] sol = s.split(" ");
             if (sol[1].equals("si")) {
                 solucio = true;
                 panellCentral.pintarSolucio();
+                info.setText("L'algorisme ha tardat: " + this.prog.getModel().getTime() + " segons");
             } else {
                 JOptionPane.showMessageDialog(null, "Solució no trobada, per favor torna a intentar-ho amb una altra posició i/o peça.", "Solució no trobada", JOptionPane.WARNING_MESSAGE);
             }
         } else if (s.startsWith("Error: PI")) {
             JOptionPane.showMessageDialog(null, "Posició inicial no especificada, per favor torna a intentar-ho fent click a la casella desitjada.", "Posició inicial no especificada", JOptionPane.ERROR_MESSAGE);
         } else if (s.startsWith("Resoldre")) {
-            this.barraInferior.setIndeterminate(true);
+            this.barraProgres.setIndeterminate(true);
         } else if (s.startsWith("Aturar")) {
-            this.barraInferior.setIndeterminate(false);
+            this.barraProgres.setIndeterminate(false);
         }
     }
 }

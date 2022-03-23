@@ -10,6 +10,7 @@ import capitol2.model.Peces.Peça;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Control extends Thread implements PerEsdeveniments {
+
     private final main prog;
     private boolean seguir, executat;
     private Tauler tauler;
@@ -59,8 +60,7 @@ public class Control extends Thread implements PerEsdeveniments {
             tauler.setCasella(x, y, 1);
             long inici = System.nanoTime();
             if (BT(x, y, 2)) {
-                double end = (System.nanoTime() - inici)/1000000000.0;
-                System.out.println("L'algorisme ha tardat "+end+" segons");
+                prog.getModel().setTime((System.nanoTime() - inici) / 1000000000.0);
                 prog.notificar("Solució si");
             } else {
                 prog.notificar("Solució no");
