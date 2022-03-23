@@ -27,7 +27,7 @@ public class main implements PerEsdeveniments {
     // Funció símple de la comunicació per Patró d'esdeveniments
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Resoldre")) {
+        if (s.startsWith("Resoldre") || s.startsWith("Aturar")) {
             con.notificar(s);
         } else if (s.startsWith("Actualitzar tauler") || s.startsWith("Solució") || s.startsWith("Error: PI")) {
             vis.notificar(s);

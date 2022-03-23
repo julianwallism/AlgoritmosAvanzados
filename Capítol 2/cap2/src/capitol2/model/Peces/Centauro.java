@@ -19,4 +19,12 @@ public class Centauro extends Peça {
         this.nom = "Centauro";
 
     }
+
+    public int[] getMovimentsX() {
+        return movimentsX;
+    }
+
+    public int[] getMovimentsY() {
+        return movimentsY;
+    }
 }

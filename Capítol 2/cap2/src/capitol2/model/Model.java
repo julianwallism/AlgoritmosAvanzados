@@ -9,21 +9,25 @@ import capitol2.model.Peces.*;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
+
     public final static String[] peces = {"Reina", "Torre", "Cavall", "Cardenal", "Centauro", "Somera"};
-    
+
     private int tamanyTriat;
-    private Casella[][] tauler;
     private Peça peçaTriada;
     private main prog;
-    private int x, y; // Posició de la peça
+    public Tauler tauler;
+    private int x, y; // posició de la peça
 
     public Model(main p) {
         prog = p;
-        this.tamanyTriat = 8;
-        this.initTauler();
-        this.peçaTriada = new Reina();
+        tamanyTriat = 8;
+        tauler = new Tauler(this.tamanyTriat);
+        tauler.setDim(tamanyTriat);
+        x = -1;
+        y = -1;
+        peçaTriada = new Reina();
     }
-    
+
     @Override
     public void notificar(String s) {
         if (s.startsWith("Tamany tauler")) {
@@ -59,16 +63,11 @@ public class Model implements PerEsdeveniments {
             }
         }
     }
-    
+
     private void initTauler() {
-        this.tauler = new Casella[tamanyTriat][tamanyTriat];
+        this.tauler = new Tauler(tamanyTriat);
         this.x = -1;
         this.y = -1;
-        for (int i = 0; i < tamanyTriat; i++) {
-            for (int j = 0; j < tamanyTriat; j++) {
-                this.tauler[i][j] = new Casella();
-            }
-        }
     }
 
     public int getTamanyTriat() {
@@ -95,11 +94,11 @@ public class Model implements PerEsdeveniments {
         return y;
     }
 
-    public Casella[][] getTauler() {
+    public Tauler getTauler() {
         return tauler;
     }
 
-    public void setTauler(Casella[][] tauler) {
+    public void setTauler(Tauler tauler) {
         this.tauler = tauler;
     }
 }

@@ -20,17 +20,19 @@ import javax.swing.JPanel;
  * @author Dawid Roch & Julià Wallis
  */
 public class PanellCentral extends JPanel {
+
     public static final int FPS = 24;
-    
+
     private JLabel[][] tauler;
     private main p;
-    
+    private ImageIcon icon;
+
     public PanellCentral(main p) {
         this.p = p;
         this.setLayout(new GridLayout(p.getModel().getTamanyTriat(), p.getModel().getTamanyTriat()));
         inicialitzarTauler();
     }
-    
+
     public void repaint() {
         if (this.getGraphics() != null) {
             paint(this.getGraphics());
@@ -41,18 +43,6 @@ public class PanellCentral extends JPanel {
         super.paint(gr);
     }
 
-    public void pintaGrafic(int n, double temps, int nAnterior, double tempsAnterior, int c) {
-        Graphics2D grap = (Graphics2D) this.getGraphics();
-        grap.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Color color = new Color(c);
-        grap.setColor(color);
-        grap.fillOval((n / 2) * (this.getWidth() / 8) - 10, this.getHeight() - (int) (this.getHeight() * (temps)) - 3, 6, 6);
-        grap.drawLine((nAnterior / 2) * (this.getWidth() / 8) - 10,
-                this.getHeight() - (int) (this.getHeight() * (tempsAnterior)),
-                (n / 2) * (this.getWidth() / 8) - 10,
-                this.getHeight() - (int) (this.getHeight() * (temps)));
-    }
-    
     public void inicialitzarTauler() {
         int dimension = this.p.getModel().getTamanyTriat();
         this.removeAll();
@@ -107,9 +97,9 @@ public class PanellCentral extends JPanel {
 
     private void pintarCasella(int i, int j) {
         if ((i + j) % 2 == 0) {
-            tauler[i][j].setBackground(new Color(232, 235, 239));
+           tauler[i][j].setBackground(new Color(238, 238, 210));
         } else {
-            tauler[i][j].setBackground(new Color(125, 135, 150));
+            tauler[i][j].setBackground(new Color(118, 150, 86));
         }
         tauler[i][j].setText("");
         tauler[i][j].setOpaque(true);
@@ -125,12 +115,12 @@ public class PanellCentral extends JPanel {
                 }
             }
         }
-        ImageIcon icon = new ImageIcon(new ImageIcon(this.p.getModel().getPeçaTriada().imatge).getImage().getScaledInstance(tauler[i][j].getWidth(), tauler[i][j].getHeight(), Image.SCALE_DEFAULT));
+        this.icon = new ImageIcon(new ImageIcon(this.p.getModel().getPeçaTriada().imatge).getImage().getScaledInstance(tauler[i][j].getWidth(), tauler[i][j].getHeight(), Image.SCALE_DEFAULT));
         tauler[i][j].setIcon(icon);
     }
-    
+
     public void pintarOrdreCasella(int i, int j, int nombre) {
-        tauler[i][j].setText(""+nombre);
+        tauler[i][j].setText("" + nombre);
     }
 
     public void removeListener() {
@@ -142,9 +132,49 @@ public class PanellCentral extends JPanel {
             }
         }
     }
+
+    public void solucio() {
+        int[][] tauler_solucio = p.getModel().getTauler().caselles;
+        for (int fila = 0; fila < p.getModel().getTamanyTriat(); fila++) {
+            for (int columna = 0; columna < p.getModel().getTamanyTriat(); columna++) {
+                tauler[fila][columna].setText(Integer.toString(tauler_solucio[fila][columna]));
+            }
+        }
+    }
+
+    public void grafica() throws InterruptedException {
+        Graphics gr = this.getGraphics();
+        gr.setColor(Color.red);
+
+        int[] ordreX = p.getModel().getTauler().getOrderX();
+        int[] ordreY = p.getModel().getTauler().getOrderY();
+
+        int pre_x = tauler[ordreX[0]][ordreY[0]].getLocation().x + tauler[0][0].getWidth() / 2;
+        int pre_y = tauler[ordreX[0]][ordreY[0]].getLocation().y + tauler[0][0].getHeight() / 2;
+
+        int x, y;
+        for (int i = 0; i < p.getModel().getTamanyTriat() * p.getModel().getTamanyTriat(); i++) {
+            x = tauler[ordreX[i]][ordreY[i]].getLocation().x + tauler[0][0].getWidth() / 2;
+            y = tauler[ordreX[i]][ordreY[i]].getLocation().y + tauler[0][0].getHeight() / 2;
+            gr.fillOval(x - 4, y - 5, 8, 8);
+            gr.drawLine(pre_x, pre_y, x, y);
+            pre_x = x;
+            pre_y = y;
+//            intentava cambiar imatge de lloc
+//            if(i>0){
+//                tauler[ordreX[i-1]][ordreY[i-1]].setIcon(null);
+//            }
+//            tauler[ordreX[i]][ordreY[i]].setIcon(icon);
+//            this.updateUI();
+            Thread.sleep(200);
+            //pintarCasella(ordreX[i],ordreY[i]);
+
+        }
+    }
 }
 
 class ProcesPintat extends Thread {
+
     private PanellCentral pan;
 
     public ProcesPintat(PanellCentral pc) {

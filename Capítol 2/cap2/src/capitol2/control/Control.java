@@ -4,6 +4,7 @@ import capitol2.MeuError;
 import capitol2.main;
 import capitol2.PerEsdeveniments;
 import capitol2.model.Casella;
+import capitol2.model.Tauler;
 import capitol2.model.Peces.Peça;
 import java.util.Random;
 
@@ -12,8 +13,12 @@ import java.util.Random;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Control extends Thread implements PerEsdeveniments {
+
     private final main prog;
     private boolean seguir, executat;
+    private Tauler tauler;
+    private int x, y;
+    private int[] movX, movY;
 
     public Control(main p) {
         this.prog = p;
@@ -46,28 +51,44 @@ public class Control extends Thread implements PerEsdeveniments {
 
     private void resol() {
         Peça p = this.prog.getModel().getPeçaTriada();
-        Casella[][] tauler = this.prog.getModel().getTauler();
-        int x = this.prog.getModel().getX();
-        int y = this.prog.getModel().getY();
+        tauler = this.prog.getModel().getTauler();
+        x = this.prog.getModel().getX();
+        y = this.prog.getModel().getY();
+        movX = p.getMovimentsX();
+        movY = p.getMovimentsY();
 
-        // Posar totes les caselles a no visitades menys l'inicial
-        if (x != -1 && y != -1) {
-            for (int i = 0; i < tauler.length; i++) {
-                for (int j = 0; j < tauler.length; j++) {
-                    if (i == x && j == y) {
-                        tauler[i][j].setVisitada(true);
+        tauler.setCasella(x, y, 1);
+        if (BT(x, y, 2)) {
+            prog.notificar("Solució si");
+        } else if (seguir) {
+            prog.notificar("Solució no");
+        }
+    }
+
+    private boolean BT(int x, int y, int mov) {
+        if (this.seguir) {
+            int prox_x, prox_y;
+            if (mov > tauler.getDim() * tauler.getDim()) {
+                tauler.setCasella(x, y, tauler.getDim() * tauler.getDim());
+                return true;
+            }
+            for (int k = 0; k < movX.length; k++) {
+                prox_x = x + movX[k];
+                prox_y = y + movY[k];
+                if (prox_x < tauler.getDim() && prox_x >= 0
+                        && prox_y >= 0 && prox_y < tauler.getDim()
+                        && tauler.getCasella(prox_x, prox_y) == 0) {
+                    System.out.println("Prox X: " + prox_x + ", Prox Y: " + prox_y + ", Mov: " + mov);
+                    tauler.setCasella(prox_x, prox_y, mov);
+                    if (BT(prox_x, prox_y, mov + 1)) {
+                        return true;
                     } else {
-                        tauler[i][j].setVisitada(false);
-                        tauler[i][j].setOrdre(new Random().nextInt(tauler.length*tauler.length));
+                        tauler.clearCasella(prox_x, prox_y); // backtracking
                     }
                 }
             }
             this.prog.getModel().setTauler(tauler);
-
-            // Algorisme backtracking per recòrrer el tauler
-            this.prog.notificar("Solució trobada");
-        } else {
-            this.prog.notificar("Error: PI");
         }
+        return false;
     }
 }
