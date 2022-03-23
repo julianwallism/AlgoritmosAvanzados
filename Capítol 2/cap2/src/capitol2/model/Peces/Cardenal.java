@@ -29,11 +29,4 @@ public class Cardenal extends Peça {
         return movimentsY;
     }
     
-     public int[] getMovimentsX() {
-        return movimentsX;
-    }
-
-    public int[] getMovimentsY() {
-        return movimentsY;
-    }
 }

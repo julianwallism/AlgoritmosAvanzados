@@ -26,12 +26,4 @@ public class Centauro extends Peça {
     public int[] getMovimentsY() {
         return movimentsY;
     }
-
-    public int[] getMovimentsX() {
-        return movimentsX;
-    }
-
-    public int[] getMovimentsY() {
-        return movimentsY;
-    }
 }

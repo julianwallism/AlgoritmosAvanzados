@@ -4,11 +4,10 @@ import capitol2.MeuError;
 import capitol2.main;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
@@ -32,6 +31,7 @@ public class PanellCentral extends JPanel {
         this.setLayout(new GridLayout(p.getModel().getTamanyTriat(), p.getModel().getTamanyTriat()));
         inicialitzarTauler();
     }
+
     public void repaint() {
         if (this.getGraphics() != null) {
             paint(this.getGraphics());
@@ -96,7 +96,7 @@ public class PanellCentral extends JPanel {
 
     private void pintarCasella(int i, int j) {
         if ((i + j) % 2 == 0) {
-           tauler[i][j].setBackground(new Color(238, 238, 210));
+            tauler[i][j].setBackground(new Color(238, 238, 210));
         } else {
             tauler[i][j].setBackground(new Color(118, 150, 86));
         }
@@ -118,10 +118,6 @@ public class PanellCentral extends JPanel {
         tauler[i][j].setIcon(icon);
     }
 
-    public void pintarOrdreCasella(int i, int j, int nombre) {
-        tauler[i][j].setText("" + nombre);
-    }
-
     public void removeListener() {
         for (int i = 0; i < p.getModel().getTamanyTriat(); i++) {
             for (int j = 0; j < p.getModel().getTamanyTriat(); j++) {
@@ -136,6 +132,7 @@ public class PanellCentral extends JPanel {
         int[][] tauler_solucio = p.getModel().getTauler().caselles;
         for (int fila = 0; fila < p.getModel().getTamanyTriat(); fila++) {
             for (int columna = 0; columna < p.getModel().getTamanyTriat(); columna++) {
+                tauler[fila][columna].setFont(new Font("Arial", Font.BOLD, 15));
                 tauler[fila][columna].setText(Integer.toString(tauler_solucio[fila][columna]));
             }
         }
