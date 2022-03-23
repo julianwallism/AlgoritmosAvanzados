@@ -6,11 +6,11 @@ package capitol2.model;
  */
 public class Tauler {
     public int dim = 8;
-    public Casella[][] caselles;
+    public int[][] caselles;
     
     public Tauler(int dim){
         this.dim=dim;
-        caselles = new Casella[this.dim][this.dim];
+        caselles = new int[this.dim][this.dim];
     }
 
     public int getDim() {
@@ -21,12 +21,16 @@ public class Tauler {
         this.dim = dim;
     }
 
-    public Casella[][] getCaselles() {
-        return caselles;
+
+    public void setCasella(int i, int j, int x) {
+        caselles[i][j] = x;
     }
 
-    public void setCaselles(Casella[][] caselles) {
-        this.caselles = caselles;
+    public void clearCasella(int i, int j) {
+        caselles[i][j] = 0;
     }
-    
+
+    public int getCasella(int i, int j) {
+        return caselles[i][j];
+    }
 }

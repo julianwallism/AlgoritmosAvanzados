@@ -13,4 +13,12 @@ public class Somera extends Peça {
         this.imatge = "somera.png";
         this.nom = "Somera";
     }
+    
+     public int[] getMovimentsX() {
+        return movimentsX;
+    }
+
+    public int[] getMovimentsY() {
+        return movimentsY;
+    }
 }

@@ -13,4 +13,12 @@ public class Cavall extends Peça {
         this.imatge = "cavall.png";
         this.nom = "Cavall";
     }
+    
+     public int[] getMovimentsX() {
+        return movimentsX;
+    }
+
+    public int[] getMovimentsY() {
+        return movimentsY;
+    }
 }

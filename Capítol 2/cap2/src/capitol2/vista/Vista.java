@@ -76,7 +76,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 prog.notificar("Resoldre");
             }
         });
-        
+
         aturar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -154,9 +154,9 @@ public class Vista extends JFrame implements PerEsdeveniments {
 
     private void pintarCasillas(int i, int j) {
         if ((i + j) % 2 == 0) {
-            tablero[i][j].setBackground(new Color(232, 235, 239));
+            tablero[i][j].setBackground(new Color(238, 238, 210));
         } else {
-            tablero[i][j].setBackground(new Color(125, 135, 150));
+            tablero[i][j].setBackground(new Color(118, 150, 86));
         }
         tablero[i][j].setOpaque(true);
     }
@@ -175,6 +175,15 @@ public class Vista extends JFrame implements PerEsdeveniments {
         tablero[i][j].setIcon(icon);
     }
 
+    private void solucio() {
+        int[][] tauler_solucio = this.prog.getModel().getTauler().caselles;
+        for (int fila = 0; fila < this.prog.getModel().getTamanyTriat(); fila++) {
+            for (int columna = 0; columna < this.prog.getModel().getTamanyTriat(); columna++) {
+                tablero[fila][columna].setText(Integer.toString(tauler_solucio[fila][columna]));
+            }
+        }
+    }
+
     public void removeListener() {
         for (int i = 0; i < prog.getModel().getTamanyTriat(); i++) {
             for (int j = 0; j < prog.getModel().getTamanyTriat(); j++) {
@@ -190,5 +199,18 @@ public class Vista extends JFrame implements PerEsdeveniments {
         if (s.startsWith("Actualitzar tauler")) {
             this.inicializaTablero(prog.getModel().getTamanyTriat());
         }
+        if (s.startsWith("Solució")) {
+            String[] sol = s.split(" ");
+            switch (sol[1]) {
+                case ("si"):
+                    System.out.println("yes");
+                    solucio();
+                    break;
+                case ("no"):
+                    // 
+                    break;
+            }
+        }
     }
+
 }

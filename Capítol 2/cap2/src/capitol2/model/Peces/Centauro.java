@@ -17,6 +17,13 @@ public class Centauro extends Peça {
     public Centauro() {
         this.imatge = "centauro.png";
         this.nom = "Centauro";
+    }
 
+    public int[] getMovimentsX() {
+        return movimentsX;
+    }
+
+    public int[] getMovimentsY() {
+        return movimentsY;
     }
 }

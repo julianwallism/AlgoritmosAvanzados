@@ -15,4 +15,12 @@ public class Torre extends Peça {
         this.imatge = "torre.png";
         this.nom = "Torre";
     }
+    
+     public int[] getMovimentsX() {
+        return movimentsX;
+    }
+
+    public int[] getMovimentsY() {
+        return movimentsY;
+    }
 }

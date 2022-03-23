@@ -21,4 +21,12 @@ public class Cardenal extends Peça {
         this.nom = "Cardenal";
 
     }
+    
+     public int[] getMovimentsX() {
+        return movimentsX;
+    }
+
+    public int[] getMovimentsY() {
+        return movimentsY;
+    }
 }

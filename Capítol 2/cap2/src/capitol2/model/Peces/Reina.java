@@ -16,4 +16,13 @@ public class Reina extends Peça {
         this.imatge = "reina.png";
         this.nom = "Reina";
     }
+
+    public int[] getMovimentsX() {
+        return movimentsX;
+    }
+
+    public int[] getMovimentsY() {
+        return movimentsY;
+    }
+    
 }

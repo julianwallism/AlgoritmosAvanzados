@@ -15,6 +15,7 @@ public class Model implements PerEsdeveniments {
     public String[] peces = {"Reina", "Torre", "Cavall", "Cardenal", "Centauro", "Somera"};
     private int progres = 0;
     private main prog;
+    public Tauler tauler = new Tauler(tamanyTriat);
     private int x, y; // posició de la peça
 
     public Model(main p) {
@@ -35,6 +36,31 @@ public class Model implements PerEsdeveniments {
 
     public void setTamanyTriat(int tamanyTriat) {
         this.tamanyTriat = tamanyTriat;
+        this.tauler.setDim(this.tamanyTriat);
+    }
+
+    public Tauler getTauler() {
+        return tauler;
+    }
+
+    public void setTauler(Tauler tauler) {
+        this.tauler = tauler;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override
@@ -42,6 +68,7 @@ public class Model implements PerEsdeveniments {
         if (s.startsWith("Tamany tauler")) {
             s = s.replaceAll("Tamany tauler: ", "");
             this.tamanyTriat = Integer.parseInt(s);
+            this.tauler.setDim(this.tamanyTriat);
             prog.notificar("Actualitzar tauler");
         } else if (s.startsWith("Peça")) {
             String[] res = s.split(", ");
