@@ -9,6 +9,7 @@ import capitol2.vista.Vista;
  * @authors Dawid Roch & Julià Wallis
  */
 public class main implements PerEsdeveniments {
+
     private Model mod;    // Punter al Model
     private Vista vis;    // Punter a la Vista
     private Control con;  // Punter al Control

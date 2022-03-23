@@ -32,7 +32,6 @@ public class PanellCentral extends JPanel {
         this.setLayout(new GridLayout(p.getModel().getTamanyTriat(), p.getModel().getTamanyTriat()));
         inicialitzarTauler();
     }
-
     public void repaint() {
         if (this.getGraphics() != null) {
             paint(this.getGraphics());

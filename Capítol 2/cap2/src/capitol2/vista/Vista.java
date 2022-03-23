@@ -16,6 +16,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
 
     private final ImageIcon logo = new ImageIcon("logo.png");
     private final PanellCentral panellCentral;
+    //private JLabel[][] tablero;
     private final JPanel barraSuperior;
     private final JMenuBar barraBotones;
     private final JButton resuelve, aturar, grafica;
@@ -130,4 +131,5 @@ public class Vista extends JFrame implements PerEsdeveniments {
             JOptionPane.showMessageDialog(null, "Posició inicial no especificada, per favor torna a intentar-ho fent click a la casella desitjada.", "Posició inicial no especificada", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 }
