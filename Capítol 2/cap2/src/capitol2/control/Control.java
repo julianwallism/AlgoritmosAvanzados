@@ -14,6 +14,8 @@ public class Control extends Thread implements PerEsdeveniments {
 
     private final main prog;
     private boolean seguir, executat;
+
+    //nou
     private Peça peça = null;
     private int[] movX, movY;
     private Tauler tauler = null;
@@ -44,29 +46,40 @@ public class Control extends Thread implements PerEsdeveniments {
                 this.start();
             }
         } else if (s.startsWith("Aturar")) {
-            System.out.println("Programa aturat");
             this.seguir = false;
+            System.out.println("Programa aturat");
         }
     }
 
     private void resol() {
-        this.peça = this.prog.getModel().getPeçaTriada();
-        this.movX = this.peça.getMovimentsX();
-        this.movY = this.peça.getMovimentsY();
-        this.tauler = this.prog.getModel().getTauler();
-        this.x = this.prog.getModel().getX();
-        this.y = this.prog.getModel().getY();
+        peça = prog.getModel().getPeçaTriada();
+        movX = peça.getMovimentsX();
+        movY = peça.getMovimentsY();
+
+        tauler = prog.getModel().getTauler();
+        tauler.clear();
+
+        x = prog.getModel().getX();
+        y = prog.getModel().getY();
+
         System.out.println("X: " + x + ", Y: " + y);
-        if (BT(x, y, 1)) {
-            prog.notificar("Solució si");       
+        if (x == -1 || y == -1) {
+            prog.notificar("Error: PI");
+
         } else {
-            prog.notificar("Solució no");
+            tauler.setCasella(x, y, 1);
+            if (BT(x, y, 2)) {
+                prog.notificar("Solució si");
+            } else {
+                prog.notificar("Solució no");
+            }
         }
     }
 
     private boolean BT(int x, int y, int mov) {
         int prox_x, prox_y;
-        if (mov == tauler.getDim() * tauler.getDim()) {
+        if (mov > tauler.getDim() * tauler.getDim()) {
+            tauler.setCasella(x, y, tauler.getDim() * tauler.getDim());
             return true;
         }
         for (int k = 0; k < movX.length; k++) {
@@ -76,7 +89,7 @@ public class Control extends Thread implements PerEsdeveniments {
                     && prox_y >= 0 && prox_y < tauler.getDim()
                     && tauler.getCasella(prox_x, prox_y) == 0) {
                 System.out.println("Prox X: " + prox_x + ", Prox Y: " + prox_y + ", Mov: " + mov);
-                tauler.setCasella(x, y, mov);
+                tauler.setCasella(prox_x, prox_y, mov);
                 if (BT(prox_x, prox_y, mov + 1)) {
                     return true;
                 } else {

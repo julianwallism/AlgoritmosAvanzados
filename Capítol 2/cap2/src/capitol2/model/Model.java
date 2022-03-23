@@ -10,25 +10,23 @@ import capitol2.model.Peces.*;
  */
 public class Model implements PerEsdeveniments {
 
-    private int tamanyTriat = 8;
-    private Peça peçaTriada = new Reina();
+    private int tamanyTriat;
+    private Peça peçaTriada;
     public String[] peces = {"Reina", "Torre", "Cavall", "Cardenal", "Centauro", "Somera"};
-    private int progres = 0;
     private main prog;
-    public Tauler tauler = new Tauler(tamanyTriat);
+    public Tauler tauler;
     private int x, y; // posició de la peça
 
     public Model(main p) {
         prog = p;
+        tamanyTriat = 8;
+        tauler = new Tauler();
+        tauler.setDim(tamanyTriat);
+        x = -1;
+        y = -1;
+        peçaTriada = new Reina();
     }
 
-    public int getProgres() {
-        return progres;
-    }
-
-    public void setProgres(int progres) {
-        this.progres = progres;
-    }
 
     public int getTamanyTriat() {
         return tamanyTriat;
@@ -36,7 +34,7 @@ public class Model implements PerEsdeveniments {
 
     public void setTamanyTriat(int tamanyTriat) {
         this.tamanyTriat = tamanyTriat;
-        this.tauler.setDim(this.tamanyTriat);
+        tauler.setDim(this.tamanyTriat);
     }
 
     public Tauler getTauler() {
@@ -61,6 +59,14 @@ public class Model implements PerEsdeveniments {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public Peça getPeçaTriada() {
+        return peçaTriada;
+    }
+
+    public void setPeçaTriada(Peça peçaTriada) {
+        this.peçaTriada = peçaTriada;
     }
 
     @Override
@@ -100,11 +106,4 @@ public class Model implements PerEsdeveniments {
         }
     }
 
-    public Peça getPeçaTriada() {
-        return peçaTriada;
-    }
-
-    public void setPeçaTriada(Peça peçaTriada) {
-        this.peçaTriada = peçaTriada;
-    }
 }

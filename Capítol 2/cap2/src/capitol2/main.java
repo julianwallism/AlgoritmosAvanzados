@@ -9,6 +9,7 @@ import capitol2.vista.Vista;
  * @authors Dawid Roch & Julià Wallis
  */
 public class main implements PerEsdeveniments {
+
     private Model mod;    // Punter al Model
     private Vista vis;    // Punter a la Vista
     private Control con;  // Punter al Control
@@ -29,7 +30,7 @@ public class main implements PerEsdeveniments {
     public void notificar(String s) {
         if (s.startsWith("Resoldre")) {
             con.notificar(s);
-        } else if (s.startsWith("Actualitzar tauler") || s.startsWith("Solució")) {
+        } else if (s.startsWith("Actualitzar tauler") || s.startsWith("Solució") || s.startsWith("Error: PI")) {
             vis.notificar(s);
         } else if (s.startsWith("Peça") || s.startsWith("Canvi peça") || s.startsWith("Tamany tauler")) {
             mod.notificar(s);
