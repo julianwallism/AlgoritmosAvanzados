@@ -2,22 +2,16 @@ package capitol2.model.Peces;
 
 /**
  *
- * @author Dawid Roch & Julià Wallis
+ * @authors Dawid Roch & Julià Wallis
  */
 public class Cavall extends Peça {
-
-    static int movimentsX[] = {2, 1, -1, -2, -2, -1, 1, 2}; 
-    static int movimentsY[] = {1, 2, 2, 1, -1, -2, -2, -1};
+    private int MOV_X[] = {2, 1, -1, -2, -2, -1, 1, 2}; 
+    private int MOV_Y[] = {1, 2, 2, 1, -1, -2, -2, -1};
 
     public Cavall() {
-        this.imatge = "cavall.png";
-        this.nom = "Cavall";
-    }
-    public int[] getMovimentsX() {
-        return movimentsX;
-    }
-
-    public int[] getMovimentsY() {
-        return movimentsY;
-    }    
+        super.setImatge("cavall.png");
+        super.setNom("Cavall");
+        super.setMovimentsX(MOV_X);
+        super.setMovimentsY(MOV_Y);
+    }  
 }

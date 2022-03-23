@@ -1,30 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package capitol2.model.Peces;
 
 /**
  *
- * @author walli
+ * @authors Dawid Roch & Julià Wallis
  */
+
 // Cavall + alfil
 public class Cardenal extends Peça {
-
-    static int movimentsX[] = {1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, -1, -2, -3, -4, -5, -6, -7, 2, 1, -1, -2, -2, -1, 1, 2};
-    static int movimentsY[] = {1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, 1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, 1, 2, 2, 1, -1, -2, -2, -1};
+    private int MOV_X[] = {1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, -1, -2, -3, -4, -5, -6, -7, 2, 1, -1, -2, -2, -1, 1, 2};
+    private int MOV_Y[] = {1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, 1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, 1, 2, 2, 1, -1, -2, -2, -1};
 
     public Cardenal() {
-        this.imatge = "cardenal.png";
-        this.nom = "Cardenal";
+        super.setImatge("cardenal.png");
+        super.setNom("Cardenal");
+        super.setMovimentsX(MOV_X);
+        super.setMovimentsY(MOV_Y);
     }
-
-    public int[] getMovimentsX() {
-        return movimentsX;
-    }
-
-    public int[] getMovimentsY() {
-        return movimentsY;
-    }
-
 }
