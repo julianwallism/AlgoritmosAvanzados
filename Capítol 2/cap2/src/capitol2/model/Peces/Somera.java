@@ -6,8 +6,8 @@ package capitol2.model.Peces;
  */
 public class Somera extends Peça {
 
-    static int movimentsX[] = {-1, -2, 1, 1, -1, -1, 2, 2, -2, -2};
-    static int movimentsY[] = {0, 0, 2, -2, 2, -2, 1, -1, 1, -1};
+    static int movimentsX[] = {-1, -2, 2, 1, -1, -2, -2, -1, 1, 2};
+    static int movimentsY[] = {0, 0, 1, 2, 2, 1, -1, -2, -2, -1};
 
     public Somera() {
         this.imatge = "somera.png";

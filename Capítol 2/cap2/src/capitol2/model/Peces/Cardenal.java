@@ -11,10 +11,8 @@ package capitol2.model.Peces;
 // Cavall + alfil
 public class Cardenal extends Peça {
 
-    static int movimentsX[] = {1, 1, -1, -1, 2, 2, -2, -2, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5,
-        6, 6, 7, 7, -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -6, -6, -7, -7};
-    static int movimentsY[] = {2, -2, 2, -2, 1, -1, 1, -1, 1, -1, 2, -2, 3, -3, 4, -4,
-        5, -5, 6, -6, 7, -7, 1, -1, 2, -2, 3, -3, 4, -4, 5, -5, 6, -6, 7, -7};
+    static int movimentsX[] = {1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, -1, -2, -3, -4, -5, -6, -7, 2, 1, -1, -2, -2, -1, 1, 2};
+    static int movimentsY[] = {1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, 1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, 1, 2, 2, 1, -1, -2, -2, -1};
 
     public Cardenal() {
         this.imatge = "cardenal.png";
@@ -28,5 +26,5 @@ public class Cardenal extends Peça {
     public int[] getMovimentsY() {
         return movimentsY;
     }
-    
+
 }

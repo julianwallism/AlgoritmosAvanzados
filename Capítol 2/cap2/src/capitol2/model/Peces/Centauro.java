@@ -11,8 +11,8 @@ package capitol2.model.Peces;
 //Cavall + rei
 public class Centauro extends Peça {
 
-    static int movimentsX[] = {1, 1, -1, -1, 2, 2, -2, -2, 0, 0, 1, 1, 1, -1, -1, -1};
-    static int movimentsY[] = {2, -2, 2, -2, 1, -1, 1, -1, 1, -1, 0, 1, -1, 0, 1, -1};
+    static int movimentsX[] = {0, 0, 1, 1, 1, -1, -1, -1, 2, 1, -1, -2, -2, -1, 1, 2};
+    static int movimentsY[] = {1, -1, 0, 1, -1, 0, 1, -1, 1, 2, 2, 1, -1, -2, -2, -1};
 
     public Centauro() {
         this.imatge = "centauro.png";

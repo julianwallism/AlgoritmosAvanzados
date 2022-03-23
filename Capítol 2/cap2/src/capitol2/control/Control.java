@@ -56,13 +56,15 @@ public class Control extends Thread implements PerEsdeveniments {
         y = this.prog.getModel().getY();
         movX = p.getMovimentsX();
         movY = p.getMovimentsY();
-
         tauler.setCasella(x, y, 1);
+        long inici = System.nanoTime();
         if (BT(x, y, 2)) {
             prog.notificar("Solució si");
         } else if (seguir) {
             prog.notificar("Solució no");
         }
+        double end = (System.nanoTime() - inici)/1000000000.0;
+        System.out.println(end);
     }
 
     private boolean BT(int x, int y, int mov) {
@@ -78,7 +80,6 @@ public class Control extends Thread implements PerEsdeveniments {
                 if (prox_x < tauler.getDim() && prox_x >= 0
                         && prox_y >= 0 && prox_y < tauler.getDim()
                         && tauler.getCasella(prox_x, prox_y) == 0) {
-                    System.out.println("Prox X: " + prox_x + ", Prox Y: " + prox_y + ", Mov: " + mov);
                     tauler.setCasella(prox_x, prox_y, mov);
                     if (BT(prox_x, prox_y, mov + 1)) {
                         return true;
