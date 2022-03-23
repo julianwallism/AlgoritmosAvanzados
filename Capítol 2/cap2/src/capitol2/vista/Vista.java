@@ -37,14 +37,13 @@ public class Vista extends JFrame implements PerEsdeveniments {
         ventana.setLayout(new GridLayout(p.getModel().getTamanyTriat(), p.getModel().getTamanyTriat()));
         barraSuperior = new JPanel();
         barraBotones = new JMenuBar();
-        tamany = new JSpinner();
+        tamany = new JSpinner(new SpinnerNumberModel(8, 2, 25, 1));
         label_tamany = new JLabel();
         label_peça = new JLabel();
         peces = new JComboBox();
         resuelve = new JButton("Resol");
         aturar = new JButton("Atura");
 
-        tamany.setValue(8);
         label_tamany.setText("Tria el tamany");
 
         peces.setModel(new DefaultComboBoxModel(prog.getModel().peces));
@@ -171,7 +170,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 }
             }
         }
-        ImageIcon icon = new ImageIcon(new ImageIcon(this.prog.getModel().getPeçaTriada().imatge).getImage().getScaledInstance(tablero[i][j].getWidth(), tablero[i][j].getHeight(), Image.SCALE_DEFAULT));
+        ImageIcon icon = new ImageIcon(new ImageIcon(this.prog.getModel().getPeçaTriada().imatge).getImage().getScaledInstance(tablero[i][j].getWidth(), tablero[i][j].getHeight(), Image.SCALE_SMOOTH));
         tablero[i][j].setIcon(icon);
     }
 
