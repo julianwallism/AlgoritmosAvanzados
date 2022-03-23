@@ -29,7 +29,7 @@ public class main implements PerEsdeveniments {
     public void notificar(String s) {
         if (s.startsWith("Resoldre")) {
             con.notificar(s);
-        } else if (s.startsWith("Actualitzar tauler")) {
+        } else if (s.startsWith("Actualitzar tauler") || s.startsWith("Solució") || s.startsWith("Error: PI")) {
             vis.notificar(s);
         } else if (s.startsWith("Peça") || s.startsWith("Canvi peça") || s.startsWith("Tamany tauler")) {
             mod.notificar(s);

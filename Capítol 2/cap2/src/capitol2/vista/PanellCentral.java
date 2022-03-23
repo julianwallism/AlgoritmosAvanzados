@@ -21,13 +21,14 @@ import javax.swing.JPanel;
  */
 public class PanellCentral extends JPanel {
     public static final int FPS = 24;
+    
     private JLabel[][] tauler;
     private main p;
     
     public PanellCentral(main p) {
         this.p = p;
         this.setLayout(new GridLayout(p.getModel().getTamanyTriat(), p.getModel().getTamanyTriat()));
-        inicialitzarTauler(p.getModel().getTamanyTriat());
+        inicialitzarTauler();
     }
     
     public void repaint() {
@@ -52,7 +53,8 @@ public class PanellCentral extends JPanel {
                 this.getHeight() - (int) (this.getHeight() * (temps)));
     }
     
-    public void inicialitzarTauler(int dimension) {
+    public void inicialitzarTauler() {
+        int dimension = this.p.getModel().getTamanyTriat();
         this.removeAll();
         tauler = new JLabel[dimension][dimension];
         this.setLayout(new GridLayout(dimension, dimension));
@@ -75,6 +77,7 @@ public class PanellCentral extends JPanel {
                     public void mousePressed(MouseEvent me) {
                         for (int i = 0; i < dimension; i++) {
                             for (int j = 0; j < dimension; j++) {
+                                pintarCasella(i, j);
                                 if (me.getSource() == tablero[i][j]) {
                                     posarImatge(i, j);
                                     p.notificar("Peça " + i + ", " + j);
@@ -96,18 +99,19 @@ public class PanellCentral extends JPanel {
                     }
                 }
                 );
-                pintarCaselles(i, j);
+                pintarCasella(i, j);
                 this.add(tablero[i][j]);
             }
         }
     }
 
-    private void pintarCaselles(int i, int j) {
+    private void pintarCasella(int i, int j) {
         if ((i + j) % 2 == 0) {
             tauler[i][j].setBackground(new Color(232, 235, 239));
         } else {
             tauler[i][j].setBackground(new Color(125, 135, 150));
         }
+        tauler[i][j].setText("");
         tauler[i][j].setOpaque(true);
     }
 
@@ -117,7 +121,7 @@ public class PanellCentral extends JPanel {
                 if (tauler[fila][columna].getIcon() != null) {
                     tauler[fila][columna].setIcon(null);
                     tauler[fila][columna].revalidate();
-                    pintarCaselles(fila, columna);
+                    pintarCasella(fila, columna);
                 }
             }
         }
@@ -125,7 +129,7 @@ public class PanellCentral extends JPanel {
         tauler[i][j].setIcon(icon);
     }
     
-    public void pintarNombreCasella(int i, int j, int nombre) {
+    public void pintarOrdreCasella(int i, int j, int nombre) {
         tauler[i][j].setText(""+nombre);
     }
 

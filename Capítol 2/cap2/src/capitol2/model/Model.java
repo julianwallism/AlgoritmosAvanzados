@@ -11,13 +11,17 @@ import capitol2.model.Peces.*;
 public class Model implements PerEsdeveniments {
     public final static String[] peces = {"Reina", "Torre", "Cavall", "Cardenal", "Centauro", "Somera"};
     
-    private int tamanyTriat = 8;
-    private Peça peçaTriada = new Reina();
+    private int tamanyTriat;
+    private Casella[][] tauler;
+    private Peça peçaTriada;
     private main prog;
-    private int x, y; // posició de la peça
+    private int x, y; // Posició de la peça
 
     public Model(main p) {
         prog = p;
+        this.tamanyTriat = 8;
+        this.initTauler();
+        this.peçaTriada = new Reina();
     }
     
     @Override
@@ -25,6 +29,7 @@ public class Model implements PerEsdeveniments {
         if (s.startsWith("Tamany tauler")) {
             s = s.replaceAll("Tamany tauler: ", "");
             this.tamanyTriat = Integer.parseInt(s);
+            this.initTauler();
             prog.notificar("Actualitzar tauler");
         } else if (s.startsWith("Peça")) {
             String[] res = s.split(", ");
@@ -54,6 +59,17 @@ public class Model implements PerEsdeveniments {
             }
         }
     }
+    
+    private void initTauler() {
+        this.tauler = new Casella[tamanyTriat][tamanyTriat];
+        this.x = -1;
+        this.y = -1;
+        for (int i = 0; i < tamanyTriat; i++) {
+            for (int j = 0; j < tamanyTriat; j++) {
+                this.tauler[i][j] = new Casella();
+            }
+        }
+    }
 
     public int getTamanyTriat() {
         return tamanyTriat;
@@ -77,5 +93,13 @@ public class Model implements PerEsdeveniments {
 
     public int getY() {
         return y;
+    }
+
+    public Casella[][] getTauler() {
+        return tauler;
+    }
+
+    public void setTauler(Casella[][] tauler) {
+        this.tauler = tauler;
     }
 }

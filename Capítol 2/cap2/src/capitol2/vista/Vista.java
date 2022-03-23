@@ -2,12 +2,12 @@ package capitol2.vista;
 
 import capitol2.PerEsdeveniments;
 import capitol2.main;
+import capitol2.model.Casella;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -82,6 +82,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         barraBotons.add(aturar);
         barraBotons.setLayout(new GridBagLayout());
         dim = new Dimension(p.getModel().getTamanyTriat() * 80, p.getModel().getTamanyTriat() * 80 + 30);
+        
         this.getContentPane().add(barraSuperior, BorderLayout.NORTH);
         this.getContentPane().add(panellCentral, BorderLayout.CENTER);
         this.getContentPane().add(barraBotons, BorderLayout.SOUTH);
@@ -95,7 +96,24 @@ public class Vista extends JFrame implements PerEsdeveniments {
     @Override
     public void notificar(String s) {
         if (s.startsWith("Actualitzar tauler")) {
-            panellCentral.inicialitzarTauler(prog.getModel().getTamanyTriat());
+            panellCentral.inicialitzarTauler();
+        } else if (s.startsWith("Solució trobada")) {
+            System.out.println(s);
+            Casella[][] taulerModel = this.prog.getModel().getTauler();
+            int xInici = this.prog.getModel().getX();
+            int yInici = this.prog.getModel().getY();
+            
+            for (int i = 0; i < taulerModel.length; i++) {
+                for (int j = 0; j < taulerModel.length; j++) {
+                    if (xInici != i || yInici != j) {
+                        panellCentral.pintarOrdreCasella(i, j, taulerModel[i][j].getOrdre());
+                    }
+                }
+            }
+        } else if (s.startsWith("Solució no trobada")) {
+            JOptionPane.showMessageDialog(null, "Solució no trobada, per favor torna a intentar-ho amb una altra posició i/o peça de les disponibles a la barra superior.", "Solució no trobada", JOptionPane.WARNING_MESSAGE);
+        } else if (s.startsWith("Error: PI")) {
+            JOptionPane.showMessageDialog(null, "Posició inicial no especificada, per favor torna a intentar-ho fent click a la casella desitjada.", "Posició inicial no especificada", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
