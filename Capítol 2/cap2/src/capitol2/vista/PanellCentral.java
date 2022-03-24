@@ -114,7 +114,7 @@ public class PanellCentral extends JPanel {
                 }
             }
         }
-        this.icon = new ImageIcon(new ImageIcon(this.p.getModel().getPeçaTriada().getImatge()).getImage().getScaledInstance(tauler[i][j].getWidth(), tauler[i][j].getHeight(), Image.SCALE_DEFAULT));
+        this.icon = new ImageIcon(new ImageIcon(this.p.getModel().getPeçaTriada().getImatge()).getImage().getScaledInstance(tauler[i][j].getWidth(), tauler[i][j].getHeight(), Image.SCALE_SMOOTH));
         tauler[i][j].setIcon(icon);
     }
 
