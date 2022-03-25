@@ -135,7 +135,7 @@ public class PanellCentral extends JPanel {
                 if (tauler_solucio[fila][columna] != 1) {
                     tauler[fila][columna].setForeground(Color.RED);
                     tauler[fila][columna].setFont(new Font("Times New Roman", Font.BOLD, 32));
-                    tauler[fila][columna].setText("   "+tauler_solucio[fila][columna]);
+                    tauler[fila][columna].setText(""+tauler_solucio[fila][columna]);
                 }
             }
         }

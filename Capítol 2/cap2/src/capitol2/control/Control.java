@@ -62,7 +62,7 @@ public class Control extends Thread implements PerEsdeveniments {
             if (BT(x, y, 2)) {
                 prog.getModel().setTime((System.nanoTime() - inici) / 1000000000.0);
                 prog.notificar("Solució si");
-            } else {
+            } else if (this.seguir) {
                 prog.notificar("Solució no");
             }
         }
