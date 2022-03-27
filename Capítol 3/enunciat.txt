@@ -1,0 +1,11 @@
+Realizar un programa que lleve a cabo la multiplicación de grandes números y efectúe una comparativa entre los diferentes algoritmos. El programa desarrollado ha de ser capaz de efectuar la multiplicació de dos numeros de N x M cifras, utilizando el algoritmo tradicional, el algoritmo de Karatsuba y el mixto explicado en clase.
+
+Opcional en la entrega ordinaria: El algoritmo mixto efectúa al arrancar el programa por primera vez, un análisis para saber cual debe de ser el punto de corte de la recursión, para posteriormente tomar este como corte del programa. Esto debe de hacerse de forma automàtica, cuando el programa se usa por primera vez en un ordenador nuevo. Además de otras cosas que el alumnado decida entregar.
+
+Obligatorio en la recuperación: La tarea opcional de la entrega ordinaria.
+
+El programa elaborado debe de presentar una estructura de diseño MVC.
+
+El programa debe de presentar una IGU gràfica. En donde se muestren los resultados y el transculso del proceso de cálculo. Se debe de poder apreciar explícitamente el resultado de los tres algoritmos, con el fin de comprobar que los resultados són iguales. Opcionalmente puede representar las gráficas del cálculo, etc.
+
+Se debe de entregar también una memoria y un video explicativo como el del primer ejercicio del curso. En la memòria debe de estar presente un estudio de Coste Computacional asintótico basado en instrucción crítica, de uno de los ordenadores de los integrantes del grupo, en donde se compare los tres costes de los tres algoritmos implementados, sus constantes multiplicativas, ...
