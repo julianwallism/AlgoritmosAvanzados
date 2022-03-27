@@ -6,8 +6,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
@@ -68,7 +70,7 @@ public class PanellCentral extends JPanel {
                         p.getModel().getTauler().clear();
                         for (int i = 0; i < dimension; i++) {
                             for (int j = 0; j < dimension; j++) {
-                                //pintarCasella(i, j);
+                                pintarCasella(i, j);
                                 if (me.getSource() == tauler[i][j]) {
                                     posarImatge(i, j);
                                     p.notificar("Peça " + i + ", " + j);
@@ -117,7 +119,7 @@ public class PanellCentral extends JPanel {
             }
         }
 
-        this.icon = new ImageIcon(new ImageIcon(this.p.getModel().getPeçaTriada().getImatge()).getImage().getScaledInstance(tauler[i][j].getWidth(), tauler[i][j].getHeight(), Image.SCALE_SMOOTH));
+        icon = new ImageIcon(new ImageIcon(p.getModel().getPeçaTriada().getImatge()).getImage().getScaledInstance(tauler[i][j].getWidth(), tauler[i][j].getHeight(), Image.SCALE_SMOOTH));
         tauler[i][j].setIcon(icon);
 
     }
@@ -136,8 +138,10 @@ public class PanellCentral extends JPanel {
     }
 
     public void grafica() throws InterruptedException {
-        Graphics gr = this.getGraphics();
+        Graphics2D gr = (Graphics2D) this.getGraphics();
         gr.setColor(Color.red);
+        gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
         int[] ordreX = p.getModel().getTauler().getOrderX();
         int[] ordreY = p.getModel().getTauler().getOrderY();
