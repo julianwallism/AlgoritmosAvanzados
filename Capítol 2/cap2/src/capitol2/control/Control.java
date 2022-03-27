@@ -45,19 +45,20 @@ public class Control extends Thread implements PerEsdeveniments {
             System.out.println("Programa aturat");
         }
     }
-   
+
     // Métode encarregat de fer les comprovacions d'error, cridar al métode 
     // de resolució backtracking i notificar al programa principal dels outputs 
     // obtinguts
     private void resol() {
-        Peça p = this.prog.getModel().getPeçaTriada();
-        tauler = this.prog.getModel().getTauler();
+        Peça p = prog.getModel().getPeçaTriada();
+        tauler = prog.getModel().getTauler();
         // Obtenim posició inicial de la peça
-        x = this.prog.getModel().getX();
-        y = this.prog.getModel().getY();
+        x = prog.getModel().getX();
+        y = prog.getModel().getY();
         if (x == -1 || y == -1) {
             prog.notificar("Error: PI");
-            prog.notificar("Aturar");
+            seguir = false;
+            System.out.println("Programa aturat");
         } else {
             // Obtenim moviments de la peça
             movX = p.getMovimentsX();
@@ -67,19 +68,20 @@ public class Control extends Thread implements PerEsdeveniments {
             if (BT(x, y, 2)) {
                 prog.getModel().setTime((System.nanoTime() - inici) / 1000000000.0);
                 prog.notificar("Solució si");
-            } else if (this.seguir) {
+            } else if (seguir) {
                 prog.notificar("Solució no");
             }
         }
     }
-    
+
     // Métode backtracking que soluciona el problema, donat una posició i el 
     // nombre de moviments que du
     private boolean BT(int x, int y, int mov) {
-        if (this.seguir) {
+        if (seguir) {
             int prox_x, prox_y;
             if (mov > tauler.getDim() * tauler.getDim()) {
                 tauler.setCasella(x, y, tauler.getDim() * tauler.getDim());
+                prog.getModel().setTauler(tauler);
                 return true;
             }
             for (int k = 0; k < movX.length; k++) {
@@ -96,7 +98,7 @@ public class Control extends Thread implements PerEsdeveniments {
                     }
                 }
             }
-            this.prog.getModel().setTauler(tauler);
+            
         }
         return false;
     }

@@ -76,8 +76,11 @@ public class Vista extends JFrame implements PerEsdeveniments {
         resol.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                solucio = false;
                 info.setText(" ");
                 prog.notificar("Resoldre");
+                barraProgres.setIndeterminate(true);
+
             }
         });
 
@@ -85,6 +88,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 prog.notificar("Aturar");
+                barraProgres.setIndeterminate(false);
             }
         });
 
@@ -142,16 +146,14 @@ public class Vista extends JFrame implements PerEsdeveniments {
             if (sol[1].equals("si")) {
                 solucio = true;
                 panellCentral.pintarSolucio();
-                info.setText("L'algorisme ha tardat: " + this.prog.getModel().getTime() + " segons");
+                info.setText("L'algorisme ha tardat: " + prog.getModel().getTime() + " segons");
             } else {
-                JOptionPane.showMessageDialog(null, "Solució no trobada, per favor torna a intentar-ho amb una altra posició i/o peça.", "Solució no trobada", JOptionPane.WARNING_MESSAGE);
+                solucio = false;
+                JOptionPane.showMessageDialog(null, "Solució no trobada, per favor torna a intentar-ho amb una altra posició, peça o tamany.", "Solució no trobada", JOptionPane.WARNING_MESSAGE);
             }
         } else if (s.startsWith("Error: PI")) {
             JOptionPane.showMessageDialog(null, "Posició inicial no especificada, per favor torna a intentar-ho fent click a la casella desitjada.", "Posició inicial no especificada", JOptionPane.ERROR_MESSAGE);
-        } else if (s.startsWith("Resoldre")) {
-            this.barraProgres.setIndeterminate(true);
-        } else if (s.startsWith("Aturar")) {
-            this.barraProgres.setIndeterminate(false);
+            barraProgres.setIndeterminate(false);
         }
     }
 }
