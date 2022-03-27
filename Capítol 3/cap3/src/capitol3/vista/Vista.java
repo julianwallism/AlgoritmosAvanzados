@@ -7,20 +7,37 @@ import javax.swing.*;
 
 public class Vista extends JFrame implements PerEsdeveniments {
     private final PanellCentral panellCentral;
-    private final JPanel barraSuperior, barraInferior;
+    private final JPanel panellSuperior, panellInferior;
+    private final JButton executar, aturar;
+    private final JTextField num1, num2;
     private main prog;
 
     public Vista(String titol, main p) {
         this.prog = p;
         this.setTitle(titol);
 
-        panellCentral = new PanellCentral(p);
-        barraSuperior = new JPanel();
-        barraInferior = new JPanel();
+        this.panellSuperior = new JPanel();
+        this.panellCentral = new PanellCentral(p);
+        this.panellInferior = new JPanel();
+        
+        // Creació dels components del panell superior
+        this.num1 = new JTextField();
+        this.num1.setToolTipText("Primer nombre a sumar");
+        this.num2 = new JTextField();
+        this.num2.setToolTipText("Segon nombre a sumar");
+        this.executar = new JButton();
+        this.executar.setText("Executar");
+        this.aturar = new JButton();
+        this.aturar.setText("Aturar");
+        
+        this.panellSuperior.add(this.num1);
+        this.panellSuperior.add(this.num2);
+        this.panellSuperior.add(this.executar);
+        this.panellSuperior.add(this.aturar);
 
-        this.getContentPane().add(barraSuperior, BorderLayout.NORTH);
+        this.getContentPane().add(panellSuperior, BorderLayout.NORTH);
         this.getContentPane().add(panellCentral, BorderLayout.CENTER);
-        this.getContentPane().add(barraInferior, BorderLayout.SOUTH);
+        this.getContentPane().add(panellInferior, BorderLayout.SOUTH);
         this.pack();
         this.setResizable(false);
         this.setVisible(true);

@@ -3,7 +3,6 @@ package capitol3.vista;
 import capitol3.MeuError;
 import capitol3.main;
 import java.awt.Graphics;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 /**
@@ -13,7 +12,6 @@ import javax.swing.JPanel;
 public class PanellCentral extends JPanel {
     public static final int FPS = 24;
     private main p;
-    private ImageIcon icon;
 
     public PanellCentral(main p) {
         this.p = p;
