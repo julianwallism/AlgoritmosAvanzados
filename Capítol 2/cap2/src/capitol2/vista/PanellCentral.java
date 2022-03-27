@@ -25,6 +25,7 @@ public class PanellCentral extends JPanel {
     private JLabel[][] tauler;
     private main p;
     private ImageIcon icon;
+    private int dimension;
 
     public PanellCentral(main p) {
         this.p = p;
@@ -43,21 +44,21 @@ public class PanellCentral extends JPanel {
     }
 
     public void inicialitzarTauler() {
-        int dimension = this.p.getModel().getTamanyTriat();
+        dimension = this.p.getModel().getTamanyTriat();
         this.removeAll();
         tauler = new JLabel[dimension][dimension];
         this.setLayout(new GridLayout(dimension, dimension));
         Dimension dim = new Dimension(dimension * 80, dimension * 80 + 30);
         this.setSize(dim);
-        inicialitzarCaselles(dimension, tauler);
+        inicialitzarCaselles();
         this.updateUI();
     }
 
-    private void inicialitzarCaselles(int dimension, JLabel[][] tablero) {
+    private void inicialitzarCaselles() {
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                tablero[i][j] = new JLabel();
-                tablero[i][j].addMouseListener(new MouseListener() {
+                tauler[i][j] = new JLabel();
+                tauler[i][j].addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent me) {
                     }
@@ -67,8 +68,8 @@ public class PanellCentral extends JPanel {
                         p.getModel().getTauler().clear();
                         for (int i = 0; i < dimension; i++) {
                             for (int j = 0; j < dimension; j++) {
-                                pintarCasella(i, j);
-                                if (me.getSource() == tablero[i][j]) {
+                                //pintarCasella(i, j);
+                                if (me.getSource() == tauler[i][j]) {
                                     posarImatge(i, j);
                                     p.notificar("Peça " + i + ", " + j);
                                 }
@@ -90,7 +91,7 @@ public class PanellCentral extends JPanel {
                 }
                 );
                 pintarCasella(i, j);
-                this.add(tablero[i][j]);
+                this.add(tauler[i][j]);
             }
         }
     }
@@ -106,8 +107,8 @@ public class PanellCentral extends JPanel {
     }
 
     public void posarImatge(int i, int j) {
-        for (int fila = 0; fila < p.getModel().getTamanyTriat(); fila++) {
-            for (int columna = 0; columna < p.getModel().getTamanyTriat(); columna++) {
+        for (int fila = 0; fila < dimension; fila++) {
+            for (int columna = 0; columna < dimension; columna++) {
                 if (tauler[fila][columna].getIcon() != null) {
                     tauler[fila][columna].setIcon(null);
                     tauler[fila][columna].revalidate();
@@ -123,8 +124,8 @@ public class PanellCentral extends JPanel {
 
     public void pintarSolucio() {
         int[][] tauler_solucio = p.getModel().getTauler().getCaselles();
-        for (int fila = 0; fila < p.getModel().getTamanyTriat(); fila++) {
-            for (int columna = 0; columna < p.getModel().getTamanyTriat(); columna++) {
+        for (int fila = 0; fila < dimension; fila++) {
+            for (int columna = 0; columna < dimension; columna++) {
                 if (tauler_solucio[fila][columna] != 1) {
                     tauler[fila][columna].setForeground(Color.RED);
                     tauler[fila][columna].setFont(new Font("Times New Roman", Font.BOLD, (256/p.getModel().getTamanyTriat())));
@@ -145,7 +146,7 @@ public class PanellCentral extends JPanel {
         int pre_y = tauler[ordreX[0]][ordreY[0]].getLocation().y + tauler[0][0].getHeight() / 2;
 
         int x, y;
-        for (int i = 0; i < p.getModel().getTamanyTriat() * p.getModel().getTamanyTriat(); i++) {
+        for (int i = 0; i < dimension * dimension; i++) {
             x = tauler[ordreX[i]][ordreY[i]].getLocation().x + tauler[0][0].getWidth() / 2;
             y = tauler[ordreX[i]][ordreY[i]].getLocation().y + tauler[0][0].getHeight() / 2;
             gr.fillOval(x - 4, y - 5, 8, 8);
@@ -157,8 +158,8 @@ public class PanellCentral extends JPanel {
     }
 
     public void removeListener() {
-        for (int i = 0; i < p.getModel().getTamanyTriat(); i++) {
-            for (int j = 0; j < p.getModel().getTamanyTriat(); j++) {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
                 for (MouseListener ml : tauler[i][j].getMouseListeners()) {
                     tauler[i][j].removeMouseListener(ml);
                 }
