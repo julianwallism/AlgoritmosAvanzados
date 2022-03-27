@@ -66,8 +66,11 @@ public class Vista extends JFrame implements PerEsdeveniments {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String resposta = peces.getSelectedItem().toString();
+                System.out.println(resposta);
                 prog.notificar("Canvi peça a " + resposta);
-                panellCentral.posarImatge(p.getModel().getX(), p.getModel().getY());
+                if (p.getModel().getX() != -1 && p.getModel().getY() != -1) {
+                    panellCentral.posarImatge(p.getModel().getX(), p.getModel().getY());
+                }
             }
         });
 
