@@ -19,6 +19,7 @@ import javax.swing.JPanel;
  * @author Dawid Roch & Julià Wallis
  */
 public class PanellCentral extends JPanel {
+
     public static final int FPS = 24;
 
     private JLabel[][] tauler;
@@ -104,9 +105,9 @@ public class PanellCentral extends JPanel {
         tauler[i][j].setOpaque(true);
     }
 
-    private void posarImatge(int i, int j) {
-        for (int fila = 0; fila < this.p.getModel().getTamanyTriat(); fila++) {
-            for (int columna = 0; columna < this.p.getModel().getTamanyTriat(); columna++) {
+    public void posarImatge(int i, int j) {
+        for (int fila = 0; fila < p.getModel().getTamanyTriat(); fila++) {
+            for (int columna = 0; columna < p.getModel().getTamanyTriat(); columna++) {
                 if (tauler[fila][columna].getIcon() != null) {
                     tauler[fila][columna].setIcon(null);
                     tauler[fila][columna].revalidate();
@@ -114,18 +115,10 @@ public class PanellCentral extends JPanel {
                 }
             }
         }
+
         this.icon = new ImageIcon(new ImageIcon(this.p.getModel().getPeçaTriada().getImatge()).getImage().getScaledInstance(tauler[i][j].getWidth(), tauler[i][j].getHeight(), Image.SCALE_SMOOTH));
         tauler[i][j].setIcon(icon);
-    }
 
-    public void removeListener() {
-        for (int i = 0; i < p.getModel().getTamanyTriat(); i++) {
-            for (int j = 0; j < p.getModel().getTamanyTriat(); j++) {
-                for (MouseListener ml : tauler[i][j].getMouseListeners()) {
-                    tauler[i][j].removeMouseListener(ml);
-                }
-            }
-        }
     }
 
     public void pintarSolucio() {
@@ -134,8 +127,8 @@ public class PanellCentral extends JPanel {
             for (int columna = 0; columna < p.getModel().getTamanyTriat(); columna++) {
                 if (tauler_solucio[fila][columna] != 1) {
                     tauler[fila][columna].setForeground(Color.RED);
-                    tauler[fila][columna].setFont(new Font("Times New Roman", Font.BOLD, (256/this.p.getModel().getTamanyTriat())));
-                    tauler[fila][columna].setText("   "+tauler_solucio[fila][columna]);
+                    tauler[fila][columna].setFont(new Font("Times New Roman", Font.BOLD, 32));
+                    tauler[fila][columna].setText("   " + tauler_solucio[fila][columna]);
                 }
             }
         }
@@ -162,9 +155,20 @@ public class PanellCentral extends JPanel {
             Thread.sleep(200);
         }
     }
+
+    public void removeListener() {
+        for (int i = 0; i < p.getModel().getTamanyTriat(); i++) {
+            for (int j = 0; j < p.getModel().getTamanyTriat(); j++) {
+                for (MouseListener ml : tauler[i][j].getMouseListeners()) {
+                    tauler[i][j].removeMouseListener(ml);
+                }
+            }
+        }
+    }
 }
 
 class ProcesPintat extends Thread {
+
     private PanellCentral pan;
 
     public ProcesPintat(PanellCentral pc) {

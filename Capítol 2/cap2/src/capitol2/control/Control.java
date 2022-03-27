@@ -45,16 +45,21 @@ public class Control extends Thread implements PerEsdeveniments {
             System.out.println("Programa aturat");
         }
     }
-
+   
+    // Métode encarregat de fer les comprovacions d'error, cridar al métode 
+    // de resolució backtracking i notificar al programa principal dels outputs 
+    // obtinguts
     private void resol() {
         Peça p = this.prog.getModel().getPeçaTriada();
         tauler = this.prog.getModel().getTauler();
+        // Obtenim posició inicial de la peça
         x = this.prog.getModel().getX();
         y = this.prog.getModel().getY();
         if (x == -1 || y == -1) {
             prog.notificar("Error: PI");
             prog.notificar("Aturar");
         } else {
+            // Obtenim moviments de la peça
             movX = p.getMovimentsX();
             movY = p.getMovimentsY();
             tauler.setCasella(x, y, 1);
@@ -67,7 +72,9 @@ public class Control extends Thread implements PerEsdeveniments {
             }
         }
     }
-
+    
+    // Métode backtracking que soluciona el problema, donat una posició i el 
+    // nombre de moviments que du
     private boolean BT(int x, int y, int mov) {
         if (this.seguir) {
             int prox_x, prox_y;

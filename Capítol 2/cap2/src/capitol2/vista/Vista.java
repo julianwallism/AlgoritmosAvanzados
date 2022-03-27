@@ -29,25 +29,29 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.prog = p;
         this.setTitle(titol);
         this.setIconImage(logo.getImage());
+
         panellCentral = new PanellCentral(p);
         barraProgres = new JProgressBar();
         barraSelectors = new JPanel();
-        barraSuperior = new JPanel();
         barraBotones = new JPanel();
+        barraSuperior = new JPanel();
         barraInferior = new JPanel();
+
         tamany = new JSpinner(new SpinnerNumberModel(8, 3, 25, 1));
-        label_tamany = new JLabel();
-        label_peça = new JLabel();
-        info = new JLabel();
-        peces = new JComboBox();
+
         resol = new JButton("Resol");
         aturar = new JButton("Atura");
         grafica = new JButton("Grafica");
+
+        label_tamany = new JLabel();
+        label_peça = new JLabel();
+        info = new JLabel();
         label_tamany.setText("Tamany:");
         label_peça.setText("Peça:");
         info.setText(" ");
+
+        peces = new JComboBox();
         peces.setModel(new DefaultComboBoxModel(prog.getModel().peces));
-       
 
         tamany.addChangeListener(new ChangeListener() {
             @Override
@@ -63,6 +67,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
             public void actionPerformed(ActionEvent e) {
                 String resposta = peces.getSelectedItem().toString();
                 prog.notificar("Canvi peça a " + resposta);
+                panellCentral.posarImatge(p.getModel().getX(), p.getModel().getY());
             }
         });
 
@@ -95,25 +100,24 @@ public class Vista extends JFrame implements PerEsdeveniments {
             }
         });
 
-        barraBotones.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        barraBotones.add(resol);
-        barraBotones.add(aturar);
-        barraBotones.add(grafica);
-        
         barraSelectors.setLayout(new FlowLayout(FlowLayout.LEFT));
         barraSelectors.add(label_tamany);
         barraSelectors.add(tamany);
         barraSelectors.add(label_peça);
         barraSelectors.add(peces);
-        
+
+        barraBotones.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        barraBotones.add(resol);
+        barraBotones.add(aturar);
+        barraBotones.add(grafica);
+
         barraSuperior.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
         barraSuperior.add(barraSelectors);
         barraSuperior.add(barraBotones);
-        
+
         barraInferior.setLayout(new BorderLayout());
         barraInferior.add(info, BorderLayout.NORTH);
         barraInferior.add(barraProgres, BorderLayout.SOUTH);
-        
 
         this.getContentPane().add(barraSuperior, BorderLayout.NORTH);
         this.getContentPane().add(panellCentral, BorderLayout.CENTER);
