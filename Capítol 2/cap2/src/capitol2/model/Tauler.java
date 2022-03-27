@@ -5,6 +5,7 @@ package capitol2.model;
  * @author Dawid Roch & Julià Wallis
  */
 public class Tauler {
+
     private int dim;
     private int[][] caselles;
 
@@ -26,14 +27,14 @@ public class Tauler {
         caselles[i][j] = x;
     }
 
+    public int getCasella(int i, int j) {
+        return caselles[i][j];
+    }
+
     public void clearCasella(int i, int j) {
         caselles[i][j] = 0;
     }
 
-    public int getCasella(int i, int j) {
-        return caselles[i][j];
-    }
-    
     public int[][] getCaselles() {
         return caselles;
     }

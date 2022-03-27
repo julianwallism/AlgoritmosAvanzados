@@ -33,33 +33,33 @@ public class Model implements PerEsdeveniments {
     public void notificar(String s) {
         if (s.startsWith("Tamany tauler")) {
             s = s.replaceAll("Tamany tauler: ", "");
-            this.tamanyTriat = Integer.parseInt(s);
-            this.initTauler();
+            tamanyTriat = Integer.parseInt(s);
+            initTauler();
             prog.notificar("Actualitzar tauler");
         } else if (s.startsWith("Peça")) {
             String[] res = s.split(", ");
-            this.x = Integer.parseInt(res[0].replaceAll("Peça ", ""));
-            this.y = Integer.parseInt(res[1]);
+            x = Integer.parseInt(res[0].replaceAll("Peça ", ""));
+            y = Integer.parseInt(res[1]);
         } else if (s.startsWith("Canvi peça")) {
             s = s.replaceAll("Canvi peça a ", "");
             switch (s) {
                 case "Cavall":
-                    this.peçaTriada = new Cavall();
+                    peçaTriada = new Cavall();
                     break;
                 case "Reina":
-                    this.peçaTriada = new Reina();
+                    peçaTriada = new Reina();
                     break;
                 case "Torre":
-                    this.peçaTriada = new Torre();
+                    peçaTriada = new Torre();
                     break;
                 case "Cardenal":
-                    this.peçaTriada = new Cardenal();
+                    peçaTriada = new Cardenal();
                     break;
                 case "Centauro":
-                    this.peçaTriada = new Centauro();
+                    peçaTriada = new Centauro();
                     break;
                 case "Somera":
-                    this.peçaTriada = new Somera();
+                    peçaTriada = new Somera();
                     break;
             }
         }

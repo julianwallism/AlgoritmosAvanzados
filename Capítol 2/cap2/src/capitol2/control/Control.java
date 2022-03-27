@@ -97,8 +97,7 @@ public class Control extends Thread implements PerEsdeveniments {
                         tauler.clearCasella(prox_x, prox_y); // tornada enrera
                     }
                 }
-            }
-            
+            } 
         }
         return false;
     }
