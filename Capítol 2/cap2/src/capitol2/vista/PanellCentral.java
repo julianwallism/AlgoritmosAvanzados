@@ -15,6 +15,7 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -27,7 +28,7 @@ public class PanellCentral extends JPanel {
     private JLabel[][] tauler;
     private main p;
     private ImageIcon icon;
-    private int dimension;
+    private int dimension, numParets;
 
     public PanellCentral(main p) {
         this.p = p;
@@ -67,13 +68,24 @@ public class PanellCentral extends JPanel {
 
                     @Override
                     public void mousePressed(MouseEvent me) {
-                        p.getModel().getTauler().clear();
-                        for (int i = 0; i < dimension; i++) {
-                            for (int j = 0; j < dimension; j++) {
-                                pintarCasella(i, j);
-                                if (me.getSource() == tauler[i][j]) {
-                                    posarImatge(i, j);
-                                    p.notificar("Peça " + i + ", " + j);
+                        if (SwingUtilities.isLeftMouseButton(me)) {
+                            p.getModel().getTauler().clear();
+                            for (int i = 0; i < dimension; i++) {
+                                for (int j = 0; j < dimension; j++) {
+                                    pintarCasella(i, j);
+                                    if (me.getSource() == tauler[i][j]) {
+                                        posarImatge(i, j);
+                                        p.notificar("Peça " + i + ", " + j);
+                                    }
+                                }
+                            }
+                        } else if (SwingUtilities.isRightMouseButton(me)) {
+                            for (int i = 0; i < dimension; i++) {
+                                for (int j = 0; j < dimension; j++) {
+                                    if (me.getSource() == tauler[i][j]) {
+                                        posarParet(i, j);
+                                        p.notificar("Paret " + i + ", " + j);
+                                    }
                                 }
                             }
                         }
@@ -121,16 +133,20 @@ public class PanellCentral extends JPanel {
 
         icon = new ImageIcon(new ImageIcon(p.getModel().getPeçaTriada().getImatge()).getImage().getScaledInstance(tauler[i][j].getWidth(), tauler[i][j].getHeight(), Image.SCALE_SMOOTH));
         tauler[i][j].setIcon(icon);
+    }
 
+    public void posarParet(int i, int j) {
+        icon = new ImageIcon(new ImageIcon("paret.png").getImage().getScaledInstance(tauler[i][j].getWidth(), tauler[i][j].getHeight(), Image.SCALE_SMOOTH));
+        tauler[i][j].setIcon(icon);
     }
 
     public void pintarSolucio() {
         int[][] tauler_solucio = p.getModel().getTauler().getCaselles();
         for (int fila = 0; fila < dimension; fila++) {
             for (int columna = 0; columna < dimension; columna++) {
-                if (tauler_solucio[fila][columna] != 1) {
+                if (tauler_solucio[fila][columna] != -1) {
                     tauler[fila][columna].setForeground(Color.RED);
-                    tauler[fila][columna].setFont(new Font("Times New Roman", Font.BOLD, (256/p.getModel().getTamanyTriat())));
+                    tauler[fila][columna].setFont(new Font("Times New Roman", Font.BOLD, (256 / p.getModel().getTamanyTriat())));
                     tauler[fila][columna].setText("   " + tauler_solucio[fila][columna]);
                 }
             }
@@ -138,6 +154,7 @@ public class PanellCentral extends JPanel {
     }
 
     public void grafica() throws InterruptedException {
+        numParets = p.getModel().getNumParets();
         Graphics2D gr = (Graphics2D) this.getGraphics();
         gr.setColor(Color.red);
         gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -150,7 +167,7 @@ public class PanellCentral extends JPanel {
         int pre_y = tauler[ordreX[0]][ordreY[0]].getLocation().y + tauler[0][0].getHeight() / 2;
 
         int x, y;
-        for (int i = 0; i < dimension * dimension; i++) {
+        for (int i = 0; i < (dimension * dimension) - numParets; i++) {
             x = tauler[ordreX[i]][ordreY[i]].getLocation().x + tauler[0][0].getWidth() / 2;
             y = tauler[ordreX[i]][ordreY[i]].getLocation().y + tauler[0][0].getHeight() / 2;
             gr.fillOval(x - 4, y - 5, 8, 8);

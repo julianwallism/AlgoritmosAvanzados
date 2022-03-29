@@ -52,7 +52,9 @@ public class Tauler {
         int[] ordre = new int[dim * dim];
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                ordre[caselles[i][j] - 1] = i;
+                if (caselles[i][j] > 0) {
+                    ordre[caselles[i][j] - 1] = i;
+                }
             }
         }
         return ordre;
@@ -63,7 +65,9 @@ public class Tauler {
         int[] ordre = new int[dim * dim];
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                ordre[caselles[i][j] - 1] = j;
+                if (caselles[i][j] > 0) {
+                    ordre[caselles[i][j] - 1] = j;
+                }
             }
         }
         return ordre;

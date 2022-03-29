@@ -29,10 +29,9 @@ public class main implements PerEsdeveniments {
     public void notificar(String s) {
         if (s.startsWith("Resoldre") || s.startsWith("Aturar")) {
             con.notificar(s);
-       
         } else if (s.startsWith("Actualitzar tauler") || s.startsWith("Solució") || s.startsWith("Error: PI")) {
             vis.notificar(s);
-        } else if (s.startsWith("Peça") || s.startsWith("Canvi peça") || s.startsWith("Tamany tauler")) {
+        } else if (s.startsWith("Peça") || s.startsWith("Canvi peça") || s.startsWith("Tamany tauler") || s.startsWith("Paret")) {
             mod.notificar(s);
         }
     }

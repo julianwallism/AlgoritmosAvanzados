@@ -9,13 +9,14 @@ import capitol2.model.Peces.*;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
+
     public final static String[] peces = {"Reina", "Torre", "Cavall", "Cardenal", "Centauro", "Somera"};
 
     private int tamanyTriat;
     private Peça peçaTriada;
     private main prog;
     private Tauler tauler;
-    private int x, y; // posició de la peça
+    private int x, y, numParets; // posició de la peça
     private double time;
 
     public Model(main p) {
@@ -27,6 +28,7 @@ public class Model implements PerEsdeveniments {
         y = -1;
         time = 0.0;
         peçaTriada = new Reina();
+        numParets =0;
     }
 
     @Override
@@ -40,6 +42,13 @@ public class Model implements PerEsdeveniments {
             String[] res = s.split(", ");
             x = Integer.parseInt(res[0].replaceAll("Peça ", ""));
             y = Integer.parseInt(res[1]);
+            numParets=0;
+        } else if (s.startsWith("Paret")) {
+            String[] res = s.split(", ");
+            int paretX = Integer.parseInt(res[0].replaceAll("Paret ", ""));
+            int paretY = Integer.parseInt(res[1]);
+            tauler.setCasella(paretX, paretY, -1);
+            numParets++;
         } else if (s.startsWith("Canvi peça")) {
             s = s.replaceAll("Canvi peça a ", "");
             switch (s) {
@@ -62,13 +71,15 @@ public class Model implements PerEsdeveniments {
                     peçaTriada = new Somera();
                     break;
             }
+            numParets=0;
         }
     }
 
     private void initTauler() {
-        this.tauler = new Tauler(tamanyTriat);
-        this.x = -1;
-        this.y = -1;
+        tauler = new Tauler(tamanyTriat);
+        x = -1;
+        y = -1;
+        numParets=0;
     }
 
     public int getTamanyTriat() {
@@ -77,6 +88,10 @@ public class Model implements PerEsdeveniments {
 
     public void setTamanyTriat(int tamanyTriat) {
         this.tamanyTriat = tamanyTriat;
+    }
+
+    public int getNumParets() {
+        return numParets;
     }
 
     public Peça getPeçaTriada() {
@@ -102,8 +117,8 @@ public class Model implements PerEsdeveniments {
     public void setTauler(Tauler tauler) {
         this.tauler = tauler;
     }
-    
-     public double getTime() {
+
+    public double getTime() {
         return time;
     }
 

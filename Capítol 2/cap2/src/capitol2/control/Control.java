@@ -14,7 +14,7 @@ public class Control extends Thread implements PerEsdeveniments {
     private final main prog;
     private boolean seguir, executat;
     private Tauler tauler;
-    private int x, y;
+    private int x, y, numParets;
     private int[] movX, movY;
 
     public Control(main p) {
@@ -63,6 +63,7 @@ public class Control extends Thread implements PerEsdeveniments {
             // Obtenim moviments de la peça
             movX = p.getMovimentsX();
             movY = p.getMovimentsY();
+            numParets = prog.getModel().getNumParets();
             tauler.setCasella(x, y, 1);
             long inici = System.nanoTime();
             if (BT(x, y, 2)) {
@@ -79,8 +80,8 @@ public class Control extends Thread implements PerEsdeveniments {
     private boolean BT(int x, int y, int mov) {
         if (seguir) {
             int prox_x, prox_y;
-            if (mov > tauler.getDim() * tauler.getDim()) {
-                tauler.setCasella(x, y, tauler.getDim() * tauler.getDim());
+            if (mov > (tauler.getDim() * tauler.getDim()) - numParets) {
+                tauler.setCasella(x, y, mov-1);
                 prog.getModel().setTauler(tauler);
                 return true;
             }
@@ -97,7 +98,7 @@ public class Control extends Thread implements PerEsdeveniments {
                         tauler.clearCasella(prox_x, prox_y); // tornada enrera
                     }
                 }
-            } 
+            }
         }
         return false;
     }
