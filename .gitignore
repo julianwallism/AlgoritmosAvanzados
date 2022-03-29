@@ -20,3 +20,4 @@
 /Capítol 3/cap3/build/
 /Capítol 3/cap3/dist/
 *.properties
+*.class
