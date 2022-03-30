@@ -2,8 +2,11 @@ package capitol3.vista;
 
 import capitol3.MeuError;
 import capitol3.main;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -12,9 +15,17 @@ import javax.swing.JPanel;
 public class PanellCentral extends JPanel {
     public static final int FPS = 24;
     private main p;
+    private final JTextArea text;
 
-    public PanellCentral(main p) {
+    public PanellCentral(main p, int width, int height) {
         this.p = p;
+        this.setBackground(Color.WHITE);
+        this.text = new JTextArea("Sortida del programa: \n");
+        this.text.setFont(new Font("Serif", Font.PLAIN, 16));
+        this.text.setWrapStyleWord(true);
+        
+        this.add(text);
+        this.setVisible(true);
     }
 
     public void repaint() {

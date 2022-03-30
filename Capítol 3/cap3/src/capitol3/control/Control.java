@@ -29,6 +29,17 @@ public class Control extends Thread implements PerEsdeveniments {
 
     @Override
     public void notificar(String s) {
-        
+        if (s.startsWith("Executar")) {
+            this.seguir = true;
+            if (!this.executat) {
+                this.start();
+                System.out.println("Programa executat per primer pic");
+            } else {
+                System.out.println("Programa reanudat");
+            }
+        } else if (s.startsWith("Aturar")) {
+            this.seguir = false;
+            System.out.println("Programa aturat");
+        }
     }
 }
