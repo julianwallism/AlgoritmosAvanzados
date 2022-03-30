@@ -101,6 +101,9 @@ public class Vista extends JFrame implements PerEsdeveniments {
 
     @Override
     public void notificar(String s) {
-        
+        if (s.startsWith("Vista")) {
+            s = s.replaceAll("Vista: ", "");
+            this.panellCentral.notificar(s);
+        }
     }
 }

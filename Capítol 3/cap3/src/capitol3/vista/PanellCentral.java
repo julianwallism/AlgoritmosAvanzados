@@ -1,10 +1,12 @@
 package capitol3.vista;
 
 import capitol3.MeuError;
+import capitol3.PerEsdeveniments;
 import capitol3.main;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.math.BigInteger;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -12,7 +14,7 @@ import javax.swing.JTextArea;
  *
  * @author Dawid Roch & Julià Wallis
  */
-public class PanellCentral extends JPanel {
+public class PanellCentral extends JPanel implements PerEsdeveniments {
     public static final int FPS = 24;
     private main p;
     private final JTextArea text;
@@ -36,6 +38,18 @@ public class PanellCentral extends JPanel {
 
     public void paint(Graphics gr) {
         super.paint(gr);
+    }
+
+    @Override
+    public void notificar(String s) {
+        if (s.startsWith("Resultat")) {
+            s = s.replaceAll("Resultat: ", "");
+            s = s.replaceAll("Temps: ", "");
+            String[] res = s.split(" ");
+            BigInteger resultat = new BigInteger(res[0]);
+            double temps = Double.parseDouble(res[1]);
+            this.text.append("Resultat ("+this.p.getModel().getAlgoritmeTriat()+"): "+resultat.toString()+"\tTemps: "+temps+'\n');
+        }
     }
 }
 

@@ -2,6 +2,7 @@ package capitol3.control;
 
 import capitol3.main;
 import capitol3.PerEsdeveniments;
+import java.math.BigInteger;
 
 /**
  *
@@ -21,10 +22,44 @@ public class Control extends Thread implements PerEsdeveniments {
         this.executat = true;
         while (true) {
             while (this.seguir) {
-                // resoldre
+                resol();
                 this.seguir = false;
             }
         }
+    }
+    
+    private void resol() {
+        BigInteger num1 = this.prog.getModel().getNum1();
+        BigInteger num2 = this.prog.getModel().getNum2();
+        BigInteger resultat = new BigInteger("-1");
+        
+        long inici = System.nanoTime();
+        switch (this.prog.getModel().getAlgoritmeTriat()) {
+            case "Tradicional":
+                resultat = tradicional(num1, num2);
+                break;
+            case "Karatsuba":
+                resultat = karatsuba(num1, num2);
+                break;
+            case "Mixte":
+                resultat = mixte(num1, num2);
+                break;
+        }
+        double temps = (System.nanoTime() - inici) / 1000000000.0;
+        System.out.println("Resultat: "+resultat.toString()+"\nTemps: "+temps);
+        prog.notificar("Resultat: "+resultat.toString()+" Temps: "+temps);
+    }
+    
+    private BigInteger tradicional(BigInteger n1, BigInteger n2) {
+        return n1.multiply(n2);
+    }
+    
+    private BigInteger karatsuba(BigInteger n1, BigInteger n2) {
+        return n1.multiply(n2);
+    }
+    
+    private BigInteger mixte(BigInteger n1, BigInteger n2) {
+        return n1.multiply(n2);
     }
 
     @Override
