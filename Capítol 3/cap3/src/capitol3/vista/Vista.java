@@ -48,11 +48,11 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.num2.setToolTipText("Segon nombre a sumar");
         this.num2.setColumns(10);
         this.selector = new JComboBox();
-        this.selector.setModel(new DefaultComboBoxModel(this.prog.getModel().getAlgoritmes()));
+        this.selector.setModel(new DefaultComboBoxModel(this.prog.getModel().getAlgorismes()));
         this.selector.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                prog.notificar("Algoritme: "+selector.getSelectedItem());
+                prog.notificar("Algorisme: "+selector.getSelectedItem());
             }
         });
         
@@ -76,7 +76,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         barraInputs.add(this.num1);
         barraInputs.add(new JLabel("Número 2 "));
         barraInputs.add(this.num2);
-        barraInputs.add(new JLabel("Algoritme "));
+        barraInputs.add(new JLabel("Algorisme "));
         barraInputs.add(this.selector);
         
         barraBotons.setLayout(new FlowLayout(FlowLayout.RIGHT));

@@ -48,7 +48,7 @@ public class PanellCentral extends JPanel implements PerEsdeveniments {
             String[] res = s.split(" ");
             BigInteger resultat = new BigInteger(res[0]);
             double temps = Double.parseDouble(res[1]);
-            this.text.append("Resultat ("+this.p.getModel().getAlgoritmeTriat()+"): "+resultat.toString()+"\tTemps: "+temps+'\n');
+            this.text.append("Resultat ("+this.p.getModel().getAlgorismeTriat()+"): "+resultat.toString()+"\tTemps: "+temps+'\n');
         }
     }
 }

@@ -11,8 +11,8 @@ import java.math.BigInteger;
 public class Model implements PerEsdeveniments {
     private main prog;
     private double time;
-    private static final String[] ALGORITMES = {"Tradicional", "Karatsuba", "Mixte"};
-    private String algoritmeTriat = ALGORITMES[0];
+    private static final String[] ALGORISMES = {"Tradicional", "Karatsuba", "Mixte"};
+    private String algorismeTriat = ALGORISMES[0];
     private BigInteger num1, num2, resultat;
 
     public Model(main p) {
@@ -44,16 +44,16 @@ public class Model implements PerEsdeveniments {
         this.num2 = num2;
     }
     
-    public static String[] getAlgoritmes() {
-        return ALGORITMES;
+    public static String[] getAlgorismes() {
+        return ALGORISMES;
     }
 
-    public String getAlgoritmeTriat() {
-        return algoritmeTriat;
+    public String getAlgorismeTriat() {
+        return algorismeTriat;
     }
 
-    public void setAlgoritmeTriat(String algoritmeTriat) {
-        this.algoritmeTriat = algoritmeTriat;
+    public void setAlgorismeTriat(String algorismeTriat) {
+        this.algorismeTriat = algorismeTriat;
     }
     
      public double getTime() {
@@ -76,7 +76,7 @@ public class Model implements PerEsdeveniments {
             System.out.println("Segon nombre canviat a "+s);
         } else if (s.startsWith("Algoritme")) {
             s = s.replaceAll("Algoritme: ", "");
-            this.algoritmeTriat = s;
+            this.algorismeTriat = s;
             System.out.println("Algoritme canviat a "+s);
         } else if (s.startsWith("Resultat")) {
             String sOriginal = s;

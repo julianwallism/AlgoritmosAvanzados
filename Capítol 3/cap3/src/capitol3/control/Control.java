@@ -34,7 +34,7 @@ public class Control extends Thread implements PerEsdeveniments {
         BigInteger resultat = new BigInteger("-1");
         
         long inici = System.nanoTime();
-        switch (this.prog.getModel().getAlgoritmeTriat()) {
+        switch (this.prog.getModel().getAlgorismeTriat()) {
             case "Tradicional":
                 resultat = tradicional(num1, num2);
                 break;
