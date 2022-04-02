@@ -74,10 +74,10 @@ public class Model implements PerEsdeveniments {
             s = s.replaceAll("Nombre 2: ", "");
             this.num2 = new BigInteger(s);
             System.out.println("Segon nombre canviat a "+s);
-        } else if (s.startsWith("Algoritme")) {
-            s = s.replaceAll("Algoritme: ", "");
+        } else if (s.startsWith("Algorisme")) {
+            s = s.replaceAll("Algorisme: ", "");
             this.algorismeTriat = s;
-            System.out.println("Algoritme canviat a "+s);
+            System.out.println("Algorisme canviat a "+s);
         } else if (s.startsWith("Resultat")) {
             String sOriginal = s;
             s = s.replaceAll("Resultat: ", "");

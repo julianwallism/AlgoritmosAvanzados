@@ -55,7 +55,27 @@ public class Control extends Thread implements PerEsdeveniments {
     }
     
     private BigInteger karatsuba(BigInteger n1, BigInteger n2) {
-        return n1.multiply(n2);
+        int n;
+        if (n1.toString().length() > n2.toString().length()) {
+            n = n1.toString().length();
+        } else {
+            n = n2.toString().length();
+        }
+        if (n > 1) {
+            int s = n/2;
+            BigInteger a = n1.divide(new BigInteger("10").pow(s));
+            BigInteger b = n1.mod(new BigInteger("10").pow(s));
+            BigInteger c = n2.divide(new BigInteger("10").pow(s));
+            BigInteger d = n2.mod(new BigInteger("10").pow(s));
+            
+            BigInteger ac = karatsuba(a, c);
+            BigInteger bd = karatsuba(b, d);
+            BigInteger carro = karatsuba(a.add(b), c.add(d)).subtract(ac).subtract(bd);
+            
+            return ac.multiply(new BigInteger("10").pow(2*s)).add(carro.multiply(new BigInteger("10").pow(s))).add(bd);
+        } else {
+            return n1.multiply(n2);
+        }
     }
     
     private BigInteger mixte(BigInteger n1, BigInteger n2) {

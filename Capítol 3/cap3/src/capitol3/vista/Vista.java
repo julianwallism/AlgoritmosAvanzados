@@ -3,6 +3,7 @@ package capitol3.vista;
 import capitol3.PerEsdeveniments;
 import capitol3.main;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -13,7 +14,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
     private final PanellCentral panellCentral;
     private final JPanel panellSuperior, barraInputs, barraBotons;
     private final JComboBox selector;
-    private final JButton executar, aturar;
+    private final JButton executar, aturar, buidar;
     private final JTextField num1, num2;
     private final JProgressBar panellInferior;
     private main prog;
@@ -23,8 +24,11 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.setTitle(titol);
 
         this.panellSuperior = new JPanel();
+        this.panellSuperior.setBackground(new Color(102,178,255));
         this.barraBotons = new JPanel();
+        this.barraBotons.setBackground(new Color(102,178,255));
         this.barraInputs = new JPanel();
+        this.barraInputs.setBackground(new Color(102,178,255));
         this.panellCentral = new PanellCentral(p, this.getWidth(), this.getHeight());
         this.panellInferior = new JProgressBar();
         
@@ -48,6 +52,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.num2.setToolTipText("Segon nombre a sumar");
         this.num2.setColumns(10);
         this.selector = new JComboBox();
+        this.selector.setBackground(Color.white);
         this.selector.setModel(new DefaultComboBoxModel(this.prog.getModel().getAlgorismes()));
         this.selector.addActionListener(new ActionListener() {
             @Override
@@ -57,37 +62,54 @@ public class Vista extends JFrame implements PerEsdeveniments {
         });
         
         this.executar = new JButton("Executar");
+        this.executar.setBackground(Color.white);
         this.executar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                panellInferior.setIndeterminate(true);
                 prog.notificar("Executar");
             }
         });
         this.aturar = new JButton("Aturar");
+        this.aturar.setBackground(Color.white);
         this.aturar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                panellInferior.setIndeterminate(false);
                 prog.notificar("Aturar");
+            }
+        });
+        this.buidar = new JButton("Buidar");
+        this.buidar.setBackground(Color.white);
+        this.buidar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panellCentral.buidar();
             }
         });
         
         barraInputs.setLayout(new FlowLayout(FlowLayout.LEFT));
-        barraInputs.add(new JLabel("Número 1 "));
+        JLabel lab1 = new JLabel("Número 1 ");
+        lab1.setForeground(Color.white);
+        barraInputs.add(lab1);
         barraInputs.add(this.num1);
-        barraInputs.add(new JLabel("Número 2 "));
+        JLabel lab2 = new JLabel("Número 2 ");
+        lab2.setForeground(Color.white);
+        barraInputs.add(lab2);
         barraInputs.add(this.num2);
-        barraInputs.add(new JLabel("Algorisme "));
+        JLabel lab3 = new JLabel("Algorisme ");
+        lab3.setForeground(Color.white);
+        barraInputs.add(lab3);
         barraInputs.add(this.selector);
         
         barraBotons.setLayout(new FlowLayout(FlowLayout.RIGHT));
         barraBotons.add(this.executar);
         barraBotons.add(this.aturar);
+        barraBotons.add(this.buidar);
         
         this.panellSuperior.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
         this.panellSuperior.add(this.barraInputs);
         this.panellSuperior.add(this.barraBotons);
-        
-        this.panellInferior.setIndeterminate(true);
 
         this.add(panellSuperior, BorderLayout.NORTH);
         this.add(panellCentral, BorderLayout.CENTER);
@@ -103,6 +125,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
     public void notificar(String s) {
         if (s.startsWith("Vista")) {
             s = s.replaceAll("Vista: ", "");
+            panellInferior.setIndeterminate(false);
             this.panellCentral.notificar(s);
         }
     }

@@ -29,7 +29,7 @@ public class main implements PerEsdeveniments {
     public void notificar(String s) {
         if (s.startsWith("Executar") || s.startsWith("Aturar")) {
             con.notificar(s);
-        } else if (s.startsWith("Nombre") || s.startsWith("Algoritme") || s.startsWith("Resultat")) {
+        } else if (s.startsWith("Nombre") || s.startsWith("Algorisme") || s.startsWith("Resultat")) {
             mod.notificar(s);
         } else if (s.startsWith("Vista")) {
             vis.notificar(s);

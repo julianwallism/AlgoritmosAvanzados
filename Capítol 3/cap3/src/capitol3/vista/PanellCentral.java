@@ -22,7 +22,7 @@ public class PanellCentral extends JPanel implements PerEsdeveniments {
     public PanellCentral(main p, int width, int height) {
         this.p = p;
         this.setBackground(Color.WHITE);
-        this.text = new JTextArea("Sortida del programa: \n");
+        this.text = new JTextArea("Sortida del programa: \n\n");
         this.text.setFont(new Font("Serif", Font.PLAIN, 16));
         this.text.setWrapStyleWord(true);
         
@@ -50,6 +50,10 @@ public class PanellCentral extends JPanel implements PerEsdeveniments {
             double temps = Double.parseDouble(res[1]);
             this.text.append("Resultat ("+this.p.getModel().getAlgorismeTriat()+"): "+resultat.toString()+"\tTemps: "+temps+'\n');
         }
+    }
+    
+    public void buidar() {
+        this.text.setText("Sortida del programa: \n\n");
     }
 }
 
