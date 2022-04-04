@@ -8,7 +8,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.math.BigInteger;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 
 /**
  *
@@ -17,16 +19,20 @@ import javax.swing.JTextArea;
 public class PanellCentral extends JPanel implements PerEsdeveniments {
     public static final int FPS = 24;
     private main p;
+    private final JScrollPane scroll;
     private final JTextArea text;
 
     public PanellCentral(main p, int width, int height) {
         this.p = p;
         this.setBackground(Color.WHITE);
         this.text = new JTextArea("Sortida del programa: \n\n");
+        this.text.setColumns(75);
+        this.text.setRows(28);
+        this.text.setEditable(false);
         this.text.setFont(new Font("Serif", Font.PLAIN, 16));
-        this.text.setWrapStyleWord(true);
-        
-        this.add(text);
+        this.scroll = new JScrollPane(this.text);
+        this.scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        this.add(scroll);
         this.setVisible(true);
     }
 
