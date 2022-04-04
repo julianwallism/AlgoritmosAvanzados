@@ -56,9 +56,9 @@ public class Control extends Thread implements PerEsdeveniments {
     private Numero karatsuba(Numero n1, Numero n2) {
         int n;
         if (n1.getNum().length() > n2.getNum().length()) {
-            n = n1.toString().length();
+            n = n1.getNum().length();
         } else {
-            n = n2.toString().length();
+            n = n2.getNum().length();
         }
         if (n > 1) {
             int s = n/2;
