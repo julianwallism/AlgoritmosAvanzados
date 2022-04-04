@@ -27,8 +27,8 @@ public class PanellCentral extends JPanel implements PerEsdeveniments {
         this.p = p;
         this.setBackground(Color.WHITE);
         this.text = new JTextArea("Sortida del programa: \n\n");
-        this.text.setColumns(75);
-        this.text.setRows(28);
+        this.text.setColumns(105);
+        this.text.setRows(30);
         this.text.setEditable(false);
         this.text.setFont(new Font("Serif", Font.PLAIN, 16));
         this.scroll = new JScrollPane(this.text);
@@ -53,9 +53,9 @@ public class PanellCentral extends JPanel implements PerEsdeveniments {
             s = s.replaceAll("Resultat: ", "");
             s = s.replaceAll("Temps: ", "");
             String[] res = s.split(" ");
-            Numero resultat = new Numero(res[0]);
+            String resultat = res[0];
             double temps = Double.parseDouble(res[1]);
-            this.text.append("Resultat ("+this.p.getModel().getAlgorismeTriat()+"): "+resultat.getNum()+"\tTemps: "+temps+'\n');
+            this.text.append("Resultat ("+this.p.getModel().getAlgorismeTriat()+"): "+resultat+"\tTemps: "+temps+'\n');
         }
     }
     

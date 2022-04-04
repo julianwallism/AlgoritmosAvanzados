@@ -22,6 +22,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
     public Vista(String titol, main p) {
         this.prog = p;
         this.setTitle(titol);
+        this.setIconImage(new ImageIcon("logo.png").getImage());
 
         this.panellSuperior = new JPanel();
         this.panellSuperior.setBackground(new Color(102,178,255));
@@ -41,7 +42,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
             }
         });
         this.num1.setToolTipText("Primer nombre a sumar");
-        this.num1.setColumns(10);
+        this.num1.setColumns(25);
         this.num2 = new JTextField();
         this.num2.addActionListener(new ActionListener() {
             @Override
@@ -50,7 +51,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
             }
         });
         this.num2.setToolTipText("Segon nombre a sumar");
-        this.num2.setColumns(10);
+        this.num2.setColumns(25);
         this.selector = new JComboBox();
         this.selector.setBackground(Color.white);
         this.selector.setModel(new DefaultComboBoxModel(this.prog.getModel().getAlgorismes()));
@@ -97,12 +98,12 @@ public class Vista extends JFrame implements PerEsdeveniments {
         lab2.setForeground(Color.white);
         barraInputs.add(lab2);
         barraInputs.add(this.num2);
-        JLabel lab3 = new JLabel("Algorisme ");
-        lab3.setForeground(Color.white);
-        barraInputs.add(lab3);
-        barraInputs.add(this.selector);
         
         barraBotons.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        JLabel lab3 = new JLabel("Algorisme ");
+        lab3.setForeground(Color.white);
+        barraBotons.add(lab3);
+        barraBotons.add(this.selector);
         barraBotons.add(this.executar);
         barraBotons.add(this.aturar);
         barraBotons.add(this.buidar);
@@ -114,7 +115,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.add(panellSuperior, BorderLayout.NORTH);
         this.add(panellCentral, BorderLayout.CENTER);
         this.add(panellInferior, BorderLayout.SOUTH);
-        this.setPreferredSize(new Dimension(900, 750));
+        this.setPreferredSize(new Dimension(1250, 800));
         this.pack();
         this.setResizable(false);
         this.setVisible(true);

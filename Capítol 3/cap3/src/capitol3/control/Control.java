@@ -28,9 +28,9 @@ public class Control extends Thread implements PerEsdeveniments {
     }
     
     private void resol() {
-        Numero num1 = this.prog.getModel().getNum1();
-        Numero num2 = this.prog.getModel().getNum2();
-        Numero resultat = new Numero("-1");
+        String num1 = this.prog.getModel().getNum1();
+        String num2 = this.prog.getModel().getNum2();
+        String resultat = "-1";
         
         long inici = System.nanoTime();
         switch (this.prog.getModel().getAlgorismeTriat()) {
@@ -45,64 +45,53 @@ public class Control extends Thread implements PerEsdeveniments {
                 break;
         }
         double temps = (System.nanoTime() - inici) / 1000000000.0;
-        System.out.println("Resultat: "+resultat.getNum()+"\nTemps: "+temps);
-        prog.notificar("Resultat: "+resultat.getNum()+" Temps: "+temps);
+        System.out.println("Resultat: "+resultat+"\nTemps: "+temps);
+        prog.notificar("Resultat: "+resultat+" Temps: "+temps);
     }
     
-    private Numero tradicional(Numero n1, Numero n2) {
-        return n1.producte(n2);
+    private String tradicional(String n1, String n2) {
+        return Numero.producte(n1, n2);
     }
     
-    private Numero karatsuba(Numero n1, Numero n2) {
+    private String karatsuba(String n1, String n2) {
+        String resultat = "";
         int n;
-        if (n1.getNum().length() > n2.getNum().length()) {
-            n = n1.getNum().length();
+        if (n1.length() > n2.length()) {
+            n = n1.length();
         } else {
-            n = n2.getNum().length();
+            n = n2.length();
         }
-        if (n > 1) {
+        if (n > 2) {
             int s = n/2;
-            Numero[] ab = n1.xaparNumero();
-            Numero[] cd = n2.xaparNumero();
-            Numero a = ab[0];
-            Numero b = ab[1];
-            Numero c = cd[0];
-            Numero d = cd[1];
+            String[] ab = Numero.xaparNumero(n1);
+            String[] cd = Numero.xaparNumero(n2);
+            String a = ab[0];
+            String b = ab[1];
+            String c = cd[0];
+            String d = cd[1];
+            System.out.println("n1: "+n1+": "+a+" | "+b);
+            System.out.println("n2: "+n2+": "+c+" | "+d);
             
-            Numero ac = karatsuba(a, c);
-            Numero bd = karatsuba(b, d);
-            Numero carro = karatsuba(a.suma(b), c.suma(d)).resta(ac).resta(bd);
+            String ac = karatsuba(a, c);
+            System.out.println("ac: "+ac);
+            String bd = karatsuba(b, d);
+            System.out.println("bd: "+bd);
+            String carro = Numero.resta(Numero.resta(karatsuba(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
+            System.out.println("carro: "+carro);
+            resultat = Numero.suma(Numero.suma(Numero.potencia10(ac, 2*s), Numero.potencia10(carro, s)), bd);
             
-            return ac.producte(new Numero("10").potencia10(2*s)).suma(carro.producte(new Numero("10").potencia10(s))).suma(bd);
+            while (resultat.charAt(0) == '0') {
+                resultat = resultat.substring(1);
+            }
+            
+            return resultat;            
         } else {
-            return n1.producte(n2);
+            return Numero.producte(n1, n2);
         }
     }
     
-    private Numero mixte(Numero n1, Numero n2) {
-        int n;
-        if (n1.getNum().length() > n2.getNum().length()) {
-            n = n1.toString().length();
-        } else {
-            n = n2.toString().length();
-        }
-        if (n > 15) {
-            int s = n/2;
-            Numero[] ab = n1.xaparNumero();
-            Numero[] cd = n2.xaparNumero();
-            Numero a = ab[0];
-            Numero b = ab[1];
-            Numero c = cd[0];
-            Numero d = cd[1];
-            
-            Numero ac = karatsuba(a, c);
-            Numero bd = karatsuba(b, d);
-            Numero carro = karatsuba(a.suma(b), c.suma(d)).resta(ac).resta(bd);
-            
-            return ac.producte(new Numero("10").potencia10(2*s)).suma(carro.producte(new Numero("10").potencia10(s))).suma(bd);
-        } else {
-            return n1.producte(n2);
-        }
+    private String mixte(String n1, String n2) {
+        return "";
     }
 
     @Override
