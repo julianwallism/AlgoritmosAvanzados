@@ -80,15 +80,22 @@ public class Numero {
             num = num.substring(1);
         }
         String[] res = new String[2];
-        String primeraPart;
+        int n = num.length()/2;
+        String primeraPart = num.substring(0, (num.length()/2)+1), segonaPart;
 
-        if (num.length() % 2 == 0) {
-            primeraPart = num.substring(0, (num.length()/2));
-        } else {
-            num = "0"+num;     
-            primeraPart = num.substring(0, (num.length()/2));
+        if (num.length() % 2 == 0 && num.length() == n/2) {
+            segonaPart = num.substring((num.length()/2)+1);
+        } else if (num.length() % 2 == 0) {
+            int diff = n - num.length();
+            segonaPart = "0";
+            while (diff > 1) {
+                segonaPart += "0";
+                diff--;
+            }
+            segonaPart += num.substring((num.length()/2)+1);
+        } else { 
+            segonaPart = "0"+num.substring((num.length()/2)+1);
         }
-        String segonaPart = num.substring(num.length()/2);
         res[0] = primeraPart;
         res[1] = segonaPart;
 
