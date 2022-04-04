@@ -2,6 +2,7 @@ package capitol3.vista;
 
 import capitol3.MeuError;
 import capitol3.PerEsdeveniments;
+import capitol3.control.Numero;
 import capitol3.main;
 import java.awt.Color;
 import java.awt.Font;
@@ -52,9 +53,9 @@ public class PanellCentral extends JPanel implements PerEsdeveniments {
             s = s.replaceAll("Resultat: ", "");
             s = s.replaceAll("Temps: ", "");
             String[] res = s.split(" ");
-            BigInteger resultat = new BigInteger(res[0]);
+            Numero resultat = new Numero(res[0]);
             double temps = Double.parseDouble(res[1]);
-            this.text.append("Resultat ("+this.p.getModel().getAlgorismeTriat()+"): "+resultat.toString()+"\tTemps: "+temps+'\n');
+            this.text.append("Resultat ("+this.p.getModel().getAlgorismeTriat()+"): "+resultat.getNum()+"\tTemps: "+temps+'\n');
         }
     }
     

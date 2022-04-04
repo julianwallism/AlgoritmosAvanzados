@@ -2,7 +2,6 @@ package capitol3.control;
 
 import capitol3.main;
 import capitol3.PerEsdeveniments;
-import java.math.BigInteger;
 
 /**
  *
@@ -29,9 +28,9 @@ public class Control extends Thread implements PerEsdeveniments {
     }
     
     private void resol() {
-        BigInteger num1 = this.prog.getModel().getNum1();
-        BigInteger num2 = this.prog.getModel().getNum2();
-        BigInteger resultat = new BigInteger("-1");
+        Numero num1 = this.prog.getModel().getNum1();
+        Numero num2 = this.prog.getModel().getNum2();
+        Numero resultat = new Numero("-1");
         
         long inici = System.nanoTime();
         switch (this.prog.getModel().getAlgorismeTriat()) {
@@ -46,77 +45,63 @@ public class Control extends Thread implements PerEsdeveniments {
                 break;
         }
         double temps = (System.nanoTime() - inici) / 1000000000.0;
-        System.out.println("Resultat: "+resultat.toString()+"\nTemps: "+temps);
-        prog.notificar("Resultat: "+resultat.toString()+" Temps: "+temps);
+        System.out.println("Resultat: "+resultat.getNum()+"\nTemps: "+temps);
+        prog.notificar("Resultat: "+resultat.getNum()+" Temps: "+temps);
     }
     
-    private BigInteger tradicional(BigInteger n1, BigInteger n2) {
-        return n1.multiply(n2);
+    private Numero tradicional(Numero n1, Numero n2) {
+        return n1.producte(n2);
     }
     
-    private BigInteger karatsuba(BigInteger n1, BigInteger n2) {
+    private Numero karatsuba(Numero n1, Numero n2) {
         int n;
-        if (n1.toString().length() > n2.toString().length()) {
+        if (n1.getNum().length() > n2.getNum().length()) {
             n = n1.toString().length();
         } else {
             n = n2.toString().length();
         }
         if (n > 1) {
             int s = n/2;
-            BigInteger a = n1.divide(new BigInteger("10").pow(s));
-            BigInteger b = n1.mod(new BigInteger("10").pow(s));
-            BigInteger c = n2.divide(new BigInteger("10").pow(s));
-            BigInteger d = n2.mod(new BigInteger("10").pow(s));
+            Numero[] ab = n1.xaparNumero();
+            Numero[] cd = n2.xaparNumero();
+            Numero a = ab[0];
+            Numero b = ab[1];
+            Numero c = cd[0];
+            Numero d = cd[1];
             
-            BigInteger ac = karatsuba(a, c);
-            BigInteger bd = karatsuba(b, d);
-            BigInteger carro = karatsuba(a.add(b), c.add(d)).subtract(ac).subtract(bd);
+            Numero ac = karatsuba(a, c);
+            Numero bd = karatsuba(b, d);
+            Numero carro = karatsuba(a.suma(b), c.suma(d)).resta(ac).resta(bd);
             
-            return ac.multiply(new BigInteger("10").pow(2*s)).add(carro.multiply(new BigInteger("10").pow(s))).add(bd);
+            return ac.producte(new Numero("10").potencia10(2*s)).suma(carro.producte(new Numero("10").potencia10(s))).suma(bd);
         } else {
-            return n1.multiply(n2);
+            return n1.producte(n2);
         }
     }
     
-    private BigInteger mixte(BigInteger n1, BigInteger n2) {
-        BigInteger ac, bd, carro;
-        
-        int n; // quantitat de xifres
-        if (n1.toString().length() > n2.toString().length()) {
+    private Numero mixte(Numero n1, Numero n2) {
+        int n;
+        if (n1.getNum().length() > n2.getNum().length()) {
             n = n1.toString().length();
         } else {
             n = n2.toString().length();
         }
-        if (n > 1) {
+        if (n > 15) {
             int s = n/2;
-            BigInteger a = n1.divide(new BigInteger("10").pow(s));
-            BigInteger b = n1.mod(new BigInteger("10").pow(s));
-            BigInteger c = n2.divide(new BigInteger("10").pow(s));
-            BigInteger d = n2.mod(new BigInteger("10").pow(s));
-
-            int tamanyA, tamanyB, tamanyC;
-            if (a.toString().length() > c.toString().length()) {
-                tamanyA = a.toString().length();
-            } else {
-                tamanyA = c.toString().length();
-            }
-            if (b.toString().length() > d.toString().length()) {
-                tamanyB = b.toString().length();
-            } else {
-                tamanyB = d.toString().length();
-            }if (a.add(b).toString().length() > c.add(d).toString().length()) {
-                tamanyC = a.add(b).toString().length();
-            } else {
-                tamanyC = c.add(d).toString().length();
-            }
-        
-            if (tamanyA > 500) { ac = karatsuba(a, c); } else { ac = tradicional(a, c); }
-            if (tamanyB > 500) { bd = karatsuba(b, d); } else { bd = tradicional(b, d); }
-            if (tamanyC > 500) { carro = karatsuba(a.add(b), c.add(d)).subtract(ac).subtract(bd); } else { carro = tradicional(a.add(b), c.add(d)).subtract(ac).subtract(bd); }
-                    
-            return ac.multiply(new BigInteger("10").pow(2*s)).add(carro.multiply(new BigInteger("10").pow(s))).add(bd);
+            Numero[] ab = n1.xaparNumero();
+            Numero[] cd = n2.xaparNumero();
+            Numero a = ab[0];
+            Numero b = ab[1];
+            Numero c = cd[0];
+            Numero d = cd[1];
+            
+            Numero ac = karatsuba(a, c);
+            Numero bd = karatsuba(b, d);
+            Numero carro = karatsuba(a.suma(b), c.suma(d)).resta(ac).resta(bd);
+            
+            return ac.producte(new Numero("10").potencia10(2*s)).suma(carro.producte(new Numero("10").potencia10(s))).suma(bd);
         } else {
-            return n1.multiply(n2);
+            return n1.producte(n2);
         }
     }
 
