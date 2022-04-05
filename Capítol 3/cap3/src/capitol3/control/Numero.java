@@ -75,29 +75,16 @@ public class Numero {
         return res;
     }
 
-    public static String[] xaparNumero(String num) {
-        while (num.charAt(0) == '0') {
-            num = num.substring(1);
-        }
-        String[] res = new String[2];
-        int n = num.length()/2;
-        String primeraPart = num.substring(0, (num.length()/2)+1), segonaPart;
-
-        if (num.length() % 2 == 0 && num.length() == n/2) {
-            segonaPart = num.substring((num.length()/2)+1);
-        } else if (num.length() % 2 == 0) {
-            int diff = n - num.length();
-            segonaPart = "0";
-            while (diff > 1) {
-                segonaPart += "0";
-                diff--;
-            }
-            segonaPart += num.substring((num.length()/2)+1);
-        } else { 
-            segonaPart = "0"+num.substring((num.length()/2)+1);
-        }
-        res[0] = primeraPart;
-        res[1] = segonaPart;
+    public static String[] xaparNumeros(String num1, String num2, int n) {
+        String[] res = new String[4];
+        int n1 = num1.length();
+        int n2 = num2.length();
+        num1 = posarZeros(num1, (2*n)-n1);
+        num2 = posarZeros(num2, (2*n)-n2);
+        res[0] = num1.substring(0, n);
+        res[1] = num1.substring(n);
+        res[2] = num2.substring(0, n);
+        res[3] = num2.substring(n);
 
         return res;
     }
@@ -144,18 +131,33 @@ public class Numero {
     }
 
     public static String potencia10(String num, int pot) {
-        String res = num;
-
-        if (pot == 0) {
-            return res;
-        }
-
-        while (pot != 0) {
-            res = res.concat("0");
+        StringBuilder s = new StringBuilder(num);
+        
+        while(pot>0) {
+            s = s.append("0");
             pot--;
         }
-
-        return res;
+        
+        return s.toString();
+    }
+    
+    public static String posarZeros(String num, int zeros) {
+        StringBuilder s = new StringBuilder(num).reverse();
+        
+        while(zeros>0) {
+            s = s.append("0");
+            zeros--;
+        }
+        
+        return s.reverse().toString();
+    }
+    
+    public static boolean esZero(String num) {
+        for (int i = 0; i < num.length(); i++) {
+            if (num.charAt(i) != '0') return false;
+        }
+        
+        return true;
     }
 
     private static boolean esMenor(String num1, String num2) {

@@ -63,12 +63,15 @@ public class Control extends Thread implements PerEsdeveniments {
         }
         if (n > 2) {
             int s = n/2;
-            String[] ab = Numero.xaparNumero(n1);
-            String[] cd = Numero.xaparNumero(n2);
-            String a = ab[0];
-            String b = ab[1];
-            String c = cd[0];
-            String d = cd[1];
+            if (2*s != n) {
+                s++;
+            }
+            String[] abcd = Numero.xaparNumeros(n1, n2, s);
+            String a = abcd[0];
+            String b = abcd[1];
+            String c = abcd[2];
+            String d = abcd[3];
+            
             System.out.println("n1: "+n1+": "+a+" | "+b);
             System.out.println("n2: "+n2+": "+c+" | "+d);
             
@@ -80,10 +83,10 @@ public class Control extends Thread implements PerEsdeveniments {
             System.out.println("carro: "+carro);
             resultat = Numero.suma(Numero.suma(Numero.potencia10(ac, 2*s), Numero.potencia10(carro, s)), bd);
             
+            if (Numero.esZero(resultat)) return "0";
             while (resultat.charAt(0) == '0') {
                 resultat = resultat.substring(1);
             }
-            
             return resultat;            
         } else {
             return Numero.producte(n1, n2);
