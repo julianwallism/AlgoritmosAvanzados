@@ -1,7 +1,6 @@
 package capitol3.model;
 
 import capitol3.PerEsdeveniments;
-import capitol3.control.Numero;
 import capitol3.main;
 
 /**
@@ -9,15 +8,20 @@ import capitol3.main;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
+    private static final int UMBRAL = 65;
+    private static final String[] ALGORISMES = {"Tradicional", "Karatsuba", "Mixte"};
     private main prog;
     private double time;
-    private static final String[] ALGORISMES = {"Tradicional", "Karatsuba", "Mixte"};
     private String algorismeTriat = ALGORISMES[0];
     private String num1, num2, resultat;
 
     public Model(main p) {
         prog = p;
         time = 0.0;
+    }
+
+    public static int getUmbral() {
+        return UMBRAL;
     }
 
     public String getNum1() {

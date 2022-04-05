@@ -2,6 +2,7 @@ package capitol3.control;
 
 import capitol3.main;
 import capitol3.PerEsdeveniments;
+import capitol3.model.Model;
 
 /**
  *
@@ -72,15 +73,9 @@ public class Control extends Thread implements PerEsdeveniments {
             String c = abcd[2];
             String d = abcd[3];
             
-            System.out.println("n1: "+n1+": "+a+" | "+b);
-            System.out.println("n2: "+n2+": "+c+" | "+d);
-            
             String ac = karatsuba(a, c);
-            System.out.println("ac: "+ac);
             String bd = karatsuba(b, d);
-            System.out.println("bd: "+bd);
             String carro = Numero.resta(Numero.resta(karatsuba(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
-            System.out.println("carro: "+carro);
             resultat = Numero.suma(Numero.suma(Numero.potencia10(ac, 2*s), Numero.potencia10(carro, s)), bd);
             
             if (Numero.esZero(resultat)) return "0";
@@ -94,7 +89,18 @@ public class Control extends Thread implements PerEsdeveniments {
     }
     
     private String mixte(String n1, String n2) {
-        return "";
+        String resultat = "";
+        int n;
+        if (n1.length() > n2.length()) {
+            n = n1.length();
+        } else {
+            n = n2.length();
+        }
+        if (n > Model.getUmbral()) {
+            return karatsuba(n1, n2);
+        } else {
+            return tradicional(n1, n2);
+        }
     }
 
     @Override
