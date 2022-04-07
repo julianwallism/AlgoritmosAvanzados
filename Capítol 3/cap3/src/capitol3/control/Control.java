@@ -31,7 +31,7 @@ public class Control extends Thread implements PerEsdeveniments {
     private void resol() {
         String num1 = this.prog.getModel().getNum1();
         String num2 = this.prog.getModel().getNum2();
-        String resultat = "-1";
+        String resultat = "0";
         
         long inici = System.nanoTime();
         switch (this.prog.getModel().getAlgorismeTriat()) {
@@ -55,14 +55,14 @@ public class Control extends Thread implements PerEsdeveniments {
     }
     
     private String karatsuba(String n1, String n2) {
-        String resultat = "";
+        String resultat;
         int n;
         if (n1.length() > n2.length()) {
             n = n1.length();
         } else {
             n = n2.length();
         }
-        if (n > 2) {
+        if (n > 2) { // aplicam karatsuba fins que la suma sigui directa (dos nombres d'un dígit)
             int s = n/2;
             if (2*s != n) {
                 s++;
@@ -76,12 +76,16 @@ public class Control extends Thread implements PerEsdeveniments {
             String ac = karatsuba(a, c);
             String bd = karatsuba(b, d);
             String carro = Numero.resta(Numero.resta(karatsuba(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
-            resultat = Numero.suma(Numero.suma(Numero.potencia10(ac, 2*s), Numero.potencia10(carro, s)), bd);
+            resultat = Numero.suma(Numero.suma(Numero.posarZeros(ac, 2*s, true), Numero.posarZeros(carro, s, true)), bd);
             
+            // Per molt que sigui "0000000000000000" retornam un "0"
             if (Numero.esZero(resultat)) return "0";
+            
+            // Llevam tots els zeros de davant en cas de tenir-ne
             while (resultat.charAt(0) == '0') {
                 resultat = resultat.substring(1);
             }
+            
             return resultat;            
         } else {
             return Numero.producte(n1, n2);
@@ -89,14 +93,13 @@ public class Control extends Thread implements PerEsdeveniments {
     }
     
     private String mixte(String n1, String n2) {
-        String resultat = "";
         int n;
         if (n1.length() > n2.length()) {
             n = n1.length();
         } else {
             n = n2.length();
         }
-        if (n > Model.getUmbral()) {
+        if (n > Model.getUmbral()) { // si el nombre està per damunt l'umbral definit aplicam Karatsuba
             return karatsuba(n1, n2);
         } else {
             return tradicional(n1, n2);

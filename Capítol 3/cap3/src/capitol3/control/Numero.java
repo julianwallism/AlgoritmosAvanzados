@@ -1,6 +1,8 @@
 package capitol3.control;
 
 /**
+ * Classe que implementa la funcionalitat pròpia dels nombres pels càlculs que
+ * facin falta fer per dur a terme el producte de grans nombres emprant Strings.
  *
  * @authors Dawid Roch & Julià Wallis
  */
@@ -15,7 +17,7 @@ public class Numero {
 
         String res = "";
         int n1 = num1.length(), n2 = num2.length();
-        int diff = n2 - n1;
+        int diff = n2 - n1; // diferència de llongitud entre els dos nombres
         int carry = 0;
 
         // Recorrem des del final de cada string
@@ -26,7 +28,7 @@ public class Numero {
             carry = sum / 10;
         }
 
-        // Afegim els digits que queden del segon numero
+        // Afegim els dígits que queden del segon nombre
         for (int i = n2 - n1 - 1; i >= 0; i--) {
             int sum = ((int) (num2.charAt(i) - '0') + carry);
             res += (char) (sum % 10 + '0');
@@ -44,31 +46,38 @@ public class Numero {
 
     public static String producte(String str1, String str2) {
         String res = "0";
-
         int count = 0;
+
+        // Recorrem el primer nombre de dreta a esquerra
         for (int i = str2.length() - 1; i >= 0; i--) {
+            // Agafam el dígit actual del segon nombre
             int d2 = str2.charAt(i) - '0';
 
             int carry = 0;
             StringBuilder prod = new StringBuilder();
+            // Recorrem el segon nombre de dreta a esquerra
             for (int j = str1.length() - 1; j >= 0; j--) {
+                // Agafam el dígit actual del primer nombre
                 int d1 = str1.charAt(j) - '0';
+
+                // Multiplicam els dos dígits actuals (d1 i d2) i sumam la 
+                // quantitat restant de l'operació anterior
                 int p = carry + (d1 * d2);
                 prod.append(p % 10);
-                carry = p / 10;
+                carry = p / 10; // actualitzam el carry per la següent operació
             }
 
-            if (carry != 0) {
+            if (carry != 0) { // si el carry no és zero l'afegim al resultat
                 prod.append(carry);
             }
 
-            prod.reverse();
+            prod.reverse(); // invertim la cadena de caràcters
 
             for (int k = 0; k < count; k++) {
-                prod.append(0);
+                prod.append(0); // afegim els zeros que pertoquin
             }
 
-            res = suma(res, prod.toString());
+            res = suma(res, prod.toString()); // computam la suma del valor anterior amb el calculat en aquesta iteració
             count++;
         }
 
@@ -77,10 +86,11 @@ public class Numero {
 
     public static String[] xaparNumeros(String num1, String num2, int n) {
         String[] res = new String[4];
-        int n1 = num1.length();
-        int n2 = num2.length();
-        num1 = posarZeros(num1, (2*n)-n1);
-        num2 = posarZeros(num2, (2*n)-n2);
+        int n1 = num1.length(), n2 = num2.length();
+        // Posam els zeros que facin falta davant perque tenguin la mateixa llargària
+        num1 = posarZeros(num1, (2 * n) - n1, false);
+        num2 = posarZeros(num2, (2 * n) - n2, false);
+        // Separam els nombres en dues parts cadascun
         res[0] = num1.substring(0, n);
         res[1] = num1.substring(n);
         res[2] = num2.substring(0, n);
@@ -95,80 +105,73 @@ public class Numero {
             num1 = num2;
             num2 = t;
         }
-        String res = "";
-        int n1 = num1.length(), n2 = num2.length();
-        String str1 = new StringBuilder(num1).reverse().toString();
-        String str2 = new StringBuilder(num2).reverse().toString();
-        int carry = 0;
+        String res = "", str1 = new StringBuilder(num1).reverse().toString(), str2 = new StringBuilder(num2).reverse().toString();
+        int n1 = num1.length(), n2 = num2.length(), carry = 0;
 
         for (int i = 0; i < n2; i++) {
+            // Computam la resta dels dos dígits actuals
             int sub = ((int) (str1.charAt(i) - '0') - (int) (str2.charAt(i) - '0') - carry);
 
-            if (sub < 0) {
+            if (sub < 0) { // si la resta dona negatiu (p.ex.: 2-6=-4)
                 sub = sub + 10;
-                carry = 1;
+                carry = 1; // augmentam el carry
             } else {
-                carry = 0;
+                carry = 0; // sinó el reinicialitzam a 0
             }
 
-            res += (char) (sub + '0');
+            res += (char) (sub + '0'); // actualitzam el resultat
         }
 
+        // Pels digits que hi hagi de diferència entre els dos nombres
         for (int i = n2; i < n1; i++) {
+            // Afegim la resta amb el carry, si existeix
             int sub = ((int) (str1.charAt(i) - '0') - carry);
 
-            if (sub < 0) {
+            if (sub < 0) { // si la resta dona negatiu (p.ex.: 2-6=-4)
                 sub = sub + 10;
-                carry = 1;
+                carry = 1; // augmentam el carry
             } else {
-                carry = 0;
+                carry = 0; // sinó el reinicialitzam a 0
             }
 
-            res += (char) (sub + '0');
+            res += (char) (sub + '0'); // actualitzam el resultat
         }
 
         return new StringBuilder(res).reverse().toString();
     }
 
-    public static String potencia10(String num, int pot) {
-        StringBuilder s = new StringBuilder(num);
-        
-        while(pot>0) {
-            s = s.append("0");
-            pot--;
-        }
-        
-        return s.toString();
-    }
-    
-    public static String posarZeros(String num, int zeros) {
-        StringBuilder s = new StringBuilder(num).reverse();
-        
-        while(zeros>0) {
+    public static String posarZeros(String num, int zeros, boolean darrera) {
+        StringBuilder s = darrera ? new StringBuilder(num) : new StringBuilder(num).reverse();
+
+        while (zeros > 0) {
             s = s.append("0");
             zeros--;
         }
-        
-        return s.reverse().toString();
+
+        return darrera ? s.toString() : s.reverse().toString();
     }
-    
+
     public static boolean esZero(String num) {
         for (int i = 0; i < num.length(); i++) {
-            if (num.charAt(i) != '0') return false;
+            if (num.charAt(i) != '0') {
+                return false;
+            }
         }
-        
+
         return true;
     }
 
     private static boolean esMenor(String num1, String num2) {
         int n1 = num1.length(), n2 = num2.length();
+        // si un dels dos és més llarg que l'altre és directe
         if (n1 < n2) {
             return true;
         }
         if (n2 < n1) {
             return false;
         }
-
+        
+        // si la llargària és igual, miram quin és el major (si una posició és igual es passa a la següent)
         for (int i = 0; i < n1; i++) {
             if (num1.charAt(i) < num2.charAt(i)) {
                 return true;
@@ -177,6 +180,6 @@ public class Numero {
             }
         }
 
-        return false;
+        return false; // si els dos nombres són iguals es retorna fals per conveni
     }
 }
