@@ -12,6 +12,7 @@ public class Model implements PerEsdeveniments {
     private static final String[] ALGORISMES = {"Tradicional", "Karatsuba", "Mixte"};
     private main prog;
     private double time;
+    private double[][] estudi;
     private String algorismeTriat = ALGORISMES[0];
     private String num1, num2, resultat;
 
@@ -60,12 +61,20 @@ public class Model implements PerEsdeveniments {
         this.algorismeTriat = algorismeTriat;
     }
     
-     public double getTime() {
+    public double getTime() {
         return time;
     }
 
     public void setTime(Double time) {
         this.time = time;
+    }
+
+    public double[][] getEstudi() {
+        return estudi;
+    }
+    
+    public void setEstudi(double[][] estudi) {
+        this.estudi = estudi;
     }
     
     @Override

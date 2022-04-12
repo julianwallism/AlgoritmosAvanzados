@@ -10,11 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+
 public class Vista extends JFrame implements PerEsdeveniments {
     private final PanellCentral panellCentral;
+    private PanellGrafic panellGrafic;
     private final JPanel panellSuperior, barraInputs, barraBotons;
     private final JComboBox selector;
-    private final JButton executar, aturar, buidar;
+    private final JButton executar, aturar, buidar, estudi;
     private final JTextField num1, num2;
     private final JProgressBar panellInferior;
     private main prog;
@@ -31,6 +33,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.barraInputs = new JPanel();
         this.barraInputs.setBackground(new Color(102,178,255));
         this.panellCentral = new PanellCentral(p, this.getWidth(), this.getHeight());
+        //this.panellGrafic = new Grafic(p, this.getWidth(), this.getHeight());
         this.panellInferior = new JProgressBar();
         
         // Creació dels components del panell superior
@@ -48,6 +51,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
             @Override
             public void actionPerformed(ActionEvent e) {
                 prog.notificar("Nombre 2: "+num2.getText());
+                System.out.println("hola");
             }
         });
         this.num2.setToolTipText("Segon nombre a sumar");
@@ -71,6 +75,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 prog.notificar("Executar");
             }
         });
+
         this.aturar = new JButton("Aturar");
         this.aturar.setBackground(Color.white);
         this.aturar.addActionListener(new ActionListener() {
@@ -80,6 +85,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 prog.notificar("Aturar");
             }
         });
+
         this.buidar = new JButton("Buidar");
         this.buidar.setBackground(Color.white);
         this.buidar.addActionListener(new ActionListener() {
@@ -89,6 +95,15 @@ public class Vista extends JFrame implements PerEsdeveniments {
             }
         });
         
+        this.estudi= new JButton("Estudi");
+        this.estudi.setBackground(Color.white);
+        this.estudi.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                prog.notificar("Estudi");
+            }
+        });
+
         barraInputs.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel lab1 = new JLabel("Número 1 ");
         lab1.setForeground(Color.white);
@@ -107,6 +122,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         barraBotons.add(this.executar);
         barraBotons.add(this.aturar);
         barraBotons.add(this.buidar);
+        barraBotons.add(this.estudi);
         
         this.panellSuperior.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 10));
         this.panellSuperior.add(this.barraInputs);
@@ -122,12 +138,33 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    public void creaGrafic(){
+        System.out.println("creagrafic");
+        JDialog jd = new JDialog();
+        jd.setTitle("Gràfic");
+        jd.setSize(new Dimension(700, 450));
+        jd.setResizable(false);
+        jd.setLocationRelativeTo(null);
+        jd.setLayout(new BorderLayout());
+
+        panellGrafic = new PanellGrafic(700,450,this.prog.getModel(),this);
+        
+        jd.add(panellGrafic);
+        jd.pack();
+        jd.setVisible(true);
+        panellGrafic.pintaGrafic();
+        //panellGrafic.creaGrafic(dades);
+    }
+
     @Override
     public void notificar(String s) {
         if (s.startsWith("Vista")) {
             s = s.replaceAll("Vista: ", "");
             panellInferior.setIndeterminate(false);
             this.panellCentral.notificar(s);
+        } else if (s.startsWith("Fet")){
+            creaGrafic();
         }
     }
+    
 }

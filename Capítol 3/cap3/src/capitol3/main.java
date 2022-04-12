@@ -27,11 +27,11 @@ public class main implements PerEsdeveniments {
     // Funció símple de la comunicació per Patró d'esdeveniments
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Executar") || s.startsWith("Aturar")) {
+        if (s.startsWith("Executar") || s.startsWith("Aturar") || s.startsWith("Estudi")) {
             con.notificar(s);
         } else if (s.startsWith("Nombre") || s.startsWith("Algorisme") || s.startsWith("Resultat")) {
             mod.notificar(s);
-        } else if (s.startsWith("Vista")) {
+        } else if (s.startsWith("Vista") || s.startsWith("Fet")) {
             vis.notificar(s);
         }
     }
