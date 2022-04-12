@@ -21,3 +21,8 @@
 /Capítol 3/cap3/dist/
 *.properties
 *.class
+/Capítol 4/cap3/dist/
+/Capítol 4/cap3/nbproject/private/
+/Capítol 4/cap4/dist/
+/Capítol 4/cap4/nbproject/private/
+/Capítol 4/cap4/build/
