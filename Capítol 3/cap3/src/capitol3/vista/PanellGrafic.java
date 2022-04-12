@@ -21,7 +21,7 @@ public class PanellGrafic extends JPanel {
     private Model mod;
     private Vista vis;
     protected final int FPS = 24; // 24 frames per segon
-    private final ProcesPintat procpin;
+    // private final ProcesPintat procpin;
     private BufferedImage bima;
 
     public PanellGrafic(int x, int y, Model m, Vista v) {
@@ -31,8 +31,8 @@ public class PanellGrafic extends JPanel {
         vis = v;
         bima = null;
         this.setPreferredSize(new Dimension(w, h));
-        procpin = new ProcesPintat(this);
-        procpin.start();
+        /*procpin = new ProcesPintat();
+        procpin.start();*/
     }
     
     @Override
@@ -104,7 +104,7 @@ public class PanellGrafic extends JPanel {
 
 }
 
-class ProcesPintat extends Thread {
+/*class ProcesPintat extends Thread {
 
     private PanellGrafic pan;
 
@@ -131,4 +131,4 @@ class ProcesPintat extends Thread {
             MeuError.informaError(e);
         }
     }
-}
+}*/
