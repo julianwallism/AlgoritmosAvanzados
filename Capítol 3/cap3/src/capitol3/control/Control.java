@@ -34,6 +34,9 @@ public class Control extends Thread implements PerEsdeveniments {
         String num1 = this.prog.getModel().getNum1();
         String num2 = this.prog.getModel().getNum2();
         String resultat = "0";
+        boolean negatiu = (num1.charAt(0) == '-' || num2.charAt(0) == '-') && !(num1.charAt(0) == '-' && num2.charAt(0) == '-');
+        if (num1.charAt(0) == '-') num1 = num1.substring(1);
+        if (num2.charAt(0) == '-') num2 = num2.substring(1);
 
         long inici = System.nanoTime();
         System.out.println(num1);
@@ -49,6 +52,7 @@ public class Control extends Thread implements PerEsdeveniments {
                 resultat = mixte(num1, num2);
                 break;
         }
+        if (negatiu) resultat = '-'+resultat;
         double temps = (System.nanoTime() - inici) / 1000000000.0;
         System.out.println("Resultat: " + resultat + "\nTemps: " + temps);
 
