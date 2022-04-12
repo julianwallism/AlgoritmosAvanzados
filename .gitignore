@@ -1,3 +1,5 @@
+*.properties
+*.class
 /Capitol_1/build/
 /Capitol 1 v2/build/
 /Capitol_1/nbproject/private/
@@ -14,15 +16,8 @@
 /Capítol 2/cap2/dist/
 /Capítol 2/cap2/nbproject/private/
 /Capítol 3/cap3/nbproject/private/
-/Capítol 3/cap2/build/
-/Capítol 3/cap2/dist/
-/Capítol 3/cap2/nbproject/private/
 /Capítol 3/cap3/build/
 /Capítol 3/cap3/dist/
-*.properties
-*.class
-/Capítol 4/cap3/dist/
-/Capítol 4/cap3/nbproject/private/
-/Capítol 4/cap4/dist/
 /Capítol 4/cap4/nbproject/private/
+/Capítol 4/cap4/dist/
 /Capítol 4/cap4/build/
