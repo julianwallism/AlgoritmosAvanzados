@@ -20,7 +20,7 @@ public class Control extends Thread implements PerEsdeveniments {
     public void run() {
         this.executat = true;
         while (true) {
-            while (this.seguir) {
+            if (this.seguir) {
                 resol();
                 this.seguir = false;
             }
@@ -33,6 +33,13 @@ public class Control extends Thread implements PerEsdeveniments {
 
     @Override
     public void notificar(String s) {
-        
+        if (s.startsWith("Comprimir")) {
+            this.seguir = true;
+            if (!this.executat) this.start();
+            System.out.println("Compressió iniciada");
+        } else if (s.startsWith("Aturar")) {
+            this.seguir = false;
+            System.out.println("Programa aturat");
+        }
     }
 }

@@ -27,7 +27,11 @@ public class main implements PerEsdeveniments {
     // Funció símple de la comunicació per Patró d'esdeveniments
     @Override
     public void notificar(String s) {
-        
+        if (s.startsWith("Fitxer")) {
+            mod.notificar(s);
+        } else if (s.startsWith("Comprimir") || s.startsWith("Aturar")) {
+            con.notificar(s);
+        }
     }
 
     // Mètode public de retorn de la instància del model de dades
