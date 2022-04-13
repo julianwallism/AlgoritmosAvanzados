@@ -13,7 +13,7 @@ import javax.swing.*;
 
 public class Vista extends JFrame implements PerEsdeveniments {
     private final PanellCentral panellCentral;
-    // private PanellGrafic panellGrafic;
+    private PanellGrafic panellGrafic;
     private final JPanel panellSuperior, barraInputs, barraBotons;
     private final JComboBox selector;
     private final JButton executar, aturar, buidar, estudi;
@@ -33,7 +33,6 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.barraInputs = new JPanel();
         this.barraInputs.setBackground(new Color(102,178,255));
         this.panellCentral = new PanellCentral(p, this.getWidth(), this.getHeight());
-        //this.panellGrafic = new Grafic(p, this.getWidth(), this.getHeight());
         this.panellInferior = new JProgressBar();
         
         // Creació dels components del panell superior
@@ -147,12 +146,12 @@ public class Vista extends JFrame implements PerEsdeveniments {
         jd.setLocationRelativeTo(null);
         jd.setLayout(new BorderLayout());
 
-        // panellGrafic = new PanellGrafic(700,450,this.prog.getModel(),this);
+        panellGrafic = new PanellGrafic(700,450,this.prog.getModel(),this);
         
-        // jd.add(panellGrafic);
-        jd.pack();
+        jd.add(panellGrafic);
         jd.setVisible(true);
-        // panellGrafic.pintaGrafic();
+        //panellGrafic.pintaGrafic();
+        jd.pack();
         // panellGrafic.creaGrafic(dades);
     }
 

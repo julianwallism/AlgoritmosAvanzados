@@ -21,7 +21,7 @@ public class PanellGrafic extends JPanel {
     private Model mod;
     private Vista vis;
     protected final int FPS = 24; // 24 frames per segon
-    // private final ProcesPintat procpin;
+    //private final ProcesPintat procpin;
     private BufferedImage bima;
 
     public PanellGrafic(int x, int y, Model m, Vista v) {
@@ -31,17 +31,17 @@ public class PanellGrafic extends JPanel {
         vis = v;
         bima = null;
         this.setPreferredSize(new Dimension(w, h));
-        /*procpin = new ProcesPintat();
+        /*procpin = new ProcesPintat(this);
         procpin.start();*/
     }
-    
+
     @Override
     public void repaint() {
         if (this.getGraphics() != null) {
             paint(this.getGraphics());
         }
     }
-    
+
     @Override
     public void paint(Graphics gr) {
         // Dibuixar rectangles
@@ -85,26 +85,26 @@ public class PanellGrafic extends JPanel {
         grap.setColor(Color.BLUE);
         double x = 0;
         int y = 0;
+        grap.drawLine(100, 100, 200, 200);
         for (int i = 0; i < tradicional.length; i++) {
-            grap.drawLine((int) (x/max)*this.getHeight(), (int) (y/500)*this.getWidth(), (int) (tradicional[i]/max)*this.getHeight(), (int) (i/500)*this.getWidth());
+            grap.drawLine((int) Math.floor((x / max) * this.getHeight()), (int) (((double) y / 500) * this.getWidth()), (int) Math.floor((tradicional[i] / max) * this.getHeight()), (int) (((double) i / 500) * this.getWidth()));
             x = tradicional[i];
             y = i;
-            System.out.println("x: " +  (x/max)*this.getHeight() + " y: " + y);
+            System.out.println((int) (((double) y / 500) * this.getWidth()));
+            System.out.println("x: " + (int) Math.floor((x / max) * this.getHeight()) + " y: " + (int) (((double) y / 500) * this.getWidth()));
         }
 
         grap.setColor(Color.GREEN);
         x = 0;
         y = 0;
         for (int i = 0; i < karatsuba.length; i++) {
-            grap.drawLine((int) (x/max)*this.getHeight(), y, (int) (karatsuba[i]/max)*this.getHeight(), i);
+            grap.drawLine((int) (x / max) * this.getHeight(), y, (int) (karatsuba[i] / max) * this.getHeight(), i);
             x = karatsuba[i];
             y = i;
         }
     }
 
-}
-
-/*class ProcesPintat extends Thread {
+    /*class ProcesPintat extends Thread {
 
     private PanellGrafic pan;
 
@@ -130,5 +130,5 @@ public class PanellGrafic extends JPanel {
         } catch (Exception e) {
             MeuError.informaError(e);
         }
-    }
-}*/
+    }*/
+}
