@@ -131,7 +131,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.add(panellSuperior, BorderLayout.NORTH);
         this.add(panellCentral, BorderLayout.CENTER);
         this.add(panellInferior, BorderLayout.SOUTH);
-        this.setPreferredSize(new Dimension(1250, 800));
+        this.setPreferredSize(new Dimension(1400, 800));
         this.pack();
         this.setResizable(false);
         this.setVisible(true);
@@ -147,12 +147,11 @@ public class Vista extends JFrame implements PerEsdeveniments {
         jd.setLocationRelativeTo(null);
         jd.setLayout(new BorderLayout());
 
-        panellGrafic = new PanellGrafic(700,450,this.prog.getModel(),this);
-        
+        panellGrafic = new PanellGrafic(1400, 800, this.prog.getModel(), this);
         jd.add(panellGrafic);
-        jd.pack();
         jd.setVisible(true);
-        panellGrafic.pintaGrafic();
+
+       
         //panellGrafic.creaGrafic(dades);
     }
 
