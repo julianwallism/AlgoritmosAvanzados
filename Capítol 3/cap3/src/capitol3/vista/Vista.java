@@ -146,13 +146,12 @@ public class Vista extends JFrame implements PerEsdeveniments {
         jd.setLocationRelativeTo(null);
         jd.setLayout(new BorderLayout());
 
-        panellGrafic = new PanellGrafic(700,450,this.prog.getModel(),this);
-        
+        panellGrafic = new PanellGrafic(1400, 800, this.prog.getModel(), this);
         jd.add(panellGrafic);
         jd.setVisible(true);
-        //panellGrafic.pintaGrafic();
-        jd.pack();
-        // panellGrafic.creaGrafic(dades);
+
+       
+        //panellGrafic.creaGrafic(dades);
     }
 
     @Override
