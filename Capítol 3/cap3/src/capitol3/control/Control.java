@@ -103,18 +103,45 @@ public class Control extends Thread implements PerEsdeveniments {
             return Numero.producte(n1, n2);
         }
     }
-
+    
     private String mixte(String n1, String n2) {
+        String resultat;
         int n;
         if (n1.length() > n2.length()) {
             n = n1.length();
         } else {
             n = n2.length();
         }
-        if (n > Model.getUmbral()) { // si el nombre està per damunt l'umbral definit aplicam Karatsuba
-            return karatsuba(n1, n2);
+        if (n > this.prog.getModel().getUmbral()) { // aplicam karatsuba fins que la suma sigui directa (dos nombres d'un dígit)
+            int s = n / 2;
+            if (2 * s != n) {
+                s++;
+            }
+            String[] abcd = Numero.xaparNumeros(n1, n2, s);
+            String a = abcd[0];
+            String b = abcd[1];
+            String c = abcd[2];
+            String d = abcd[3];
+
+            String ac = mixte(a, c);
+            String bd = mixte(b, d);
+            String carro = Numero.resta(Numero.resta(mixte(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
+            resultat = Numero.suma(Numero.suma(Numero.posarZeros(ac, 2 * s, true), Numero.posarZeros(carro, s, true)),
+                    bd);
+
+            // Per molt que sigui "0000000000000000" retornam un "0"
+            if (Numero.esZero(resultat)) {
+                return "0";
+            }
+
+            // Llevam tots els zeros de davant en cas de tenir-ne
+            while (resultat.charAt(0) == '0') {
+                resultat = resultat.substring(1);
+            }
+
+            return resultat;
         } else {
-            return tradicional(n1, n2);
+            return Numero.producte(n1, n2);
         }
     }
 
@@ -125,15 +152,16 @@ public class Control extends Thread implements PerEsdeveniments {
         double[][] estudi = new double[2][500];
         long tempsActual;
         // int umbral = 0;
+        //Cream les dades per a graficar i treure un umbral recomanat
         for (int umbral = 0; umbral < 500; umbral++) {
-
             String num1 = "";
             String num2 = "";
+            
             for (int i = 0; i < umbral; i++) {
                 num1 += rand.nextInt(10);
                 num2 += rand.nextInt(10);
             }
-
+            
             tempsActual = System.nanoTime();
             tradicional(num1, num2);
             tempsTradicional = (System.nanoTime() - tempsActual) / 1000000000.0;
@@ -146,8 +174,28 @@ public class Control extends Thread implements PerEsdeveniments {
             estudi[1][umbral] = tempsKaratsuba;
             System.out.println(umbral);
         }
+        
+        recomanarUmbral(estudi);
+        
         this.prog.getModel().setEstudi(estudi);
         this.prog.notificar("Fet estudi");
+    }
+    
+    private void recomanarUmbral(double[][] estudi){
+        
+        double[] tradicional = estudi[0];
+        double[] karatsuba = estudi[1];
+        
+        double temps_tradicional = 0;
+        double temps_karatsuba = 1;
+        int index = 10;
+       
+        while(temps_tradicional<temps_karatsuba){
+            temps_tradicional=tradicional[index];
+            temps_karatsuba=karatsuba[index];
+            index++;
+        }
+        this.prog.getModel().setUmbral(index);
     }
 
     @Override

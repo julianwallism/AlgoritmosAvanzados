@@ -8,7 +8,7 @@ import capitol3.main;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
-    private static final int UMBRAL = 65;
+    private static int umbral = 65;
     private static final String[] ALGORISMES = {"Tradicional", "Karatsuba", "Mixte"};
     private main prog;
     private double time;
@@ -21,10 +21,13 @@ public class Model implements PerEsdeveniments {
         time = 0.0;
     }
 
-    public static int getUmbral() {
-        return UMBRAL;
+    public int getUmbral() {
+        return umbral;
     }
-
+    
+    public void setUmbral(int umbral){
+        Model.umbral = umbral;
+    }
     public String getNum1() {
         return num1;
     }
