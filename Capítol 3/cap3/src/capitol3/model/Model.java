@@ -8,13 +8,12 @@ import capitol3.main;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
-    private static int umbral = 65;
     private static final String[] ALGORISMES = {"Tradicional", "Karatsuba", "Mixte"};
     private main prog;
+    private int umbral = 65;
     private double time;
     private double[][] estudi;
-    private String algorismeTriat = ALGORISMES[0];
-    private String num1, num2, resultat;
+    private String algorismeTriat = ALGORISMES[0], num1, num2, resultat;
 
     public Model(main p) {
         prog = p;
@@ -26,7 +25,7 @@ public class Model implements PerEsdeveniments {
     }
     
     public void setUmbral(int umbral){
-        Model.umbral = umbral;
+        this.umbral = umbral;
     }
     public String getNum1() {
         return num1;
@@ -102,6 +101,10 @@ public class Model implements PerEsdeveniments {
             this.setResultat(res[0]);
             this.setTime(Double.parseDouble(res[1]));
             this.prog.notificar("Vista: "+sOriginal);
+        } else if (s.startsWith("Umbral")) {
+            s = s.replaceAll("Umbral: ", "");
+            this.umbral = Integer.parseInt(s);
+            System.out.println("Umbral canviat a "+s);
         }
     }
 }

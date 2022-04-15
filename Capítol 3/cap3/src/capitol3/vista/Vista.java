@@ -16,7 +16,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
     private PanellGrafic panellGrafic;
     private final JPanel panellSuperior, barraInputs, barraBotons;
     private final JComboBox selector;
-    private final JButton executar, aturar, buidar, estudi, setUmbral;
+    private final JButton executar, aturar, buidar, estudi;
     private final JTextField num1, num2, umbral;
     private final JProgressBar panellInferior;
     private main prog;
@@ -111,31 +111,12 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.umbral = new JTextField(Integer.toString(prog.getModel().getUmbral()));
         this.umbral.setToolTipText("Umbral");
         this.umbral.setColumns(3);
-
-        this.setUmbral = new JButton("Set Umbral");
-        this.setUmbral.setBackground(Color.white);
-        this.setUmbral.addActionListener(new ActionListener() {
+        this.umbral.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    umbral.setForeground(Color.black);
-                    int num = Integer.parseInt(umbral.getText());
-                    if (num > 2 && num < 500) {
-                        prog.getModel().setUmbral(num);
-                        System.out.println(num);
-                    } else {
-                        umbral.setForeground(Color.red);
-                        umbral.setText("Error");
-                    }
-                } catch (Exception ex) {
-                    umbral.setForeground(Color.red);
-                    umbral.setText("Error");
-
-                }
-
+                prog.notificar("Umbral: " + umbral.getText());
             }
         });
-        // Input in umbral must be a number betwen 2 and 500
 
         barraInputs.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel lab_num1 = new JLabel("Número 1 ");
@@ -160,7 +141,6 @@ public class Vista extends JFrame implements PerEsdeveniments {
         barraBotons.add(lab_algorisme);
         barraBotons.add(this.selector);
         barraBotons.add(this.executar);
-        barraBotons.add(this.setUmbral);
         barraBotons.add(this.aturar);
         barraBotons.add(this.buidar);
         barraBotons.add(this.estudi);
@@ -180,7 +160,6 @@ public class Vista extends JFrame implements PerEsdeveniments {
     }
 
     public void creaGrafic() {
-        System.out.println("creagrafic");
         JDialog jd = new JDialog(this, "Estudi", false);
         jd.setTitle("Gràfic");
         jd.setSize(new Dimension(1600, 800));
@@ -205,5 +184,4 @@ public class Vista extends JFrame implements PerEsdeveniments {
             creaGrafic();
         }
     }
-
 }

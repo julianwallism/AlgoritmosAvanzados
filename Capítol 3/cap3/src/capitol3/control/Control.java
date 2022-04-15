@@ -2,7 +2,6 @@ package capitol3.control;
 
 import capitol3.main;
 import capitol3.PerEsdeveniments;
-import capitol3.model.Model;
 import java.util.Random;
 
 /**
