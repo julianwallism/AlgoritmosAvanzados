@@ -50,17 +50,12 @@ public class PanellCentral extends JPanel implements PerEsdeveniments {
     @Override
     public void notificar(String s) {
         if (s.startsWith("Resultat")) {
-            s = s.replaceAll("Resultat: ", "");
-            s = s.replaceAll("Temps: ", "");
-            String[] res = s.split(" ");
-            String resultat = res[0];
-            double temps = Double.parseDouble(res[1]);
-            this.text.append("Resultat ("+this.p.getModel().getAlgorismeTriat()+"): "+resultat+"\tTemps: "+temps+'\n');
+            text.append("Resultat ("+p.getModel().getAlgorismeTriat()+"): "+p.getModel().getResultat()+"\tTemps: "+p.getModel().getTime()+'\n');
         }
     }
     
     public void buidar() {
-        this.text.setText("Sortida del programa: \n\n");
+        text.setText("Sortida del programa: \n\n");
     }
 }
 

@@ -35,7 +35,8 @@ public class PanellGrafic extends JPanel {
     @Override
     public void paint(Graphics gr) {
         Graphics2D gr2d = (Graphics2D) gr;
-        gr2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        gr2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Cercam el temps màxim per poder graficart respecte a ell
         double[][] estudi = mod.getEstudi();
@@ -59,22 +60,22 @@ public class PanellGrafic extends JPanel {
         double x = 0;
         int y = 0;
         for (int i = 0; i < tradicional.length; i++) {
-            gr2d.drawLine((int) (((double) y / 500) * this.getWidth()),
+            gr2d.drawLine((int) (((double) y / 700) * this.getWidth()),
                     this.getHeight() - (int) Math.floor((x / max) * this.getHeight()),
-                    (int) (((double) i / 500) * this.getWidth()),
+                    (int) (((double) i / 700) * this.getWidth()),
                     this.getHeight() - (int) Math.floor((tradicional[i] / max) * this.getHeight()));
             x = tradicional[i];
             y = i;
         }
 
         //Graficam l'algorisme de karatsuba
-        gr2d.setColor(Color.ORANGE);
+        gr2d.setColor(Color.ORANGE.darker());
         x = 0;
         y = 0;
         for (int i = 0; i < karatsuba.length; i++) {
-            gr2d.drawLine((int) (((double) y / 500) * this.getWidth()),
+            gr2d.drawLine((int) (((double) y / 700) * this.getWidth()),
                     this.getHeight() - (int) Math.floor((x / max) * this.getHeight()),
-                    (int) (((double) i / 500) * this.getWidth()),
+                    (int) (((double) i / 700) * this.getWidth()),
                     this.getHeight() - (int) Math.floor((karatsuba[i] / max) * this.getHeight()));
             x = karatsuba[i];
             y = i;
@@ -83,15 +84,14 @@ public class PanellGrafic extends JPanel {
         //pintam els eixos
         this.setLayout(null);
         gr2d.setColor(Color.gray);
-        for (int i = 1; i < 5; i++) {
+        for (int i =1; i < 7; i++) {
             JLabel eix_X = new JLabel(Integer.toString(i * 100));
             this.add(eix_X);
-            eix_X.setLocation((int) (((double) i / 5) * this.getWidth()) - 10, 0);
+            eix_X.setLocation((int) (((double) i / 7) * this.getWidth()) - 10, 0);
             eix_X.setSize(50, 15);
             eix_X.setOpaque(true);
             this.add(eix_X);
-
-            gr2d.drawLine((int) (((double) i / 5) * this.getWidth()), 10, (int) (((double) i / 5) * this.getWidth()), this.getHeight());
+            gr2d.drawLine((int) (((double) i / 7) * this.getWidth()), 10, (int) (((double) i / 7) * this.getWidth()), this.getHeight());
         }
 
         JLabel info_umbral = new JLabel("Umbral recomanat: " + Integer.toString(umbral));
@@ -100,8 +100,7 @@ public class PanellGrafic extends JPanel {
         info_umbral.setSize(150, 15);
         info_umbral.setOpaque(true);
         gr2d.setColor(Color.red);
-        gr2d.drawOval((int) (((double) umbral / 500) * this.getWidth()) - 10,
+        gr2d.drawOval((int) (((double) umbral / 700) * this.getWidth()) - 10,
                 this.getHeight() - (int) Math.floor((karatsuba[umbral] / max) * this.getHeight())-10, 20, 20);
-        mod.setUmbral(umbral);
     }
 }

@@ -7,6 +7,7 @@ package capitol3.control;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Numero {
+
     public static String suma(String num1, String num2) {
         // Ens asseguram que el segon nombre (num2) és el més gran dels dos
         if (num1.length() > num2.length()) {
@@ -84,21 +85,6 @@ public class Numero {
         return res;
     }
 
-    public static String[] xaparNumeros(String num1, String num2, int n) {
-        String[] res = new String[4];
-        int n1 = num1.length(), n2 = num2.length();
-        // Posam els zeros que facin falta davant perque tenguin la mateixa llargària
-        num1 = posarZeros(num1, (2 * n) - n1, false);
-        num2 = posarZeros(num2, (2 * n) - n2, false);
-        // Separam els nombres en dues parts cadascun
-        res[0] = num1.substring(0, n);
-        res[1] = num1.substring(n);
-        res[2] = num2.substring(0, n);
-        res[3] = num2.substring(n);
-
-        return res;
-    }
-
     public static String resta(String num1, String num2) {
         if (esMenor(num1, num2)) {
             String t = num1;
@@ -140,6 +126,21 @@ public class Numero {
         return new StringBuilder(res).reverse().toString();
     }
 
+    public static String[] xaparNumeros(String num1, String num2, int n) {
+        String[] res = new String[4];
+        int n1 = num1.length(), n2 = num2.length();
+        // Posam els zeros que facin falta davant perque tenguin la mateixa llargària
+        num1 = posarZeros(num1, (2 * n) - n1, false);
+        num2 = posarZeros(num2, (2 * n) - n2, false);
+        // Separam els nombres en dues parts cadascun
+        res[0] = num1.substring(0, n);
+        res[1] = num1.substring(n);
+        res[2] = num2.substring(0, n);
+        res[3] = num2.substring(n);
+
+        return res;
+    }
+
     public static String posarZeros(String num, int zeros, boolean darrera) {
         StringBuilder s = darrera ? new StringBuilder(num) : new StringBuilder(num).reverse();
 
@@ -170,7 +171,7 @@ public class Numero {
         if (n2 < n1) {
             return false;
         }
-        
+
         // si la llargària és igual, miram quin és el major (si una posició és igual es passa a la següent)
         for (int i = 0; i < n1; i++) {
             if (num1.charAt(i) < num2.charAt(i)) {

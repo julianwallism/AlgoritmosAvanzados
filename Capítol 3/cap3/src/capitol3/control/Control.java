@@ -34,8 +34,12 @@ public class Control extends Thread implements PerEsdeveniments {
         String num2 = this.prog.getModel().getNum2();
         String resultat = "0";
         boolean negatiu = (num1.charAt(0) == '-' || num2.charAt(0) == '-') && !(num1.charAt(0) == '-' && num2.charAt(0) == '-');
-        if (num1.charAt(0) == '-') num1 = num1.substring(1);
-        if (num2.charAt(0) == '-') num2 = num2.substring(1);
+        if (num1.charAt(0) == '-') {
+            num1 = num1.substring(1);
+        }
+        if (num2.charAt(0) == '-') {
+            num2 = num2.substring(1);
+        }
 
         long inici = System.nanoTime();
         System.out.println(num1);
@@ -51,11 +55,14 @@ public class Control extends Thread implements PerEsdeveniments {
                 resultat = mixte(num1, num2);
                 break;
         }
-        if (negatiu) resultat = '-'+resultat;
+        if (negatiu) {
+            resultat = '-' + resultat;
+        }
         double temps = (System.nanoTime() - inici) / 1000000000.0;
         System.out.println("Resultat: " + resultat + "\nTemps: " + temps);
-
-        prog.notificar("Resultat: " + resultat + " Temps: " + temps);
+        prog.getModel().setResultat(resultat);
+        prog.getModel().setTime(temps);
+        prog.notificar("Resultat");
     }
 
     private String tradicional(String n1, String n2) {
@@ -70,7 +77,7 @@ public class Control extends Thread implements PerEsdeveniments {
         } else {
             n = n2.length();
         }
-        if (n > 2) { // aplicam karatsuba fins que la suma sigui directa (dos nombres d'un dígit)
+        if (n > 2) { // aplicam karatsuba fins que la multiplicacio sigui directa (dos nombres d'un dígit)
             int s = n / 2;
             if (2 * s != n) {
                 s++;
@@ -84,9 +91,9 @@ public class Control extends Thread implements PerEsdeveniments {
             String ac = karatsuba(a, c);
             String bd = karatsuba(b, d);
             String carro = Numero.resta(Numero.resta(karatsuba(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
-            resultat = Numero.suma(Numero.suma(Numero.posarZeros(ac, 2 * s, true), Numero.posarZeros(carro, s, true)),
-                    bd);
-
+            ac = Numero.posarZeros(ac, 2 * s, true);
+            carro = Numero.posarZeros(carro, s, true);
+            resultat = Numero.suma(Numero.suma(ac, carro), bd);
             // Per molt que sigui "0000000000000000" retornam un "0"
             if (Numero.esZero(resultat)) {
                 return "0";
@@ -102,7 +109,7 @@ public class Control extends Thread implements PerEsdeveniments {
             return Numero.producte(n1, n2);
         }
     }
-    
+
     private String mixte(String n1, String n2) {
         String resultat;
         int n;
@@ -111,7 +118,7 @@ public class Control extends Thread implements PerEsdeveniments {
         } else {
             n = n2.length();
         }
-        if (n > this.prog.getModel().getUmbral()) { // aplicam karatsuba fins que la suma sigui directa (dos nombres d'un dígit)
+        if (n > this.prog.getModel().getUmbral()) { // aplicam karatsuba fins que la multiplicacio sigui directa (dos nombres d'un dígit)
             int s = n / 2;
             if (2 * s != n) {
                 s++;
@@ -125,8 +132,13 @@ public class Control extends Thread implements PerEsdeveniments {
             String ac = mixte(a, c);
             String bd = mixte(b, d);
             String carro = Numero.resta(Numero.resta(mixte(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
-            resultat = Numero.suma(Numero.suma(Numero.posarZeros(ac, 2 * s, true), Numero.posarZeros(carro, s, true)),
-                    bd);
+            resultat = Numero.suma(Numero.suma(Numero.posarZeros(ac, 2 * s, true),  Numero.posarZeros(carro, s, true)), bd);
+//            String ac = mixte(a, c);
+//            String bd = mixte(b, d);
+//            String carro = Numero.resta(Numero.resta(mixte(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
+//            ac = Numero.posarZeros(ac, 2 * s, true);
+//            carro = Numero.posarZeros(carro, s, true);
+//            resultat = Numero.suma(Numero.suma(ac, carro), bd);
 
             // Per molt que sigui "0000000000000000" retornam un "0"
             if (Numero.esZero(resultat)) {
@@ -148,19 +160,19 @@ public class Control extends Thread implements PerEsdeveniments {
         Random rand = new Random();
         double tempsTradicional;
         double tempsKaratsuba;
-        double[][] estudi = new double[2][500];
+        double[][] estudi = new double[2][700];
         long tempsActual;
         // int umbral = 0;
         //Cream les dades per a graficar i treure un umbral recomanat
-        for (int umbral = 0; umbral < 500; umbral++) {
+        for (int umbral = 0; umbral < 700; umbral++) {
             String num1 = "";
             String num2 = "";
-            
+
             for (int i = 0; i < umbral; i++) {
                 num1 += rand.nextInt(10);
                 num2 += rand.nextInt(10);
             }
-            
+
             tempsActual = System.nanoTime();
             tradicional(num1, num2);
             tempsTradicional = (System.nanoTime() - tempsActual) / 1000000000.0;
@@ -173,26 +185,37 @@ public class Control extends Thread implements PerEsdeveniments {
             estudi[1][umbral] = tempsKaratsuba;
             System.out.println(umbral);
         }
-        
+
         recomanarUmbral(estudi);
-        
+
         this.prog.getModel().setEstudi(estudi);
         this.prog.notificar("Fet estudi");
     }
-    
-    private void recomanarUmbral(double[][] estudi){
-        
+
+    private void recomanarUmbral(double[][] estudi) {
+
         double[] tradicional = estudi[0];
         double[] karatsuba = estudi[1];
-        
-        double temps_tradicional = 0;
-        double temps_karatsuba = 1;
-        int index = 10;
-       
-        while(temps_tradicional<temps_karatsuba){
-            temps_tradicional=tradicional[index];
-            temps_karatsuba=karatsuba[index];
-            index++;
+
+        int atura = 25;
+        int index = 65;
+        // while(temps_tradicional<temps_karatsuba){
+        //     temps_tradicional=tradicional[index];
+        //     temps_karatsuba=karatsuba[index];
+        //     index++;
+        // }
+
+        //Find the index when the values in karatsuba have been greater than the ones in traditional ten times in a row
+        for (int i = 10; i < tradicional.length; i++) {
+            if (tradicional[i] > karatsuba[i]) {
+                atura--;
+            } else {
+                atura = 25;
+            }
+            if (atura == 0) {
+                index = i-25;
+                break;
+            }
         }
         this.prog.getModel().setUmbral(index);
     }
@@ -210,7 +233,7 @@ public class Control extends Thread implements PerEsdeveniments {
         } else if (s.startsWith("Aturar")) {
             this.seguir = false;
             System.out.println("Programa aturat");
-        } else if(s.startsWith("Estudi")){
+        } else if (s.startsWith("Estudi")) {
             estudi();
         }
     }

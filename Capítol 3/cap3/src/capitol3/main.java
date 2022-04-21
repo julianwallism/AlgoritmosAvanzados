@@ -29,9 +29,9 @@ public class main implements PerEsdeveniments {
     public void notificar(String s) {
         if (s.startsWith("Executar") || s.startsWith("Aturar") || s.startsWith("Estudi")) {
             con.notificar(s);
-        } else if (s.startsWith("Nombre") || s.startsWith("Algorisme") || s.startsWith("Resultat") || s.startsWith("Umbral")) {
+        } else if (s.startsWith("Nombre") || s.startsWith("Algorisme") || s.startsWith("Umbral")) {
             mod.notificar(s);
-        } else if (s.startsWith("Vista") || s.startsWith("Fet")) {
+        } else if (s.startsWith("Fet")|| s.startsWith("Resultat") ) {
             vis.notificar(s);
         }
     }

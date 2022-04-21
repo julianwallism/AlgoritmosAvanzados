@@ -93,14 +93,6 @@ public class Model implements PerEsdeveniments {
             s = s.replaceAll("Algorisme: ", "");
             this.algorismeTriat = s;
             System.out.println("Algorisme canviat a "+s);
-        } else if (s.startsWith("Resultat")) {
-            String sOriginal = s;
-            s = s.replaceAll("Resultat: ", "");
-            s = s.replaceAll("Temps: ", "");
-            String[] res = s.split(" ");
-            this.setResultat(res[0]);
-            this.setTime(Double.parseDouble(res[1]));
-            this.prog.notificar("Vista: "+sOriginal);
         } else if (s.startsWith("Umbral")) {
             s = s.replaceAll("Umbral: ", "");
             this.umbral = Integer.parseInt(s);

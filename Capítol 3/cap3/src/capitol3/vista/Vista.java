@@ -114,9 +114,9 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.umbral.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Integer.parseInt(umbral.getText()) > 500) {
+                if (Integer.parseInt(umbral.getText()) > 700) {
                     JOptionPane.showMessageDialog(Vista.this, 
-                        "L'umbral introduït és massa alt, per favor, torna a posar un més baix. L'umbral màxim és de 500 xifres.", "Umbral massa alt", JOptionPane.ERROR_MESSAGE);
+                        "L'umbral introduït és massa alt, per favor, torna a posar un més baix. L'umbral màxim és de 700 xifres.", "Umbral massa alt", JOptionPane.ERROR_MESSAGE);
                     umbral.setText(prog.getModel().getUmbral()+"");
                 } else {
                     prog.notificar("Umbral: " + umbral.getText());
@@ -182,8 +182,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
 
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Vista")) {
-            s = s.replaceAll("Vista: ", "");
+        if (s.startsWith("Resultat")) {
             panellInferior.setIndeterminate(false);
             this.panellCentral.notificar(s);
         } else if (s.startsWith("Fet")) {
