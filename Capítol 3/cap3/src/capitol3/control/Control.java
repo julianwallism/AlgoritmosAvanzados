@@ -12,6 +12,7 @@ public class Control extends Thread implements PerEsdeveniments {
 
     private final main prog;
     private boolean seguir, executat;
+    Random rand = new Random();
 
     public Control(main p) {
         this.prog = p;
@@ -129,16 +130,16 @@ public class Control extends Thread implements PerEsdeveniments {
             String c = abcd[2];
             String d = abcd[3];
 
-            String ac = mixte(a, c);
-            String bd = mixte(b, d);
-            String carro = Numero.resta(Numero.resta(mixte(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
-            resultat = Numero.suma(Numero.suma(Numero.posarZeros(ac, 2 * s, true),  Numero.posarZeros(carro, s, true)), bd);
 //            String ac = mixte(a, c);
 //            String bd = mixte(b, d);
 //            String carro = Numero.resta(Numero.resta(mixte(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
-//            ac = Numero.posarZeros(ac, 2 * s, true);
-//            carro = Numero.posarZeros(carro, s, true);
-//            resultat = Numero.suma(Numero.suma(ac, carro), bd);
+//            resultat = Numero.suma(Numero.suma(Numero.posarZeros(ac, 2 * s, true), Numero.posarZeros(carro, s, true)), bd);
+            String ac = mixte(a, c);
+            String bd = mixte(b, d);
+            String carro = Numero.resta(Numero.resta(mixte(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
+            ac = Numero.posarZeros(ac, 2 * s, true);
+            carro = Numero.posarZeros(carro, s, true);
+            resultat = Numero.suma(Numero.suma(ac, carro), bd);
 
             // Per molt que sigui "0000000000000000" retornam un "0"
             if (Numero.esZero(resultat)) {
@@ -156,41 +157,71 @@ public class Control extends Thread implements PerEsdeveniments {
         }
     }
 
+    private String[] randNum(int length) {
+        String num1 = "";
+        String num2 = "";
+        //No pot començar per 0
+        num1 += rand.nextInt(9) + 1;
+        num2 += rand.nextInt(9) + 1;
+        for (int i = 0; i < length - 1; i++) {
+            num1 += rand.nextInt(10);
+            num2 += rand.nextInt(10);
+        }
+        String[] ret = new String[2];
+        ret[0] = num1;
+        ret[1] = num2;
+        return ret;
+    }
+
+    
     private void estudi() {
-        Random rand = new Random();
         double tempsTradicional;
         double tempsKaratsuba;
-        double[][] estudi = new double[2][700];
+        double tempsMixte;
+        double[][] estudi = new double[3][700];
         long tempsActual;
-        // int umbral = 0;
+        String num1;
+        String num2;
+        String[] nums;
+
         //Cream les dades per a graficar i treure un umbral recomanat
         for (int umbral = 0; umbral < 700; umbral++) {
-            String num1 = "";
-            String num2 = "";
 
-            for (int i = 0; i < umbral; i++) {
-                num1 += rand.nextInt(10);
-                num2 += rand.nextInt(10);
-            }
+            nums = randNum(umbral);
+            num1 = nums[0];
+            num2 = nums[1];
 
             tempsActual = System.nanoTime();
             tradicional(num1, num2);
             tempsTradicional = (System.nanoTime() - tempsActual) / 1000000000.0;
 
+            nums = randNum(umbral);
+            num1 = nums[0];
+            num2 = nums[1];
+
             tempsActual = System.nanoTime();
             karatsuba(num1, num2);
             tempsKaratsuba = (System.nanoTime() - tempsActual) / 1000000000.0;
 
+            nums = randNum(umbral);
+            num1 = nums[0];
+            num2 = nums[1];
+
+            tempsActual = System.nanoTime();
+            mixte(num1, num2);
+            tempsMixte = (System.nanoTime() - tempsActual) / 1000000000.0;
+
             estudi[0][umbral] = tempsTradicional;
             estudi[1][umbral] = tempsKaratsuba;
+            estudi[2][umbral] = tempsMixte;
             System.out.println(umbral);
         }
-
         recomanarUmbral(estudi);
 
         this.prog.getModel().setEstudi(estudi);
         this.prog.notificar("Fet estudi");
     }
+   
 
     private void recomanarUmbral(double[][] estudi) {
 
@@ -198,12 +229,7 @@ public class Control extends Thread implements PerEsdeveniments {
         double[] karatsuba = estudi[1];
 
         int atura = 25;
-        int index = 65;
-        // while(temps_tradicional<temps_karatsuba){
-        //     temps_tradicional=tradicional[index];
-        //     temps_karatsuba=karatsuba[index];
-        //     index++;
-        // }
+        int index = 335;
 
         //Find the index when the values in karatsuba have been greater than the ones in traditional ten times in a row
         for (int i = 10; i < tradicional.length; i++) {
@@ -213,7 +239,7 @@ public class Control extends Thread implements PerEsdeveniments {
                 atura = 25;
             }
             if (atura == 0) {
-                index = i-25;
+                index = i - 25;
                 break;
             }
         }

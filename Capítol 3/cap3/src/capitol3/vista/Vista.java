@@ -40,7 +40,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.num1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                prog.notificar("Nombre 1: " + num1.getText());
+                    prog.notificar("Nombre 1: " + num1.getText());
             }
         });
         this.num1.setToolTipText("Primer nombre a multiplicar");
@@ -71,8 +71,16 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.executar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panellInferior.setIndeterminate(true);
-                prog.notificar("Executar");
+                if (!num1.getText().isEmpty() && !num2.getText().isEmpty()) {
+                    panellInferior.setIndeterminate(true);
+                    prog.notificar("Executar");
+                } else {
+                    System.out.println(num1.getText().isEmpty());
+                    System.out.println(num2.getText().isEmpty());
+                    JOptionPane.showMessageDialog(Vista.this,
+                            "Uns dels nombres està buid", "Executar", JOptionPane.ERROR_MESSAGE);
+                }
+
             }
         });
 
@@ -100,10 +108,10 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.estudi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Vista.this, 
+                JOptionPane.showMessageDialog(Vista.this,
                         "Després d'acceptar aquest missatge es començarà a fer l'estudi, "
-                                + "finalment, es mostrarà un gràfic amb els resultats, "
-                                + "sigui pacient.", "Estudi", JOptionPane.INFORMATION_MESSAGE);
+                        + "finalment, es mostrarà un gràfic amb els resultats, "
+                        + "sigui pacient.", "Estudi", JOptionPane.INFORMATION_MESSAGE);
                 prog.notificar("Estudi");
             }
         });
@@ -115,9 +123,9 @@ public class Vista extends JFrame implements PerEsdeveniments {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Integer.parseInt(umbral.getText()) > 700) {
-                    JOptionPane.showMessageDialog(Vista.this, 
-                        "L'umbral introduït és massa alt, per favor, torna a posar un més baix. L'umbral màxim és de 700 xifres.", "Umbral massa alt", JOptionPane.ERROR_MESSAGE);
-                    umbral.setText(prog.getModel().getUmbral()+"");
+                    JOptionPane.showMessageDialog(Vista.this,
+                            "L'umbral introduït és massa alt, per favor, torna a posar un més baix. L'umbral màxim és de 700 xifres.", "Umbral massa alt", JOptionPane.ERROR_MESSAGE);
+                    umbral.setText(prog.getModel().getUmbral() + "");
                 } else {
                     prog.notificar("Umbral: " + umbral.getText());
                 }
@@ -168,7 +176,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
     public void creaGrafic() {
         JDialog jd = new JDialog(this, "Estudi", false);
         jd.setTitle("Gràfic");
-        jd.setSize(new Dimension(1600, 800));
+        jd.setSize(new Dimension(1400, 800));
         jd.setResizable(false);
         jd.setLocationRelativeTo(null);
         jd.setLayout(new BorderLayout());

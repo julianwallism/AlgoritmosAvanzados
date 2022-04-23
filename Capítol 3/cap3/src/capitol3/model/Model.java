@@ -8,9 +8,10 @@ import capitol3.main;
  * @authors Dawid Roch & Julià Wallis
  */
 public class Model implements PerEsdeveniments {
+
     private static final String[] ALGORISMES = {"Tradicional", "Karatsuba", "Mixte"};
     private main prog;
-    private int umbral = 65;
+    private int umbral = 335;
     private double time;
     private double[][] estudi;
     private String algorismeTriat = ALGORISMES[0], num1, num2, resultat;
@@ -23,10 +24,11 @@ public class Model implements PerEsdeveniments {
     public int getUmbral() {
         return umbral;
     }
-    
-    public void setUmbral(int umbral){
+
+    public void setUmbral(int umbral) {
         this.umbral = umbral;
     }
+
     public String getNum1() {
         return num1;
     }
@@ -49,10 +51,6 @@ public class Model implements PerEsdeveniments {
 
     public void setResultat(String resultat) {
         this.resultat = resultat;
-    }    
-    
-    public static String[] getAlgorismes() {
-        return ALGORISMES;
     }
 
     public String getAlgorismeTriat() {
@@ -62,7 +60,7 @@ public class Model implements PerEsdeveniments {
     public void setAlgorismeTriat(String algorismeTriat) {
         this.algorismeTriat = algorismeTriat;
     }
-    
+
     public double getTime() {
         return time;
     }
@@ -74,29 +72,33 @@ public class Model implements PerEsdeveniments {
     public double[][] getEstudi() {
         return estudi;
     }
-    
+
     public void setEstudi(double[][] estudi) {
         this.estudi = estudi;
     }
-    
+
+    public static String[] getAlgorismes() {
+        return ALGORISMES;
+    }
+
     @Override
     public void notificar(String s) {
         if (s.startsWith("Nombre 1")) {
             s = s.replaceAll("Nombre 1: ", "");
-            System.out.println("Primer nombre canviat a "+s);
+            System.out.println("Primer nombre canviat a " + s);
             this.num1 = s;
         } else if (s.startsWith("Nombre 2")) {
             s = s.replaceAll("Nombre 2: ", "");
             this.num2 = s;
-            System.out.println("Segon nombre canviat a "+s);
+            System.out.println("Segon nombre canviat a " + s);
         } else if (s.startsWith("Algorisme")) {
             s = s.replaceAll("Algorisme: ", "");
             this.algorismeTriat = s;
-            System.out.println("Algorisme canviat a "+s);
+            System.out.println("Algorisme canviat a " + s);
         } else if (s.startsWith("Umbral")) {
             s = s.replaceAll("Umbral: ", "");
             this.umbral = Integer.parseInt(s);
-            System.out.println("Umbral canviat a "+s);
+            System.out.println("Umbral canviat a " + s);
         }
     }
 }

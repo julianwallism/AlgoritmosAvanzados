@@ -35,13 +35,14 @@ public class PanellGrafic extends JPanel {
     @Override
     public void paint(Graphics gr) {
         Graphics2D gr2d = (Graphics2D) gr;
-        gr2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+        gr2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Cercam el temps màxim per poder graficart respecte a ell
         double[][] estudi = mod.getEstudi();
         double[] tradicional = estudi[0];
         double[] karatsuba = estudi[1];
+        double[] mixte = estudi[2];
         //get mad max value from array
         double max = 0;
         for (int i = 0; i < tradicional.length; i++) {
@@ -81,10 +82,22 @@ public class PanellGrafic extends JPanel {
             y = i;
         }
 
+        gr2d.setColor(Color.BLACK);
+        x = 0;
+        y = 0;
+        for (int i = 0; i < mixte.length; i++) {
+            gr2d.drawLine((int) (((double) y / 700) * this.getWidth()),
+                    this.getHeight() - (int) Math.floor((x / max) * this.getHeight()),
+                    (int) (((double) i / 700) * this.getWidth()),
+                    this.getHeight() - (int) Math.floor((mixte[i] / max) * this.getHeight()));
+            x = mixte[i];
+            y = i;
+        }
+
         //pintam els eixos
         this.setLayout(null);
         gr2d.setColor(Color.gray);
-        for (int i =1; i < 7; i++) {
+        for (int i = 1; i < 7; i++) {
             JLabel eix_X = new JLabel(Integer.toString(i * 100));
             this.add(eix_X);
             eix_X.setLocation((int) (((double) i / 7) * this.getWidth()) - 10, 0);
@@ -101,6 +114,6 @@ public class PanellGrafic extends JPanel {
         info_umbral.setOpaque(true);
         gr2d.setColor(Color.red);
         gr2d.drawOval((int) (((double) umbral / 700) * this.getWidth()) - 10,
-                this.getHeight() - (int) Math.floor((karatsuba[umbral] / max) * this.getHeight())-10, 20, 20);
+                this.getHeight() - (int) Math.floor((karatsuba[umbral] / max) * this.getHeight()) - 10, 20, 20);
     }
 }
