@@ -43,8 +43,6 @@ public class Control extends Thread implements PerEsdeveniments {
         }
 
         long inici = System.nanoTime();
-        System.out.println(num1);
-        System.out.println(num2);
         switch (this.prog.getModel().getAlgorismeTriat()) {
             case "Tradicional":
                 resultat = tradicional(num1, num2);
@@ -130,10 +128,6 @@ public class Control extends Thread implements PerEsdeveniments {
             String c = abcd[2];
             String d = abcd[3];
 
-//            String ac = mixte(a, c);
-//            String bd = mixte(b, d);
-//            String carro = Numero.resta(Numero.resta(mixte(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
-//            resultat = Numero.suma(Numero.suma(Numero.posarZeros(ac, 2 * s, true), Numero.posarZeros(carro, s, true)), bd);
             String ac = mixte(a, c);
             String bd = mixte(b, d);
             String carro = Numero.resta(Numero.resta(mixte(Numero.suma(a, b), Numero.suma(c, d)), ac), bd);
@@ -214,7 +208,6 @@ public class Control extends Thread implements PerEsdeveniments {
             estudi[0][umbral] = tempsTradicional;
             estudi[1][umbral] = tempsKaratsuba;
             estudi[2][umbral] = tempsMixte;
-            System.out.println(umbral);
         }
         recomanarUmbral(estudi);
 
@@ -252,7 +245,6 @@ public class Control extends Thread implements PerEsdeveniments {
             this.seguir = true;
             if (!this.executat) {
                 this.start();
-                System.out.println("Programa executat per primer pic");
             } else {
                 System.out.println("Programa reanudat");
             }

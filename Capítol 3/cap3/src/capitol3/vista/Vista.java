@@ -75,8 +75,6 @@ public class Vista extends JFrame implements PerEsdeveniments {
                     panellInferior.setIndeterminate(true);
                     prog.notificar("Executar");
                 } else {
-                    System.out.println(num1.getText().isEmpty());
-                    System.out.println(num2.getText().isEmpty());
                     JOptionPane.showMessageDialog(Vista.this,
                             "Uns dels nombres està buid", "Executar", JOptionPane.ERROR_MESSAGE);
                 }
