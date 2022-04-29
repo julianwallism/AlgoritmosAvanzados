@@ -1,0 +1,137 @@
+package capitol4.vista;
+
+import static capitol4.MeuError.informaError;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
+import javax.swing.JPanel;
+import capitol4.main;
+import java.awt.Color;
+import java.util.List;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+
+/**
+ *
+ * @authors Dawid Roch & Julià Wallis
+ */
+public class DragAndDrop extends JPanel {
+    private main p;
+    public JLabel label, label2, imageLabel;
+    public JButton boton;
+
+    public DragAndDrop(main p) {
+        this.p = p;
+        label = new JLabel("Arrastra un archivo");
+        label2 = new JLabel("o");
+        BufferedImage fileImage = null;
+        try {
+            fileImage = ImageIO.read(new File("icon2.png"));
+        } catch (IOException ex) {
+            informaError(ex);
+        }
+        imageLabel = new JLabel(new ImageIcon(fileImage));
+        boton = new JButton("Elige un archivo");
+        boton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (boton.getText().contains("Eliminar")) {
+                    label.setText("Arrastra un archivo");
+                    label2.setText("o");
+                    boton.setText("Elige un archivo");
+                    p.notificar("Fichero eliminado");
+                } else {
+                    JFileChooser escogerArchivo = new JFileChooser();
+                    int res = escogerArchivo.showOpenDialog(DragAndDrop.this);
+                    if (res == JFileChooser.APPROVE_OPTION) {
+                        File file = escogerArchivo.getSelectedFile();
+                        label.setText("Archivo seleccionado: " + file.getName());
+                        label2.setText("");
+                        boton.setText("Eliminar fichero seleccionado");
+                        p.getModel().setFitxerTriat(file);
+                        p.notificar("Fichero subido");
+                    }
+                }
+            }
+        });
+
+        GroupLayout layout = new GroupLayout(this);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addComponent(label)
+                        .addComponent(imageLabel)
+                        .addComponent(label2)
+                        .addComponent(boton)
+        );
+        layout.setVerticalGroup(
+                layout.createSequentialGroup()
+                        .addComponent(label)
+                        .addComponent(imageLabel)
+                        .addComponent(label2)
+                        .addComponent(boton)
+        );
+        this.setLayout(layout);
+        this.setBackground(Color.white);
+        this.setVisible(true);
+    }
+
+    DropTarget dropTarget = new DropTarget(this, new DropTargetListener() {
+        @Override
+        public void dragEnter(DropTargetDragEvent dtde) {
+        }
+
+        @Override
+        public void dragOver(DropTargetDragEvent dtde) {
+            setBackground(new Color(153, 217, 234));
+        }
+
+        @Override
+        public void dropActionChanged(DropTargetDragEvent dtde) {
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent dte) {
+            setBackground(Color.white);
+        }
+
+        @Override
+        public void drop(DropTargetDropEvent dtde) {
+            setBackground(Color.white);
+            dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+            Transferable tr = dtde.getTransferable();
+            DataFlavor[] flavors = tr.getTransferDataFlavors();
+            for (DataFlavor flavor : flavors) {
+                try {
+                    if (flavor.isFlavorJavaFileListType()) {
+                        List files = (List) tr.getTransferData(flavor);
+                        File file = (File) files.get(0);
+                        label.setText("Archivo seleccionado: " + file.getName());
+                        label2.setText("");
+                        boton.setText("Eliminar fichero seleccionado");
+                        p.getModel().setFitxerTriat(file);
+                        p.notificar("Fichero subido");
+                    }
+                } catch (UnsupportedFlavorException | IOException ex) {
+                    informaError(ex);
+                }
+            }
+        }
+    });
+}

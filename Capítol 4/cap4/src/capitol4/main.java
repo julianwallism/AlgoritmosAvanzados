@@ -27,11 +27,14 @@ public class main implements PerEsdeveniments {
     // Funció símple de la comunicació per Patró d'esdeveniments
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Fitxer") || s.startsWith("Compresion realizada")) {
+        if (s.startsWith("Fichero subido") || s.startsWith("Compresion realizada")) {
             vis.notificar(s);
         } else if (s.startsWith("Comprime") || s.startsWith("Descomprime") || s.startsWith("Aturar")) {
             con.notificar(s);
-        } 
+        } else if (s.startsWith("Fichero eliminado")) {
+            vis.notificar(s);
+            mod.notificar(s);
+        }
     }
 
     // Mètode public de retorn de la instància del model de dades

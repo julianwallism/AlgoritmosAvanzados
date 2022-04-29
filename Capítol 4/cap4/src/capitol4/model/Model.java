@@ -12,7 +12,7 @@ public class Model implements PerEsdeveniments {
     private main prog;
     private double time;
     private int retornSelector;
-    private File fitxerTriat;// = new File("elquijote.txt"); 
+    private File fitxerTriat;
     private File fitxerCompressat;
     private int bufferSize = 1024;
 
@@ -63,10 +63,8 @@ public class Model implements PerEsdeveniments {
 
     @Override
     public void notificar(String s) {
-        // if (s.startsWith("Fitxer")) {
-        // System.out.println(s);
-        // this.fitxerTriat = new File(s.replaceAll("Fitxer: ", ""));
-        // }
+        if (s.startsWith("Fichero eliminado")) {
+            this.fitxerTriat = this.fitxerCompressat = null;
+        }
     }
-    // Return HashMap with frequency of each character in the file
 }
