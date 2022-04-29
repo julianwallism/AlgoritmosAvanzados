@@ -34,6 +34,7 @@ public class Control extends Thread implements PerEsdeveniments {
         String num1 = this.prog.getModel().getNum1();
         String num2 = this.prog.getModel().getNum2();
         String resultat = "0";
+        //Comprovam si la multiplicació donarà un resultat negatiu
         boolean negatiu = (num1.charAt(0) == '-' || num2.charAt(0) == '-') && !(num1.charAt(0) == '-' && num2.charAt(0) == '-');
         if (num1.charAt(0) == '-') {
             num1 = num1.substring(1);
@@ -179,7 +180,7 @@ public class Control extends Thread implements PerEsdeveniments {
         String[] nums;
 
         //Cream les dades per a graficar i treure un umbral recomanat
-        for (int umbral = 0; umbral < 700; umbral++) {
+        for (int umbral = 1; umbral < 700; umbral++) {
 
             nums = randNum(umbral);
             num1 = nums[0];

@@ -2,12 +2,10 @@ package capitol3.vista;
 
 import capitol3.MeuError;
 import capitol3.PerEsdeveniments;
-import capitol3.control.Numero;
 import capitol3.main;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.math.BigInteger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;

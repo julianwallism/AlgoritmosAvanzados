@@ -9,9 +9,9 @@ import capitol4.vista.Vista;
  * @authors Dawid Roch & Julià Wallis
  */
 public class main implements PerEsdeveniments {
-    private Model mod;    // Punter al Model
-    private Vista vis;    // Punter a la Vista
-    private Control con;  // Punter al Control
+    private Model mod; // Punter al Model
+    private Vista vis; // Punter a la Vista
+    private Control con; // Punter al Control
 
     // Construcció de l'esquema MVC
     private void inicio() {
@@ -27,11 +27,11 @@ public class main implements PerEsdeveniments {
     // Funció símple de la comunicació per Patró d'esdeveniments
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Fitxer")) {
-            mod.notificar(s);
-        } else if (s.startsWith("Comprimir") || s.startsWith("Aturar")) {
+        if (s.startsWith("Fitxer") || s.startsWith("Compresion realizada")) {
+            vis.notificar(s);
+        } else if (s.startsWith("Comprime") || s.startsWith("Descomprime") || s.startsWith("Aturar")) {
             con.notificar(s);
-        }
+        } 
     }
 
     // Mètode public de retorn de la instància del model de dades

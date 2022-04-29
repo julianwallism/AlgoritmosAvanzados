@@ -2,9 +2,7 @@ package capitol3.vista;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
-import capitol3.MeuError;
 import capitol3.model.Model;
 import java.awt.Color;
 import java.awt.Graphics2D;
