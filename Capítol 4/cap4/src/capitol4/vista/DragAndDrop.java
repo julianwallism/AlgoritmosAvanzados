@@ -62,7 +62,7 @@ public class DragAndDrop extends JPanel {
                         File file = escogerArchivo.getSelectedFile();
                         label.setText("Archivo seleccionado: " + file.getName());
                         label2.setText("");
-                        boton.setText("Eliminar fichero seleccionado");
+                        boton.setText("Eliminar archivo seleccionado");
                         p.getModel().setFitxerTriat(file);
                         p.notificar("Fichero subido");
                     }
