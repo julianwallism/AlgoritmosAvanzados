@@ -14,10 +14,11 @@ import javax.swing.*;
 
 public class Vista extends JFrame implements PerEsdeveniments {
     private main prog;
-    private DragAndDrop dnd;
+    private PanellCentral panellCentral;
     private JPanel botons, resultats, info, central;
     private JButton comprimir, descomprimir;
     private JLabel original, comprimido;
+    private JProgressBar panellInferior;
     public JLabel label;
 
     public Vista(String titol, main p) {
@@ -25,22 +26,24 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.setTitle(titol);
         this.setIconImage(new ImageIcon("logo.png").getImage());
 
-        dnd = new DragAndDrop(p);
-        dnd.setBorder(BorderFactory.createLineBorder(new Color(153, 217, 234), 2));
+        panellCentral = new PanellCentral(p);
+        panellCentral.setBorder(BorderFactory.createLineBorder(new Color(153, 217, 234), 2));
         botons = new JPanel();
         resultats = new JPanel();
         info = new JPanel();
-        info.setBorder(BorderFactory.createMatteBorder(1,0,0,0,new Color(153, 217, 234)));
+        info.setBorder(BorderFactory.createMatteBorder(0,0,1,0,new Color(153, 217, 234)));
         central = new JPanel();
         central.setBackground(Color.white);
+        central.setLayout(new FlowLayout(FlowLayout.CENTER));
+        central.add(panellCentral);
+        panellInferior = new JProgressBar();
+        panellInferior.setBorderPainted(true);
+        panellInferior.setIndeterminate(true);
 
         comprimir = new JButton("Comprimir");
         descomprimir = new JButton("Descomprimir");
         original = new JLabel();
         comprimido = new JLabel();
-
-        central.setLayout(new FlowLayout(FlowLayout.CENTER));
-        central.add(dnd);
 
         resultats.setLayout(new FlowLayout(FlowLayout.RIGHT));
         resultats.add(original);
@@ -68,9 +71,10 @@ public class Vista extends JFrame implements PerEsdeveniments {
         });
 
         this.setLayout(new BorderLayout());
+        this.add(info, BorderLayout.NORTH);
         this.add(central, BorderLayout.CENTER);
-        this.add(info, BorderLayout.SOUTH);
-        this.setPreferredSize(new Dimension(600, 300));
+        this.add(panellInferior, BorderLayout.SOUTH);
+        this.setPreferredSize(new Dimension(600, 335));
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
