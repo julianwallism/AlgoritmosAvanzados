@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
@@ -72,9 +74,6 @@ public class Control extends Thread implements PerEsdeveniments {
         // Get frequency of each character in the file
         HashMap<Byte, Integer> freq = frequencies();
         bufferSize = prog.getModel().getBufferSize();
-
-        // Get the number of characters in the file
-        int n = freq.size();
         // Create a priority queue of the characters in the file
         PriorityQueue<Node> pq = new PriorityQueue<Node>();
         for (byte b : freq.keySet()) {
@@ -99,26 +98,40 @@ public class Control extends Thread implements PerEsdeveniments {
         try {
             FileOutputStream fos = new FileOutputStream(fitxerCompressat);
             // Write the number of characters in the file
-            fos.write(n);
+            fos.write(0);
 
-            // Write the codes of each character
-            for (byte b : codes.keySet()) {
-                fos.write(b);
-                fos.write(codes.get(b).length());
-                fos.write(codes.get(b).getBytes());
-            }
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(root);
 
             // Write the compressed file
             FileInputStream fis = new FileInputStream(fitxerOriginal);
             int valorRetorn = 0;
             byte[] buffer = new byte[bufferSize];
+            String buffAux = new String();
+            byte b;
             while (valorRetorn != -1) {
                 valorRetorn = fis.read(buffer);
                 for (int i = 0; i < valorRetorn; i++) {
-                    byte b = buffer[i];
-                    fos.write(codes.get(b).getBytes());
+                    b = buffer[i];
+                    buffAux += codes.get(b);
                 }
+                int offSet = buffAux.length() % 8;
+                String offAux = buffAux.substring(0, buffAux.length() - offSet);
+                buffAux = buffAux.substring(buffAux.length() - offSet, buffAux.length());
+                fos.write(parse(offAux));
             }
+
+            if (buffAux.length() != 0) {
+                int offSetFinal = 8 - buffAux.length();
+                for (int i = 0; i < offSetFinal; i++) {
+                    buffAux += "0";
+                }
+                fos.write(parse(buffAux));
+                RandomAccessFile raf = new RandomAccessFile(fitxerCompressat, "rw");
+//                raf.open();
+                raf.write(offSetFinal);
+            }
+
             fis.close();
             fos.close();
             prog.getModel().setFitxerCompressat(fitxerCompressat);
@@ -138,14 +151,15 @@ public class Control extends Thread implements PerEsdeveniments {
         }
     }
 
-    // //Parse string withy binary values to byte
-    // public byte[] parse(String s) {
-    // byte[] b = new byte[s.length() / 8];
-    // for (int i = 0; i < b.length; i++) {
-    // b[i] = (byte) Integer.parseInt(s.substring(i * 8, (i + 1) * 8), 2);
-    // }
-    // return b;
-    // }
+    //Parse string withy binary values to byte
+    public byte[] parse(String s) {
+        byte[] b = new byte[s.length() / 8];
+        for (int i = 0; i < b.length; i++) {
+            b[i] = (byte) Integer.parseInt(s.substring(i * 8, (i + 1) * 8), 2);
+        }
+        return b;
+    }
+
     @Override
     public void notificar(String s) {
         if (s.startsWith("Comprime")) {

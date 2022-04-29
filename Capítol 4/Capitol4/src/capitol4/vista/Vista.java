@@ -49,6 +49,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         info.add(resultats, BorderLayout.SOUTH);
 
         dnd.add(etiqueta, BorderLayout.NORTH);
+        dnd.setBorder(BorderFactory.createDashedBorder(Color.BLUE.brighter(), 4F, 4F, 3F, false));
 
         // Click sobre el botó comprimeix
         comprimir.addActionListener(new ActionListener() {

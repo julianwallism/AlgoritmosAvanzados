@@ -1,6 +1,8 @@
 package capitol4.control;
 
-public class Node implements Comparable<Node> {
+import java.io.Serializable;
+
+public class Node implements Comparable<Node>, Serializable {
 
     private Node left;
     private Node right;

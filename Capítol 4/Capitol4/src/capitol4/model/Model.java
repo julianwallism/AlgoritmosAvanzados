@@ -12,7 +12,7 @@ public class Model implements PerEsdeveniments {
     private main prog;
     private double time;
     private int retornSelector;
-    private File fitxerTriat = new File("quijote.txt");  
+    private File fitxerTriat;// = new File("elquijote.txt"); 
     private File fitxerCompressat;
     private int bufferSize = 1024;
 
