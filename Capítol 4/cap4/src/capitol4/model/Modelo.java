@@ -14,8 +14,8 @@ public class Modelo implements PerEsdeveniments {
     private File ficheroInput;
     private File ficheroOutput;
     private int retornSelector;
-    private double time; 
-    private int bufferSize = 1024;
+    private double time, entropia, entropiaReal;
+    private int bufferSize = 32;
     private HashMap<Byte, String> codes;
 
     public Modelo(main p) {
@@ -23,7 +23,7 @@ public class Modelo implements PerEsdeveniments {
         time = 0.0;
     }
 
-    /** 
+    /**
      * Getter de ficheroInput
      */
     public File getFicheroInput() {
@@ -80,6 +80,34 @@ public class Modelo implements PerEsdeveniments {
     }
 
     /**
+     * Getter de entropia
+     */
+    public double getEntropia() {
+        return entropia;
+    }
+
+    /**
+     * Setter de entropia
+     */
+    public void setEntropia(Double entropia) {
+        this.entropia = entropia;
+    }
+
+    /**
+     * Getter de entropiaReal
+     */
+    public double getEntropiaReal() {
+        return entropiaReal;
+    }
+
+    /**
+     * Setter de entropiaReal
+     */
+    public void setEntropiaReal(Double entropiaReal) {
+        this.entropiaReal = entropiaReal;
+    }
+
+    /**
      * Getter de freq
      */
     public int getBufferSize() {
@@ -98,7 +126,7 @@ public class Modelo implements PerEsdeveniments {
      */
     public HashMap<Byte, String> getCodes() {
         return codes;
-    }   
+    }
 
     /**
      * Setter de codes
@@ -108,9 +136,23 @@ public class Modelo implements PerEsdeveniments {
     }
 
     /**
+     * Método que calcula la entropia Real en base al tamaño del fichero input,
+     * el del output y la entropia teorica.
+     * 
+     * Nos basamos en esta fórmula:
+     *  EntropiaReal = (8 / EntropiaTeorica) / (TamañoFicheroInput / TamañoFicheroOutput)
+     */
+    public void entropiaReal(){
+        long bytesInput = ficheroInput.length();
+        long bytesOutput = ficheroOutput.length();
+        this.entropiaReal = (8.0 / this.entropia) / (bytesInput / bytesOutput);
+    }
+
+    /**
      * Método notificar de la intefaz por esdevenimientos
      * Puede recibir un tipo de mensaje:
      * - "Fichero Eliminado": Pone ficherInput y ficheroOutput a null
+     * 
      * @param s
      */
     @Override

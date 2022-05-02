@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
@@ -19,7 +20,7 @@ import java.util.PriorityQueue;
 public class Control extends Thread implements PerEsdeveniments {
 
     private final main prog;
-    private int lengthCode = 0;
+    private int lengthCode = 0, numBytes = 1;
     private HashMap<Byte, String> codes;
 
     public Control(main p) {
@@ -27,13 +28,12 @@ public class Control extends Thread implements PerEsdeveniments {
     }
 
     /**
-     * Método que a partir de la frecuencia de cada Byte, calcula el código Huffman
-     * y
-     * comprime el ficheroInput en el ficheroOutput.
-     * 
-     * A la hora de escribir el fichero comprimido escribirá el offset del último
-     * byte, el árbol de Huffman serializado y el contenido del ficheroInput en sí.
-     * Para hacerlo hace uso de un buffer.
+     * Método que a partir de la frecuencia de cada Byte, calcula el código
+     * Huffman y comprime el ficheroInput en el ficheroOutput.
+     *
+     * A la hora de escribir el fichero comprimido escribirá el offset del
+     * último byte, el árbol de Huffman serializado y el contenido del
+     * ficheroInput en sí. Para hacerlo hace uso de un buffer.
      */
     public void compress() {
         // Del modelo obtenemos el ficheroInput y el tamaño del buffer
@@ -64,7 +64,7 @@ public class Control extends Thread implements PerEsdeveniments {
         // String)
         // y lo almacenamos en el hash
         buildCodes(root, "");
-        
+
         // Creamos el ficheroOutput, donde comprimiremos el ficheroInput
         File ficheroOutput = new File(ficheroInput.getName() + ".huff");
         try {
@@ -109,7 +109,6 @@ public class Control extends Thread implements PerEsdeveniments {
                 // Luego escribimos en fichero el contenido de offAux. De esta
                 // manera en la siguiente iteración buffAux contiene los bits que
                 // no se han podido escribir en esta iteración.
-
                 int offSet = buffAux.length() % 8;
                 String offAux = buffAux.substring(0, buffAux.length() - offSet);
                 buffAux = buffAux.substring(buffAux.length() - offSet, buffAux.length());
@@ -138,6 +137,7 @@ public class Control extends Thread implements PerEsdeveniments {
             // Cerramos los ficheros
             fis.close();
             fos.close();
+            entropy(freq);
             // Hacemos un set del ficheroOutput
             prog.getModelo().setFicheroOutput(ficheroOutput);
             prog.getModelo().setCodes(codes);
@@ -148,7 +148,7 @@ public class Control extends Thread implements PerEsdeveniments {
         }
     }
 
-        /**
+    /**
      * Metódo que decomprime el ficheroInput y crea uno nuevo con los contenidos
      * descomprimidos
      */
@@ -216,7 +216,7 @@ public class Control extends Thread implements PerEsdeveniments {
 
     /**
      * Método que calcula la frecuencia de cada Byte en el fichero de entrada
-     * 
+     *
      * @param ficheroInput
      * @return HashMap<Byte, Integer>
      */
@@ -237,6 +237,7 @@ public class Control extends Thread implements PerEsdeveniments {
                 // Leemos el fichero y lo almacenamos en el buffer,
                 // devuelve el número de bytes leídos
                 valorRetorn = fis.read(buffer);
+                numBytes+=valorRetorn;
                 // Recorremos el buffer. Si el byte no está en el hash lo añadimos,
                 // si está, incrementamos su frecuencia
                 for (int i = 0; i < valorRetorn; i++) {
@@ -257,7 +258,7 @@ public class Control extends Thread implements PerEsdeveniments {
 
     /**
      * Método recursivo que construye el código de Huffman
-     * 
+     *
      * @param root
      * @param code
      */
@@ -272,16 +273,14 @@ public class Control extends Thread implements PerEsdeveniments {
 
     /**
      * Método recursivo que decodifica el primer byte del buffer
-     * 
-     * Le pasamos un String que contiene los bits a decodificar y un nodo raíz del
-     * árbol de Huffman.
-     * Va decodficando los bits hasta que encuentra un nodo hoja, en ese momento
-     * retornará el byte decodificado.
-     * Vamos guardando la longitud del código en lengthCode para poder borrarlo del
-     * buffer.
-     * En el caso de que no encuentre un nodo hoja ya que el código no es completo
+     *
+     * Le pasamos un String que contiene los bits a decodificar y un nodo raíz
+     * del árbol de Huffman. Va decodficando los bits hasta que encuentra un
+     * nodo hoja, en ese momento retornará el byte decodificado. Vamos guardando
+     * la longitud del código en lengthCode para poder borrarlo del buffer. En
+     * el caso de que no encuentre un nodo hoja ya que el código no es completo
      * retornará null, para que se pueda decodificar en la siguiente lectura
-     * 
+     *
      * @param root
      * @param s
      * @return Byte decodificado
@@ -303,7 +302,7 @@ public class Control extends Thread implements PerEsdeveniments {
 
     /**
      * Método que parsea un String a un array de bytes
-     * 
+     *
      * @param s
      * @return
      */
@@ -315,18 +314,28 @@ public class Control extends Thread implements PerEsdeveniments {
         return b;
     }
 
-    // Method that calculates the entropy 
-    public void entropy(){
+    // Method that calculates the entropy
+    public void entropy(HashMap<Byte, Integer> freq) {
+        double entropy = 0;
+        // For each byte in freq get their frequency
 
+        for (Map.Entry<Byte, Integer> entry : freq.entrySet()) {
+            // Calculate the probability of the byte
+            double probability = (double) entry.getValue() / numBytes;
+            entropy += probability * (Math.log(probability) / Math.log(2));
+        }
+        numBytes=0;
+        entropy = -entropy;
+        prog.getModelo().setEntropia(entropy);
+        prog.notificar("Entropia");
     }
 
     /**
      * Método notificar de la interfaz de esdevenimientos.
-     * 
-     * Puede recibir dos tipos de mensajes:
-     * - Comprime: Se llama al método compress()
-     * - Descomprime: Se llama al método decompress()
-     * 
+     *
+     * Puede recibir dos tipos de mensajes: - Comprime: Se llama al método
+     * compress() - Descomprime: Se llama al método decompress()
+     *
      * @param s
      */
     @Override

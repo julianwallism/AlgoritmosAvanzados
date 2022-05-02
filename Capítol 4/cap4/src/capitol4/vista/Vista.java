@@ -18,7 +18,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
     private PanelCentral panelCentral;
     private JPanel botones, resultados, info, central;
     private JButton comprimir, descomprimir, muestraCódigos;
-    private JLabel original, comprimido;
+    private JLabel original, comprimido, entropia;
     private JProgressBar panelInferior;
     public JLabel label;
 
@@ -51,10 +51,12 @@ public class Vista extends JFrame implements PerEsdeveniments {
 
         original = new JLabel();
         comprimido = new JLabel();
+        entropia = new JLabel();
 
         resultados.setLayout(new FlowLayout(FlowLayout.RIGHT));
         resultados.add(original);
         resultados.add(comprimido);
+        resultados.add(entropia);
 
         botones.setLayout(new FlowLayout(FlowLayout.LEFT));
         botones.add(comprimir);
@@ -69,7 +71,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
             @Override
             public void actionPerformed(ActionEvent e) {
                 File ficheroInput = prog.getModelo().getFicheroInput();
-                if (ficheroInput==null) {
+                if (ficheroInput == null) {
                     JOptionPane.showMessageDialog(null, "Selecciona un fichero!");
                     return;
                 }
@@ -82,7 +84,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
             @Override
             public void actionPerformed(ActionEvent e) {
                 File ficheroInput = prog.getModelo().getFicheroInput();
-                if (ficheroInput==null || !ficheroInput.getName().endsWith(".huff")) {
+                if (ficheroInput == null || !ficheroInput.getName().endsWith(".huff")) {
                     JOptionPane.showMessageDialog(null, "Selecciona un fichero .huff válido!");
                     return;
                 }
@@ -95,7 +97,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
             @Override
             public void actionPerformed(ActionEvent e) {
                 HashMap<Byte, String> codes = prog.getModelo().getCodes();
-                if (codes==null) {
+                if (codes == null) {
                     JOptionPane.showMessageDialog(null, "No hay códigos!");
                     return;
                 }
@@ -107,7 +109,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 for (Byte b : codes.keySet()) {
                     textArea.append((char) (b & 0xFF) + ": " + codes.get(b) + "\n");
                 }
-                //textArea.setText(codes.toString());
+                // textArea.setText(codes.toString());
                 JScrollPane scrollPane = new JScrollPane(textArea);
                 scrollPane.setPreferredSize(new Dimension(500, 500));
                 dialog.add(scrollPane);
@@ -121,7 +123,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.add(info, BorderLayout.NORTH);
         this.add(central, BorderLayout.CENTER);
         this.add(panelInferior, BorderLayout.SOUTH);
-        this.setPreferredSize(new Dimension(500, 500));
+        this.setPreferredSize(new Dimension(800, 600));
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -138,6 +140,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
 
     /**
      * Actualitza els labels de la vista
+     * 
      * @param text
      */
     private void updateEtiqueta(String text) {
@@ -149,10 +152,11 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 original.setText("El archivo Input pesa " + peso);
                 break;
             }
-            case "Original eliminado":
+            case "Original eliminado": {
                 original.setText("");
                 comprimido.setText("");
                 break;
+            }
             case "Comprimido": {
                 File archivoOutput = prog.getModelo().getFicheroOutput();
                 printFileSize(archivoOutput);
@@ -160,13 +164,22 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 comprimido.setText("El archivo Output pesa " + peso);
                 break;
             }
+            case "Entropia": {
+                String entropia = String.format("%.3f", prog.getModelo().getEntropia());
+                String entropiaReal = String.format("%.3f", prog.getModelo().getEntropiaReal());
+                this.entropia.setText("Entropia Teorica: " + entropia + " bits/caracter" + 
+                        "\tEntropia Real: "+ entropiaReal + " bits/caracter");
+                break;
+            }
             default:
                 break;
         }
     }
+
     /**
-     * Método que a partir del tamanyo del fichero en bytes, hace la conversión 
+     * Método que a partir del tamanyo del fichero en bytes, hace la conversión
      * a kilobytes, megabytes, etc.
+     * 
      * @param file
      * @return
      */
@@ -211,6 +224,8 @@ public class Vista extends JFrame implements PerEsdeveniments {
      * - "Fichero Subido": llama a updateEtiqueta("Original")
      * - "Fichero Eliminado": llama a updateEtiqueta("Original eliminado")
      * - "Compresión realizada": llama a updateEtiqueta("Comprimido")
+     * - "Entropia": llama a updateEtiqueta("Entropia")
+     * 
      * @param s
      */
     @Override
@@ -221,6 +236,8 @@ public class Vista extends JFrame implements PerEsdeveniments {
             updateEtiqueta("Original eliminado");
         } else if (s.startsWith("Compresion realizada")) {
             updateEtiqueta("Comprimido");
+        } else if (s.startsWith("Entropia")) {
+            updateEtiqueta("Entropia");
         }
     }
 }
