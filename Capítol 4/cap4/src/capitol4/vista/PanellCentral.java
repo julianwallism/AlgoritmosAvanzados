@@ -26,6 +26,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.LayoutStyle;
 
 /**
  *
@@ -84,12 +85,12 @@ public class PanellCentral extends JPanel {
         );
         layout.setVerticalGroup(
                 layout.createSequentialGroup()
-                        .addGap(50)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED, 35, 100)
                         .addComponent(label)
                         .addComponent(imageLabel)
                         .addComponent(label2)
                         .addComponent(boton)
-                        .addGap(50)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED, 35, 100)
         );
         this.setLayout(layout);
         this.setBackground(Color.white);

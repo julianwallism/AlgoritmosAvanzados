@@ -74,7 +74,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.add(info, BorderLayout.NORTH);
         this.add(central, BorderLayout.CENTER);
         this.add(panellInferior, BorderLayout.SOUTH);
-        this.setPreferredSize(new Dimension(600, 335));
+        this.setPreferredSize(new Dimension(500, 335));
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
