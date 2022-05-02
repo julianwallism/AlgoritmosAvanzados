@@ -32,13 +32,13 @@ import javax.swing.LayoutStyle;
  *
  * @authors Dawid Roch & Julià Wallis
  */
-public class PanellCentral extends JPanel {
+public class PanelCentral extends JPanel {
     public static final int FPS = 24;
     private main p;
     public JLabel label, label2, imageLabel;
     public JButton boton;
 
-    public PanellCentral(main p) {
+    public PanelCentral(main p) {
         this.p = p;
         label = new JLabel("Arrastra un archivo");
         label2 = new JLabel("o");
@@ -60,13 +60,13 @@ public class PanellCentral extends JPanel {
                     p.notificar("Fichero eliminado");
                 } else {
                     JFileChooser escogerArchivo = new JFileChooser();
-                    int res = escogerArchivo.showOpenDialog(PanellCentral.this);
+                    int res = escogerArchivo.showOpenDialog(PanelCentral.this);
                     if (res == JFileChooser.APPROVE_OPTION) {
                         File file = escogerArchivo.getSelectedFile();
                         label.setText("Archivo seleccionado: " + file.getName());
                         label2.setText("");
                         boton.setText("Eliminar archivo seleccionado");
-                        p.getModel().setFitxerTriat(file);
+                        p.getModelo().setFicheroInput(file);
                         p.notificar("Fichero subido");
                     }
                 }
@@ -130,7 +130,7 @@ public class PanellCentral extends JPanel {
                         label.setText("Archivo seleccionado: " + file.getName());
                         label2.setText("");
                         boton.setText("Eliminar fichero seleccionado");
-                        p.getModel().setFitxerTriat(file);
+                        p.getModelo().setFicheroInput(file);
                         p.notificar("Fichero subido");
                     }
                 } catch (UnsupportedFlavorException | IOException ex) {
@@ -152,9 +152,9 @@ public class PanellCentral extends JPanel {
 }
 
 class ProcesPintat extends Thread {
-    private PanellCentral pan;
+    private PanelCentral pan;
 
-    public ProcesPintat(PanellCentral pc) {
+    public ProcesPintat(PanelCentral pc) {
         pan = pc;
     }
 

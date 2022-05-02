@@ -1,7 +1,7 @@
 package capitol4;
 
 import capitol4.control.Control;
-import capitol4.model.Model;
+import capitol4.model.Modelo;
 import capitol4.vista.Vista;
 
 /**
@@ -9,15 +9,15 @@ import capitol4.vista.Vista;
  * @authors Dawid Roch & Julià Wallis
  */
 public class main implements PerEsdeveniments {
-    private Model mod; // Punter al Model
+    private Modelo mod; // Punter al Modelo
     private Vista vis; // Punter a la Vista
     private Control con; // Punter al Control
 
     // Construcció de l'esquema MVC
     private void inicio() {
-        mod = new Model(this);
+        mod = new Modelo(this);
         con = new Control(this);
-        vis = new Vista("Pràctica Capítol 4 - Dawid Roch i Julià Wallis", this);
+        vis = new Vista("Práctica Capitulo 4 - Víctor Blanes, Dawid Roch y Julià Wallis", this);
     }
 
     public static void main(String[] args) {
@@ -38,7 +38,7 @@ public class main implements PerEsdeveniments {
     }
 
     // Mètode public de retorn de la instància del model de dades
-    public Model getModel() {
+    public Modelo getModelo() {
         return mod;
     }
 }

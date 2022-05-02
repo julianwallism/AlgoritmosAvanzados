@@ -10,15 +10,16 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.HashMap;
 import javax.swing.*;
 
 public class Vista extends JFrame implements PerEsdeveniments {
     private main prog;
-    private PanellCentral panellCentral;
-    private JPanel botons, resultats, info, central;
-    private JButton comprimir, descomprimir;
+    private PanelCentral panelCentral;
+    private JPanel botones, resultados, info, central;
+    private JButton comprimir, descomprimir, muestraCódigos;
     private JLabel original, comprimido;
-    private JProgressBar panellInferior;
+    private JProgressBar panelInferior;
     public JLabel label;
 
     public Vista(String titol, main p) {
@@ -26,65 +27,100 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.setTitle(titol);
         this.setIconImage(new ImageIcon("logo.png").getImage());
 
-        panellCentral = new PanellCentral(p);
-        panellCentral.setBorder(BorderFactory.createLineBorder(new Color(153, 217, 234), 2));
-        botons = new JPanel();
-        resultats = new JPanel();
+        panelCentral = new PanelCentral(p);
+        panelCentral.setBorder(BorderFactory.createLineBorder(new Color(153, 217, 234), 2));
+
+        botones = new JPanel();
+        resultados = new JPanel();
+
         info = new JPanel();
         info.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(153, 217, 234)));
+
         central = new JPanel();
         central.setBackground(Color.white);
         central.setLayout(new FlowLayout(FlowLayout.CENTER));
-        central.add(panellCentral);
-        panellInferior = new JProgressBar();
-        panellInferior.setBorderPainted(true);
-        panellInferior.setIndeterminate(true);
+        central.add(panelCentral);
+
+        panelInferior = new JProgressBar();
+        panelInferior.setBorderPainted(true);
+        panelInferior.setIndeterminate(true);
 
         comprimir = new JButton("Comprimir");
         descomprimir = new JButton("Descomprimir");
+        muestraCódigos = new JButton("Mostrar códigos");
+
         original = new JLabel();
         comprimido = new JLabel();
 
-        resultats.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        resultats.add(original);
-        resultats.add(comprimido);
-        botons.setLayout(new FlowLayout(FlowLayout.LEFT));
-        botons.add(comprimir);
-        botons.add(descomprimir);
-        info.add(botons);
-        info.add(resultats);
+        resultados.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        resultados.add(original);
+        resultados.add(comprimido);
 
-        // Click sobre el botó comprimeix
+        botones.setLayout(new FlowLayout(FlowLayout.LEFT));
+        botones.add(comprimir);
+        botones.add(descomprimir);
+        botones.add(muestraCódigos);
+
+        info.add(botones);
+        info.add(resultados);
+
+        // Click sobre el botón comprime
         comprimir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                File fitxerTriat = prog.getModel().getFitxerTriat();
-                if (fitxerTriat==null) {
-                    JOptionPane.showMessageDialog(null, "Selecciona un fitxer!");
+                File ficheroInput = prog.getModelo().getFicheroInput();
+                if (ficheroInput==null) {
+                    JOptionPane.showMessageDialog(null, "Selecciona un fichero!");
                     return;
                 }
-                prog.notificar("Comprimeix");
+                prog.notificar("Comprime");
             }
         });
 
-        // Click sobre el botó descomprimeix
+        // Click sobre el botón descomprime
         descomprimir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                File fitxerTriat = prog.getModel().getFitxerTriat();
-                if (fitxerTriat==null || !fitxerTriat.getName().endsWith(".huff")) {
-                    JOptionPane.showMessageDialog(null, "Selecciona un fitxer .huff vàlid");
+                File ficheroInput = prog.getModelo().getFicheroInput();
+                if (ficheroInput==null || !ficheroInput.getName().endsWith(".huff")) {
+                    JOptionPane.showMessageDialog(null, "Selecciona un fichero .huff válido!");
                     return;
                 }
-                prog.notificar("Descomprimeix");
+                prog.notificar("Descomprime");
             }
+        });
 
+        // Click sobre el botón muestra códigos
+        muestraCódigos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                HashMap<Byte, String> codes = prog.getModelo().getCodes();
+                if (codes==null) {
+                    JOptionPane.showMessageDialog(null, "No hay códigos!");
+                    return;
+                }
+                JDialog dialog = new JDialog(Vista.this, "Códigos", true);
+                JTextArea textArea = new JTextArea();
+                textArea.setEditable(false);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                for (Byte b : codes.keySet()) {
+                    textArea.append((char) (b & 0xFF) + ": " + codes.get(b) + "\n");
+                }
+                //textArea.setText(codes.toString());
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setPreferredSize(new Dimension(500, 500));
+                dialog.add(scrollPane);
+                dialog.pack();
+                dialog.setLocationRelativeTo(null);
+                dialog.setVisible(true);
+            }
         });
 
         this.setLayout(new BorderLayout());
         this.add(info, BorderLayout.NORTH);
         this.add(central, BorderLayout.CENTER);
-        this.add(panellInferior, BorderLayout.SOUTH);
+        this.add(panelInferior, BorderLayout.SOUTH);
         this.setPreferredSize(new Dimension(500, 500));
 
         try {
@@ -100,13 +136,17 @@ public class Vista extends JFrame implements PerEsdeveniments {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /**
+     * Actualitza els labels de la vista
+     * @param text
+     */
     private void updateEtiqueta(String text) {
         switch (text) {
             case "Original": {
-                File archivo = prog.getModel().getFitxerTriat();
-                printFileSize(archivo);
-                String peso = printFileSize(archivo);
-                original.setText("El archivo original pesa " + peso);
+                File archivoInput = prog.getModelo().getFicheroInput();
+                printFileSize(archivoInput);
+                String peso = printFileSize(archivoInput);
+                original.setText("El archivo Input pesa " + peso);
                 break;
             }
             case "Original eliminado":
@@ -114,19 +154,23 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 comprimido.setText("");
                 break;
             case "Comprimido": {
-                File archivo = prog.getModel().getFitxerOutput();
-                printFileSize(archivo);
-                String peso = printFileSize(archivo);
-                comprimido.setText("El archivo comprimido pesa " + peso);
+                File archivoOutput = prog.getModelo().getFicheroOutput();
+                printFileSize(archivoOutput);
+                String peso = printFileSize(archivoOutput);
+                comprimido.setText("El archivo Output pesa " + peso);
                 break;
             }
             default:
                 break;
         }
     }
-
+    /**
+     * Método que a partir del tamanyo del fichero en bytes, hace la conversión 
+     * a kilobytes, megabytes, etc.
+     * @param file
+     * @return
+     */
     public static String printFileSize(File file) {
-        // size of a file (in bytes)
         long bytes = file.length();
         long kilobytes = (bytes / 1024);
         long megabytes = (kilobytes / 1024);
@@ -137,7 +181,6 @@ public class Vista extends JFrame implements PerEsdeveniments {
         long zettabytes = (exabytes / 1024);
         long yottabytes = (zettabytes / 1024);
 
-        // return the first variable that isnt 0 starting from yottabytes to bytes
         if (yottabytes != 0) {
             return yottabytes + " YB";
         } else if (zettabytes != 0) {
@@ -161,6 +204,15 @@ public class Vista extends JFrame implements PerEsdeveniments {
         }
     }
 
+    /**
+     * Método notificar de la interfaz de esdevenimientos
+     * 
+     * Puede recibir los siguientes eventos:
+     * - "Fichero Subido": llama a updateEtiqueta("Original")
+     * - "Fichero Eliminado": llama a updateEtiqueta("Original eliminado")
+     * - "Compresión realizada": llama a updateEtiqueta("Comprimido")
+     * @param s
+     */
     @Override
     public void notificar(String s) {
         if (s.startsWith("Fichero subido")) {
