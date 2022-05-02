@@ -31,7 +31,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         botons = new JPanel();
         resultats = new JPanel();
         info = new JPanel();
-        info.setBorder(BorderFactory.createMatteBorder(0,0,1,0,new Color(153, 217, 234)));
+        info.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(153, 217, 234)));
         central = new JPanel();
         central.setBackground(Color.white);
         central.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -58,7 +58,12 @@ public class Vista extends JFrame implements PerEsdeveniments {
         comprimir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                prog.notificar("Comprime");
+                File fitxerTriat = prog.getModel().getFitxerTriat();
+                if (fitxerTriat==null) {
+                    JOptionPane.showMessageDialog(null, "Selecciona un fitxer!");
+                    return;
+                }
+                prog.notificar("Comprimeix");
             }
         });
 
@@ -66,18 +71,29 @@ public class Vista extends JFrame implements PerEsdeveniments {
         descomprimir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                prog.notificar("Descomprime");
+                File fitxerTriat = prog.getModel().getFitxerTriat();
+                if (fitxerTriat==null || !fitxerTriat.getName().endsWith(".huff")) {
+                    JOptionPane.showMessageDialog(null, "Selecciona un fitxer .huff vàlid");
+                    return;
+                }
+                prog.notificar("Descomprimeix");
             }
+
         });
 
         this.setLayout(new BorderLayout());
         this.add(info, BorderLayout.NORTH);
         this.add(central, BorderLayout.CENTER);
         this.add(panellInferior, BorderLayout.SOUTH);
+<<<<<<< Updated upstream
         this.setPreferredSize(new Dimension(500, 335));
+=======
+        this.setPreferredSize(new Dimension(600, 600));
+>>>>>>> Stashed changes
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                | UnsupportedLookAndFeelException ex) {
             informaError(ex);
         }
         SwingUtilities.updateComponentTreeUI(this);
@@ -88,19 +104,27 @@ public class Vista extends JFrame implements PerEsdeveniments {
     }
 
     private void updateEtiqueta(String text) {
-        if (text.equals("Original")) {
-            File archivo = prog.getModel().getFitxerTriat();
-            printFileSize(archivo);
-            String peso = printFileSize(archivo);
-            original.setText("El archivo original pesa " + peso);
-        } else if (text.equals("Original eliminado")) {
-            original.setText("");
-            comprimido.setText("");
-        } else if (text.equals("Comprimido")) {
-            File archivo = prog.getModel().getFitxerCompressat();
-            printFileSize(archivo);
-            String peso = printFileSize(archivo);
-            comprimido.setText("El archivo comprimido pesa " + peso);
+        switch (text) {
+            case "Original": {
+                File archivo = prog.getModel().getFitxerTriat();
+                printFileSize(archivo);
+                String peso = printFileSize(archivo);
+                original.setText("El archivo original pesa " + peso);
+                break;
+            }
+            case "Original eliminado":
+                original.setText("");
+                comprimido.setText("");
+                break;
+            case "Comprimido": {
+                File archivo = prog.getModel().getFitxerOutput();
+                printFileSize(archivo);
+                String peso = printFileSize(archivo);
+                comprimido.setText("El archivo comprimido pesa " + peso);
+                break;
+            }
+            default:
+                break;
         }
     }
 

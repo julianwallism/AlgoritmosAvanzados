@@ -13,8 +13,8 @@ public class Model implements PerEsdeveniments {
     private double time;
     private int retornSelector;
     private File fitxerTriat;
-    private File fitxerCompressat;
-    private int bufferSize = 1024;
+    private File fitxerOutput;
+    private int bufferSize = 10;
 
     public Model(main p) {
         prog = p;
@@ -29,12 +29,12 @@ public class Model implements PerEsdeveniments {
         this.fitxerTriat = fitxerTriat;
     }
 
-    public File getFitxerCompressat() {
-        return fitxerCompressat;
+    public File getFitxerOutput() {
+        return fitxerOutput;
     }
 
-    public void setFitxerCompressat(File fitxerCompressat) {
-        this.fitxerCompressat = fitxerCompressat;
+    public void setFitxerOutput(File fitxerOutput) {
+        this.fitxerOutput = fitxerOutput;
     }
 
     public int getRetornSelector() {
@@ -64,7 +64,7 @@ public class Model implements PerEsdeveniments {
     @Override
     public void notificar(String s) {
         if (s.startsWith("Fichero eliminado")) {
-            this.fitxerTriat = this.fitxerCompressat = null;
+            this.fitxerTriat = this.fitxerOutput = null;
         }
     }
 }

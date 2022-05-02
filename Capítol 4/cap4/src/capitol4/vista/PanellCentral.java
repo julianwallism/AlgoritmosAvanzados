@@ -44,7 +44,7 @@ public class PanellCentral extends JPanel {
         label2 = new JLabel("o");
         BufferedImage fileImage = null;
         try {
-            fileImage = ImageIO.read(new File("icon2.png"));
+            fileImage = ImageIO.read(new File("icon.png"));
         } catch (IOException ex) {
             informaError(ex);
         }

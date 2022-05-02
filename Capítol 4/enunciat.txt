@@ -1,22 +1,11 @@
-Efectuar una aplicació seguint el patró de disseny MVC per resoldre el problema de la codificació de Huffman de forma àvida.
+Realizar un programa que lleve a cabo la multiplicación de grandes números y efectúe una comparativa entre los diferentes algoritmos. El programa desarrollado ha de ser capaz de efectuar la multiplicació de dos numeros de N x M cifras, utilizando el algoritmo tradicional, el algoritmo de Karatsuba y el mixto explicado en clase.
 
-El programa ha de presentar una GUI a on l'usuari pugui indicar un arxiu d'entrada. L'aplicació haurà d'analitzar-lo, associar-li un codi de Huffman amb la tècnica àvida vista a classe i donar la informació dels resultats finals (codi de Huffman obtingut, mida de l'arxiu abans i després de comprimir, ...). També ha de dur a terme la comparativa entre l'entropia teòrica de cada compressió i la que es dona realment. Associat al codi del programa s'ha de lliurar una memòria i un vídeo amb les mateixes condicions que les pràctiques anteriors.
+Opcional en la entrega ordinaria: El algoritmo mixto efectúa al arrancar el programa por primera vez, un análisis para saber cual debe de ser el punto de corte de la recursión, para posteriormente tomar este como corte del programa. Esto debe de hacerse de forma automàtica, cuando el programa se usa por primera vez en un ordenador nuevo. Además de otras cosas que el alumnado decida entregar.
 
+Obligatorio en la recuperación: La tarea opcional de la entrega ordinaria.
 
+El programa elaborado debe de presentar una estructura de diseño MVC.
 
-Feines addicionals per l'entrega a la convocatòria durant el curs: són la mateixa a dos nivells, és a dir és desenvolupa un o l'altre punt (puntuen de 0 a 3 punts sobre 10): 
+El programa debe de presentar una IGU gràfica. En donde se muestren los resultados y el transculso del proceso de cálculo. Se debe de poder apreciar explícitamente el resultado de los tres algoritmos, con el fin de comprobar que los resultados són iguales. Opcionalmente puede representar las gráficas del cálculo, etc.
 
-       1) Que el programa gravi al disc un arxiu comprimit i un de nou que sigui el comprimit una vegada descomprimit. En aquest cas tot el procés té la informació en memòria.
-
-       2) Un programa capaç de comprimir arxius o descomprimir. Però en aquest cas, s'ha de poder obrir el programa i descomprimir un arxiu (comprimit per ell). Teniu en compte que per aquesta opció a l'arxiu comprimit hi ha d'haver la informació necessària per poder descomprimir-lo.
-
-Convocatòria de juliol: L'opció 1 de les tasques addicionals és obligatòria.
-
-
-Teniu en compta que per exemple a un arxiu gros que contengui una cadena d'ADN el guany serà molt, però a un arxiu de text gros amb molts de caràcters diferents el guany serà molt poc o ho empitjorareu. El mateix passa amb imatges regulars o irregulars.
-
-(Per generar l'arxiu comprimit, penseu que a la compressió també hi ha d'haver el codi, si no, no es podrà descomprimir)
-
-(Ajuda: Podeu efectuar comparatives entre diferents tipus d'arxius i explicar-la a la memòria).
-
-Data límit 8 de maig de 2022.
+Se debe de entregar también una memoria y un video explicativo como el del primer ejercicio del curso. En la memòria debe de estar presente un estudio de Coste Computacional asintótico basado en instrucción crítica, de uno de los ordenadores de los integrantes del grupo, en donde se compare los tres costes de los tres algoritmos implementados, sus constantes multiplicativas, ...
