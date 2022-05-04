@@ -43,7 +43,6 @@ public class Vista extends JFrame implements PerEsdeveniments {
 
         panelInferior = new JProgressBar();
         panelInferior.setBorderPainted(true);
-        panelInferior.setIndeterminate(true);
 
         comprimir = new JButton("Comprimir");
         descomprimir = new JButton("Descomprimir");
@@ -75,6 +74,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
                     JOptionPane.showMessageDialog(null, "Selecciona un fichero!");
                     return;
                 }
+                panelInferior.setIndeterminate(true);
                 prog.notificar("Comprime");
             }
         });
@@ -88,6 +88,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
                     JOptionPane.showMessageDialog(null, "Selecciona un fichero .huff válido!");
                     return;
                 }
+                panelInferior.setIndeterminate(true);
                 prog.notificar("Descomprime");
             }
         });
@@ -139,7 +140,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
     }
 
     /**
-     * Actualitza els labels de la vista
+     * Actualiza los labels de la vista
      * 
      * @param text
      */
@@ -177,7 +178,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
     }
 
     /**
-     * Método que a partir del tamanyo del fichero en bytes, hace la conversión
+     * Método que a partir del tamaño del fichero en bytes, hace la conversión
      * a kilobytes, megabytes, etc.
      * 
      * @param file
@@ -189,20 +190,8 @@ public class Vista extends JFrame implements PerEsdeveniments {
         long megabytes = (kilobytes / 1024);
         long gigabytes = (megabytes / 1024);
         long terabytes = (gigabytes / 1024);
-        long petabytes = (terabytes / 1024);
-        long exabytes = (petabytes / 1024);
-        long zettabytes = (exabytes / 1024);
-        long yottabytes = (zettabytes / 1024);
 
-        if (yottabytes != 0) {
-            return yottabytes + " YB";
-        } else if (zettabytes != 0) {
-            return zettabytes + " ZB";
-        } else if (petabytes != 0) {
-            return petabytes + " PB";
-        } else if (exabytes != 0) {
-            return exabytes + " EB";
-        } else if (terabytes != 0) {
+        if (terabytes != 0) {
             return terabytes + " TB";
         } else if (gigabytes != 0) {
             return gigabytes + " GB";
@@ -218,7 +207,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
     }
 
     /**
-     * Método notificar de la interfaz de esdevenimientos
+     * Método notificar de la interfaz de eventos
      * 
      * Puede recibir los siguientes eventos:
      * - "Fichero Subido": llama a updateEtiqueta("Original")
@@ -235,6 +224,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         } else if (s.startsWith("Fichero eliminado")) {
             updateEtiqueta("Original eliminado");
         } else if (s.startsWith("Compresion realizada")) {
+            panelInferior.setIndeterminate(false);
             updateEtiqueta("Comprimido");
         } else if (s.startsWith("Entropia")) {
             updateEtiqueta("Entropia");
