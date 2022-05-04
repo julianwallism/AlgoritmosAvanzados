@@ -16,7 +16,7 @@ import javax.swing.*;
 public class Vista extends JFrame implements PerEsdeveniments {
     private main prog;
     private PanelCentral panelCentral;
-    private JPanel botones, resultados, info, central;
+    private JPanel panelSuperior, botones, resultados, central;
     private JButton comprimir, descomprimir, muestraCódigos;
     private JLabel original, comprimido, entropia;
     private JProgressBar panelInferior;
@@ -33,8 +33,8 @@ public class Vista extends JFrame implements PerEsdeveniments {
         botones = new JPanel();
         resultados = new JPanel();
 
-        info = new JPanel();
-        info.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(153, 217, 234)));
+        panelSuperior = new JPanel();
+        panelSuperior.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(153, 217, 234)));
 
         central = new JPanel();
         central.setBackground(Color.white);
@@ -62,8 +62,8 @@ public class Vista extends JFrame implements PerEsdeveniments {
         botones.add(descomprimir);
         botones.add(muestraCódigos);
 
-        info.add(botones);
-        info.add(resultados);
+        panelSuperior.add(botones);
+        panelSuperior.add(resultados);
 
         // Click sobre el botón comprime
         comprimir.addActionListener(new ActionListener() {
@@ -121,7 +121,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
         });
 
         this.setLayout(new BorderLayout());
-        this.add(info, BorderLayout.NORTH);
+        this.add(panelSuperior, BorderLayout.NORTH);
         this.add(central, BorderLayout.CENTER);
         this.add(panelInferior, BorderLayout.SOUTH);
         this.setPreferredSize(new Dimension(800, 600));
