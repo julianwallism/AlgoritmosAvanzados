@@ -10,17 +10,18 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import javax.swing.*;
 
 public class Vista extends JFrame implements PerEsdeveniments {
+
     private main prog;
     private PanelCentral panelCentral;
     private JPanel panelSuperior, botones, resultados, central;
-    private JButton comprimir, descomprimir, muestraCódigos;
-    private JLabel original, comprimido, entropia;
+    private JButton comprimir, descomprimir, info;
     private JProgressBar panelInferior;
-    public JLabel label;
+    public JLabel original, comprimido;
 
     public Vista(String titol, main p) {
         this.prog = p;
@@ -46,21 +47,19 @@ public class Vista extends JFrame implements PerEsdeveniments {
 
         comprimir = new JButton("Comprimir");
         descomprimir = new JButton("Descomprimir");
-        muestraCódigos = new JButton("Mostrar códigos");
+        info = new JButton("Info");
 
         original = new JLabel();
         comprimido = new JLabel();
-        entropia = new JLabel();
 
         resultados.setLayout(new FlowLayout(FlowLayout.RIGHT));
         resultados.add(original);
         resultados.add(comprimido);
-        resultados.add(entropia);
 
         botones.setLayout(new FlowLayout(FlowLayout.LEFT));
         botones.add(comprimir);
         botones.add(descomprimir);
-        botones.add(muestraCódigos);
+        botones.add(info);
 
         panelSuperior.add(botones);
         panelSuperior.add(resultados);
@@ -93,22 +92,52 @@ public class Vista extends JFrame implements PerEsdeveniments {
             }
         });
 
-        // Click sobre el botón muestra códigos
-        muestraCódigos.addActionListener(new ActionListener() {
+        // Create an actionListener on the button info that creates a jdialog with the
+        // info
+        info.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 HashMap<Byte, String> codes = prog.getModelo().getCodes();
-                if (codes == null) {
-                    JOptionPane.showMessageDialog(null, "No hay códigos!");
-                    return;
-                }
-                JDialog dialog = new JDialog(Vista.this, "Códigos", true);
+                File archivoInput = prog.getModelo().getFicheroInput();
+                File archivoOutput = prog.getModelo().getFicheroOutput();
+                Double entropia = prog.getModelo().getEntropia();
+                Double entropiaReal = prog.getModelo().getEntropiaReal();
+                Double expectedSize = prog.getModelo().getExpectedSize();
+
+                JDialog dialog = new JDialog(Vista.this, "Informacion", true);
                 JTextArea textArea = new JTextArea();
                 textArea.setEditable(false);
                 textArea.setLineWrap(true);
                 textArea.setWrapStyleWord(true);
-                for (Byte b : codes.keySet()) {
-                    textArea.append((char) (b & 0xFF) + ": " + codes.get(b) + "\n");
+
+                // If input is not null, print the file size
+                if (archivoInput != null) {
+                    textArea.append("Tamaño del fichero input:\t" + printFileSize(archivoInput.length()) + "\n");
+                }
+                if (archivoOutput != null) {
+                    textArea.append("Tamaño del fichero output:\t" + printFileSize(archivoOutput.length()) + "\n");
+                }
+                if (expectedSize != 0.0) {
+                    textArea.append("Tamaño esperado del fichero:\t" + printFileSize(expectedSize.longValue()) + "\n");
+                }
+                if (archivoInput != null && archivoOutput != null) {
+                    double compressionRate = ((double) archivoOutput.length() / (double) archivoInput.length()) * 100;
+                    String compressionRateString = String.format("%.3f", compressionRate);
+                    textArea.append("Ratio de compresion:\t\t" + compressionRateString + "%\n");
+                }
+                if (entropia != 0.0) {
+                    String entropiaString = String.format("%.3f", entropia);
+                    textArea.append("Entropia teórica:\t\t" + entropiaString + "\n");
+                }
+                if (entropiaReal != 0.0) {
+                    String entropiaRealString = String.format("%.3f", entropiaReal);
+                    textArea.append("Entropia real:\t\t\t" + entropiaRealString + "\n");
+                }
+                if (codes != null) {
+                    textArea.append("\nCódigos");
+                    for (Byte key : codes.keySet()) {
+                        textArea.append((char) (key & 0xFF) + ": " + codes.get(key) + "\n");
+                    }
                 }
                 // textArea.setText(codes.toString());
                 JScrollPane scrollPane = new JScrollPane(textArea);
@@ -141,15 +170,15 @@ public class Vista extends JFrame implements PerEsdeveniments {
 
     /**
      * Actualiza los labels de la vista
-     * 
+     *
      * @param text
      */
     private void updateEtiqueta(String text) {
         switch (text) {
             case "Original": {
                 File archivoInput = prog.getModelo().getFicheroInput();
-                printFileSize(archivoInput);
-                String peso = printFileSize(archivoInput);
+                printFileSize(archivoInput.length());
+                String peso = printFileSize(archivoInput.length());
                 original.setText("El archivo Input pesa " + peso);
                 break;
             }
@@ -160,16 +189,9 @@ public class Vista extends JFrame implements PerEsdeveniments {
             }
             case "Comprimido": {
                 File archivoOutput = prog.getModelo().getFicheroOutput();
-                printFileSize(archivoOutput);
-                String peso = printFileSize(archivoOutput);
+                printFileSize(archivoOutput.length());
+                String peso = printFileSize(archivoOutput.length());
                 comprimido.setText("El archivo Output pesa " + peso);
-                break;
-            }
-            case "Entropia": {
-                String entropia = String.format("%.3f", prog.getModelo().getEntropia());
-                String entropiaReal = String.format("%.3f", prog.getModelo().getEntropiaReal());
-                this.entropia.setText("Entropia Teorica: " + entropia + " bits/caracter" + 
-                        "\tEntropia Real: "+ entropiaReal + " bits/caracter");
                 break;
             }
             default:
@@ -178,14 +200,13 @@ public class Vista extends JFrame implements PerEsdeveniments {
     }
 
     /**
-     * Método que a partir del tamaño del fichero en bytes, hace la conversión
-     * a kilobytes, megabytes, etc.
-     * 
+     * Método que a partir del tamaño del fichero en bytes, hace la conversión a
+     * kilobytes, megabytes, etc.
+     *
      * @param file
      * @return
      */
-    public static String printFileSize(File file) {
-        long bytes = file.length();
+    public static String printFileSize(Long bytes) {
         long kilobytes = (bytes / 1024);
         long megabytes = (kilobytes / 1024);
         long gigabytes = (megabytes / 1024);
@@ -208,13 +229,13 @@ public class Vista extends JFrame implements PerEsdeveniments {
 
     /**
      * Método notificar de la interfaz de eventos
-     * 
-     * Puede recibir los siguientes eventos:
-     * - "Fichero Subido": llama a updateEtiqueta("Original")
-     * - "Fichero Eliminado": llama a updateEtiqueta("Original eliminado")
-     * - "Compresión realizada": llama a updateEtiqueta("Comprimido")
-     * - "Entropia": llama a updateEtiqueta("Entropia")
-     * 
+     *
+     * Puede recibir los siguientes eventos: - "Fichero Subido": llama a
+     * updateEtiqueta("Original") - "Fichero Eliminado": llama a
+     * updateEtiqueta("Original eliminado") - "Compresión realizada": llama a
+     * updateEtiqueta("Comprimido") - "Entropia": llama a
+     * updateEtiqueta("Entropia")
+     *
      * @param s
      */
     @Override
@@ -226,8 +247,6 @@ public class Vista extends JFrame implements PerEsdeveniments {
         } else if (s.startsWith("Compresion realizada")) {
             panelInferior.setIndeterminate(false);
             updateEtiqueta("Comprimido");
-        } else if (s.startsWith("Entropia")) {
-            updateEtiqueta("Entropia");
         }
     }
 }

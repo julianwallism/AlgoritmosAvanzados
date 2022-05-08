@@ -14,13 +14,12 @@ public class Modelo implements PerEsdeveniments {
     private File ficheroInput;
     private File ficheroOutput;
     private int retornSelector;
-    private double time, entropia, entropiaReal;
+    private double entropia, entropiaReal, expectedSize;
     private int bufferSize = 32;
     private HashMap<Byte, String> codes;
 
     public Modelo(main p) {
         prog = p;
-        time = 0.0;
     }
 
     /**
@@ -65,19 +64,6 @@ public class Modelo implements PerEsdeveniments {
         this.retornSelector = retornSelector;
     }
 
-    /**
-     * Getter de time
-     */
-    public double getTime() {
-        return time;
-    }
-
-    /**
-     * Setter de time
-     */
-    public void setTime(Double time) {
-        this.time = time;
-    }
 
     /**
      * Getter de entropia
@@ -107,6 +93,22 @@ public class Modelo implements PerEsdeveniments {
         this.entropiaReal = entropiaReal;
     }
 
+    /**
+     * Getter de expectedSize
+     */
+    public double getExpectedSize() {
+        return expectedSize;
+    }
+    
+    /**
+     * Setter de expectedSize
+     */
+    public void setExpectedSize(double expectedSize) {
+        this.expectedSize = expectedSize;
+    }
+
+    
+    
     /**
      * Getter de freq
      */

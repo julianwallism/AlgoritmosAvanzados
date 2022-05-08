@@ -1,9 +1,0 @@
-********************** Error date: Sun May 01 01:09:16 CEST 2022
-javax.imageio.IIOException: Can't read input file!
-	at java.desktop/javax.imageio.ImageIO.read(ImageIO.java:1310)
-	at capitol4.vista.PanellCentral.<init>(PanellCentral.java:46)
-	at capitol4.vista.Vista.<init>(Vista.java:29)
-	at capitol4.main.inicio(main.java:20)
-	at capitol4.main.main(main.java:24)
-********************** End error report
-

@@ -20,7 +20,7 @@ import java.util.PriorityQueue;
 public class Control extends Thread implements PerEsdeveniments {
 
     private final main prog;
-    private int lengthCode = 0, numBytes = 1;
+    private int lengthCode = 0;
     private HashMap<Byte, String> codes;
 
     public Control(main p) {
@@ -72,14 +72,16 @@ public class Control extends Thread implements PerEsdeveniments {
             // para leer el ficheroInput; un oos del ficheroOutput, para escribir
             // el árbol de Huffman serializado; y un fos del ficheroOutput, para
             // escribir el fichero comprimido.
-            FileInputStream fis = new FileInputStream(ficheroInput);
-            FileOutputStream fos = new FileOutputStream(ficheroOutput);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
 
             // Lo primero que haremos será escribir el offset del último byte,
             // que de momento será 0, luego escribiremos el árbol de Huffman.
+            FileOutputStream fos = new FileOutputStream(ficheroOutput);
             fos.write(0);
+
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(root);
+
+            FileInputStream fis = new FileInputStream(ficheroInput);
 
             // Para realizar la escritura del fichero comprimido, necesitaremos:
             // un int que almacenará el número de bytes leídos, un array de bytes
@@ -137,10 +139,11 @@ public class Control extends Thread implements PerEsdeveniments {
             // Cerramos los ficheros
             fis.close();
             fos.close();
-            entropy(freq);
             // Hacemos un set del ficheroOutput
             prog.getModelo().setFicheroOutput(ficheroOutput);
             prog.getModelo().setCodes(codes);
+            entropy(freq);
+            expectedSize(freq);
             // Notificamos al programa que se ha completado la compresión
             prog.notificar("Compresion realizada");
         } catch (IOException e) {
@@ -162,6 +165,7 @@ public class Control extends Thread implements PerEsdeveniments {
         String extension = ficheroInput.getName().substring(ficheroInput.getName().indexOf("."),
                 ficheroInput.getName().lastIndexOf("."));
         String nombreFichero = ficheroInput.getName().substring(0, ficheroInput.getName().indexOf("."));
+
         File ficheroOutput = new File(nombreFichero + "_Descomprimido" + extension);
         try {
             // Abrimos un fis para el ficheroInput y un fos para el ficheroOutput
@@ -190,6 +194,11 @@ public class Control extends Thread implements PerEsdeveniments {
                 for (int i = 0; i < valorRetorno; i++) {
                     buffAux += String.format("%8s", Integer.toBinaryString(buffer[i] & 0xFF)).replace(' ', '0');
                 }
+                // Si valor retorno es menor que bufferSize, borramos los ultimos "offset" bits
+                // de buffAux
+                if (valorRetorno < bufferSize && valorRetorno > offset) {
+                    buffAux = buffAux.substring(0, buffAux.length() - offset);
+                }
 
                 // Mientras no se haya llegado al final del buffer
                 while (ret != null) {
@@ -208,7 +217,7 @@ public class Control extends Thread implements PerEsdeveniments {
             fis.close();
             ois.close();
             fos.close();
-
+            prog.getModelo().setFicheroOutput(ficheroOutput);
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error");
         }
@@ -237,7 +246,6 @@ public class Control extends Thread implements PerEsdeveniments {
                 // Leemos el fichero y lo almacenamos en el buffer,
                 // devuelve el número de bytes leídos
                 valorRetorn = fis.read(buffer);
-                numBytes+=valorRetorn;
                 // Recorremos el buffer. Si el byte no está en el hash lo añadimos,
                 // si está, incrementamos su frecuencia
                 for (int i = 0; i < valorRetorn; i++) {
@@ -315,19 +323,40 @@ public class Control extends Thread implements PerEsdeveniments {
     }
 
     // Method that calculates the entropy
-    public void entropy(HashMap<Byte, Integer> freq) {
+    private void entropy(HashMap<Byte, Integer> freq) {
         double entropy = 0;
-        // For each byte in freq get their frequency
+        File input = prog.getModelo().getFicheroInput();
+        File output = prog.getModelo().getFicheroOutput();
 
         for (Map.Entry<Byte, Integer> entry : freq.entrySet()) {
-            // Calculate the probability of the byte
-            double probability = (double) entry.getValue() / numBytes;
+            double probability = (double) entry.getValue() / input.length();
             entropy += probability * (Math.log(probability) / Math.log(2));
         }
-        numBytes=0;
         entropy = -entropy;
         prog.getModelo().setEntropia(entropy);
-        prog.notificar("Entropia");
+
+        entropy = 0;
+        for (Map.Entry<Byte, Integer> entry : freq.entrySet()) {
+            double probability = (double) entry.getValue() / output.length();
+            entropy += probability * (Math.log(probability) / Math.log(2));
+        }
+        entropy = -entropy;
+        prog.getModelo().setEntropiaReal(entropy);
+    }
+
+    /**
+     * Método que calcula el tamaño esperado del fichero de output mediante a la
+     * tabla de frecuencias
+     *
+     * @param freq
+     */
+    private void expectedSize(HashMap<Byte, Integer> freq) {
+        double expectedSize = 0;
+        for (Map.Entry<Byte, Integer> entry : freq.entrySet()) {
+            expectedSize += entry.getValue() * codes.get(entry.getKey()).length();
+        }
+        expectedSize = expectedSize / 8;
+        prog.getModelo().setExpectedSize(expectedSize);
     }
 
     /**
