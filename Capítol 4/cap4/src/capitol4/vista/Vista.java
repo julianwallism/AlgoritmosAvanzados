@@ -186,7 +186,7 @@ public class Vista extends JFrame implements PerEsdeveniments {
                 comprimido.setText("");
                 break;
             }
-            case "Comprimido": {
+            case "Realizado": {
                 File archivoOutput = prog.getModelo().getFicheroOutput();
                 printFileSize(archivoOutput.length());
                 String peso = printFileSize(archivoOutput.length());
@@ -245,9 +245,10 @@ public class Vista extends JFrame implements PerEsdeveniments {
             updateEtiqueta("Original eliminado");
         } else if (s.startsWith("Compresion realizada")) {
             panelInferior.setIndeterminate(false);
-            updateEtiqueta("Comprimido");
+            updateEtiqueta("Realizado");
         } else if (s.startsWith("Descompresion realizada")) {
             panelInferior.setIndeterminate(false);
+            updateEtiqueta("Realizado");
         }
     }
 }

@@ -13,7 +13,6 @@ public class Modelo implements PerEsdeveniments {
     private main prog;
     private File ficheroInput;
     private File ficheroOutput;
-    private int retornSelector;
     private double entropia, entropiaReal, expectedSize;
     private int bufferSize = 32;
     private HashMap<Byte, String> codes;
@@ -24,6 +23,7 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Getter de ficheroInput
+     * @return 
      */
     public File getFicheroInput() {
         return ficheroInput;
@@ -31,6 +31,7 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Setter de ficheroInput
+     * @param ficheroInput
      */
     public void setFicheroInput(File ficheroInput) {
         this.ficheroInput = ficheroInput;
@@ -38,6 +39,7 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Getter de ficheroOutput
+     * @return 
      */
     public File getFicheroOutput() {
         return ficheroOutput;
@@ -45,28 +47,15 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Setter de ficheroOutput
+     * @param ficheroOutput
      */
     public void setFicheroOutput(File ficheroOutput) {
         this.ficheroOutput = ficheroOutput;
     }
 
     /**
-     * Getter de retornSelector
-     */
-    public int getRetornSelector() {
-        return retornSelector;
-    }
-
-    /**
-     * Setter de retornSelector
-     */
-    public void setRetornSelector(int retornSelector) {
-        this.retornSelector = retornSelector;
-    }
-
-
-    /**
      * Getter de entropia
+     * @return 
      */
     public double getEntropia() {
         return entropia;
@@ -74,6 +63,7 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Setter de entropia
+     * @param entropia
      */
     public void setEntropia(Double entropia) {
         this.entropia = entropia;
@@ -81,6 +71,7 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Getter de entropiaReal
+     * @return 
      */
     public double getEntropiaReal() {
         return entropiaReal;
@@ -88,6 +79,7 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Setter de entropiaReal
+     * @param entropiaReal
      */
     public void setEntropiaReal(Double entropiaReal) {
         this.entropiaReal = entropiaReal;
@@ -95,6 +87,7 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Getter de expectedSize
+     * @return 
      */
     public double getExpectedSize() {
         return expectedSize;
@@ -102,15 +95,15 @@ public class Modelo implements PerEsdeveniments {
     
     /**
      * Setter de expectedSize
+     * @param expectedSize
      */
     public void setExpectedSize(double expectedSize) {
         this.expectedSize = expectedSize;
-    }
-
-    
+    }   
     
     /**
      * Getter de freq
+     * @return 
      */
     public int getBufferSize() {
         return bufferSize;
@@ -118,6 +111,7 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Setter de freq
+     * @param bufferSize
      */
     public void setBufferSize(int bufferSize) {
         this.bufferSize = bufferSize;
@@ -125,6 +119,7 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Getter de codes
+     * @return 
      */
     public HashMap<Byte, String> getCodes() {
         return codes;
@@ -132,22 +127,10 @@ public class Modelo implements PerEsdeveniments {
 
     /**
      * Setter de codes
+     * @param codes
      */
     public void setCodes(HashMap<Byte, String> codes) {
         this.codes = codes;
-    }
-
-    /**
-     * Método que calcula la entropia Real en base al tamaño del fichero input,
-     * el del output y la entropia teorica.
-     * 
-     * Nos basamos en esta fórmula:
-     *  EntropiaReal = (8 / EntropiaTeorica) / (TamañoFicheroInput / TamañoFicheroOutput)
-     */
-    public void entropiaReal(){
-        long bytesInput = ficheroInput.length();
-        long bytesOutput = ficheroOutput.length();
-        this.entropiaReal = (8.0 / this.entropia) / (bytesInput / bytesOutput);
     }
 
     /**

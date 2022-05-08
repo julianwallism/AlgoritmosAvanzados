@@ -324,7 +324,11 @@ public class Control extends Thread implements PerEsdeveniments {
         return b;
     }
 
-    // Method that calculates the entropy
+    /**
+     * Método que calcula la entropia teórica y la entropia real de la compresión
+     * 
+     * @param freq 
+     */
     private void entropy(HashMap<Byte, Integer> freq) {
         double entropy = 0;
         File input = prog.getModelo().getFicheroInput();
@@ -337,22 +341,12 @@ public class Control extends Thread implements PerEsdeveniments {
         entropy = -entropy;
         prog.getModelo().setEntropia(entropy);
 
-        entropy = 0;
-        for (Map.Entry<Byte, Integer> entry : freq.entrySet()) {
-            double probability = (double) entry.getValue() / output.length();
-            entropy += probability * (Math.log(probability) / Math.log(2));
-        }
-
-        double entropiaReal;
         double numSimbolos = 0.0;
-        // Calculate the number of symbols in the file given the frequency map
         for (Map.Entry<Byte, Integer> entry : freq.entrySet()) {
             numSimbolos += (double) entry.getValue();
 
         }
-        System.out.println(output.length() * 8);
-        System.out.println(numSimbolos);
-        entropiaReal = (output.length() * 8) / numSimbolos;
+        double entropiaReal = (output.length() * 8) / numSimbolos;
         prog.getModelo().setEntropiaReal(entropiaReal);
     }
 

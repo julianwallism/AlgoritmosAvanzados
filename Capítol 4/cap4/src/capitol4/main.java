@@ -51,27 +51,6 @@ public class main implements PerEsdeveniments {
     }
 */
 
-    public static String printFileSize(Long bytes) {
-        long kilobytes = (bytes / 1024);
-        long megabytes = (kilobytes / 1024);
-        long gigabytes = (megabytes / 1024);
-        long terabytes = (gigabytes / 1024);
-
-        if (terabytes != 0) {
-            return terabytes + " TB";
-        } else if (gigabytes != 0) {
-            return gigabytes + " GB";
-        } else if (megabytes != 0) {
-            return megabytes + " MB";
-        } else if (kilobytes != 0) {
-            return kilobytes + " KB";
-        } else if (bytes != 0) {
-            return bytes + " B";
-        } else {
-            return "0";
-        }
-    }
-
     public static void main(String[] args) {
         (new main()).inicio();
     }
