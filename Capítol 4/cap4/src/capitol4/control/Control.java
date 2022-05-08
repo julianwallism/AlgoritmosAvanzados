@@ -340,8 +340,18 @@ public class Control extends Thread implements PerEsdeveniments {
             double probability = (double) entry.getValue() / output.length();
             entropy += probability * (Math.log(probability) / Math.log(2));
         }
-        entropy = -entropy;
-        prog.getModelo().setEntropiaReal(entropy);
+
+        double entropiaReal;
+        double numSimbolos = 0.0;
+        // Calculate the number of symbols in the file given the frequency map
+        for (Map.Entry<Byte, Integer> entry : freq.entrySet()) {
+            numSimbolos += (double) entry.getValue();
+
+        }
+        System.out.println(output.length() * 8);
+        System.out.println(numSimbolos);
+        entropiaReal = (output.length() * 8) / numSimbolos;
+        prog.getModelo().setEntropiaReal(entropiaReal);
     }
 
     /**
