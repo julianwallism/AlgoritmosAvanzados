@@ -218,6 +218,8 @@ public class Control extends Thread implements PerEsdeveniments {
             ois.close();
             fos.close();
             prog.getModelo().setFicheroOutput(ficheroOutput);
+            // Notificamos al programa que se ha completado la descompresión
+            prog.notificar("Descompresion realizada");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error");
         }

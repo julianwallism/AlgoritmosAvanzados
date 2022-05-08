@@ -79,7 +79,7 @@ public class main implements PerEsdeveniments {
     // Funció símple de la comunicació per Patró d'esdeveniments
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Fichero subido") || s.startsWith("Compresion realizada") || s.startsWith("Entropia")) {
+        if (s.startsWith("Fichero subido") || s.startsWith("Compresion realizada") || s.startsWith("Entropia") || s.startsWith("Descompresion realizada")) {
             vis.notificar(s);
         } else if (s.startsWith("Comprime") || s.startsWith("Descomprime") || s.startsWith("Aturar")) {
             con.notificar(s);

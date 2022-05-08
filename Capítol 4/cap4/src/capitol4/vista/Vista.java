@@ -246,6 +246,8 @@ public class Vista extends JFrame implements PerEsdeveniments {
         } else if (s.startsWith("Compresion realizada")) {
             panelInferior.setIndeterminate(false);
             updateEtiqueta("Comprimido");
+        } else if (s.startsWith("Descompresion realizada")) {
+            panelInferior.setIndeterminate(false);
         }
     }
 }
