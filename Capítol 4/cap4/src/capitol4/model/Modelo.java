@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 /**
  *
- * @authors Dawid Roch & Julià Wallis
+ * @authors Dawid Roch, Julià Wallis y Víctor Blanes
  */
 public class Modelo implements PerEsdeveniments {
     private main prog;

@@ -6,7 +6,7 @@ import capitol4.vista.Vista;
 
 /**
  *
- * @authors Dawid Roch & Julià Wallis
+ * @authors Dawid Roch, Julià Wallis y Víctor Blanes
  */
 public class main implements PerEsdeveniments {
 

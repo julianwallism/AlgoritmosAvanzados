@@ -16,7 +16,7 @@ import java.util.PriorityQueue;
 
 /**
  *
- * @authors Dawid Roch & Julià Wallis
+ * @authors Dawid Roch, Julià Wallis y Víctor Blanes
  */
 public class Control extends Thread implements PerEsdeveniments {
 

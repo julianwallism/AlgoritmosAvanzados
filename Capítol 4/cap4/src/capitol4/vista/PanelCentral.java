@@ -30,7 +30,7 @@ import javax.swing.LayoutStyle;
 
 /**
  *
- * @authors Dawid Roch & Julià Wallis
+ * @authors Dawid Roch, Julià Wallis y Víctor Blanes
  */
 public class PanelCentral extends JPanel {
     public static final int FPS = 24;
