@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class Vista extends JFrame implements PerEsdeveniments {
@@ -42,7 +44,6 @@ public class Vista extends JFrame implements PerEsdeveniments {
         central.add(panelCentral);
 
         panelInferior = new JProgressBar();
-        panelInferior.setBorderPainted(true);
 
         comprimir = new JButton("Comprimir");
         descomprimir = new JButton("Descomprimir");

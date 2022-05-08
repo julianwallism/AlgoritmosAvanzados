@@ -1,5 +1,6 @@
 package capitol4.control;
 
+import static capitol4.MeuError.informaError;
 import capitol4.main;
 import capitol4.PerEsdeveniments;
 import java.io.File;
@@ -144,11 +145,11 @@ public class Control extends Thread implements PerEsdeveniments {
             prog.getModelo().setCodes(codes);
             entropy(freq);
             expectedSize(freq);
-            // Notificamos al programa que se ha completado la compresión
-            prog.notificar("Compresion realizada");
         } catch (IOException e) {
-            System.out.println("Error");
+            informaError(e);
         }
+        // Notificamos al programa que se ha completado la compresión
+        prog.notificar("Compresion realizada");
     }
 
     /**
@@ -218,11 +219,11 @@ public class Control extends Thread implements PerEsdeveniments {
             ois.close();
             fos.close();
             prog.getModelo().setFicheroOutput(ficheroOutput);
-            // Notificamos al programa que se ha completado la descompresión
-            prog.notificar("Descompresion realizada");
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error");
+            informaError(e);
         }
+        // Notificamos al programa que se ha completado la descompresión
+        prog.notificar("Descompresion realizada");
     }
 
     /**
@@ -377,10 +378,10 @@ public class Control extends Thread implements PerEsdeveniments {
     public void notificar(String s) {
         if (s.startsWith("Comprime")) {
             compress();
-            System.out.println("Compressió iniciada");
+            System.out.println("Compresión iniciada");
         } else if (s.startsWith("Descomprime")) {
             decompress();
-            System.out.println("Descompression iniciada");
+            System.out.println("Descompresión iniciada");
         }
     }
 }
