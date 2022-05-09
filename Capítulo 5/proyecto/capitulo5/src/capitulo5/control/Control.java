@@ -4,7 +4,6 @@ import capitulo5.PorEventos;
 import capitulo5.main;
 
 /**
- *
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
 public class Control extends Thread implements PorEventos {
@@ -17,6 +16,14 @@ public class Control extends Thread implements PorEventos {
     // Método notificar de la intefaz por eventos
     @Override
     public void notificar(String s) {
-        
+        if (s.startsWith("Corregir texto")) {
+            this.corregirTexto();
+        } else if (s.startsWith("Texto guardado")) {
+            this.analizarTexto();
+        }
     }
+    
+    private void corregirTexto() {}
+    
+    private void analizarTexto() {}
 }

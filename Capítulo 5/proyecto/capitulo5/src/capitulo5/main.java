@@ -8,8 +8,8 @@ import capitulo5.vista.Vista;
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
 public class main implements PorEventos {
-    private Modelo mod; // Puntero al Modelo
-    private Vista vis; // Puntero a la Vista
+    private Modelo mod;  // Puntero al Modelo
+    private Vista vis;   // Puntero a la Vista
     private Control con; // Puntero al Control
 
     // Construcción del esquema MVC
@@ -38,6 +38,8 @@ public class main implements PorEventos {
     // Función para gestionar el patrón de eventos centralizado
     @Override
     public void notificar(String s) {
-        
+        if (s.startsWith("Texto guardado") || s.startsWith("Corregir texto")) {
+            this.con.notificar(s);
+        }
     }
 }

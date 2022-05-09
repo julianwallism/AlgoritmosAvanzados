@@ -3,46 +3,129 @@ package capitulo5.vista;
 import static capitulo5.Error.informaError;
 import capitulo5.PorEventos;
 import capitulo5.main;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 
+/**
+ * @authors Víctor Blanes, Dawid Roch y Julià Wallis
+ */
 public class Vista extends JFrame implements PorEventos {
     private main prog;
-    private JPanel panelSuperior, panelInferior;
-    private PanelCentral panelCentral;
+    private JButton botonCorregir, botonGuardar;
+    private JLabel labelIdioma, labelPalabrasErroneas, labelPalabrasTotales;
+    private JScrollPane jScrollPane1;
+    private JTextPane textPane;
+    private JProgressBar barraProgreso;
+    private StyleContext styleContextCorrectas, styleContextErroneas;
+    private Style styleCorrectas, styleErroneas;
+    private DefaultStyledDocument document;
 
     public Vista(String titol, main p) {
         this.prog = p;
         this.setTitle(titol);
         this.setIconImage(new ImageIcon("logo.png").getImage());
-        panelCentral = new PanelCentral(p);
-        panelSuperior = new JPanel();
-        panelInferior = new JPanel();
+        this.initComponents();
+        try {
+            this.document.insertString(0, "Esto es una prueba de palabras incorrectas.\n", styleErroneas);
+            this.document.insertString(this.document.getLength(), "Esto es una prueba de palabras correctas.", styleCorrectas);
+        } catch (BadLocationException ex) {
+            informaError(ex);
+        }
+    }
+    
+    private void initComponents() {
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        jScrollPane1 = new JScrollPane();
+        document = new DefaultStyledDocument();
+        textPane = new JTextPane(document);
+        botonCorregir = new JButton();
+        botonGuardar = new JButton();
+        labelPalabrasTotales = new JLabel();
+        labelPalabrasErroneas = new JLabel();
+        labelIdioma = new JLabel();
+        barraProgreso = new JProgressBar();
+        styleContextCorrectas = new StyleContext();
+        styleCorrectas = styleContextCorrectas.addStyle("correctas", null);
+        StyleConstants.setForeground(styleCorrectas, Color.black);
+        styleContextErroneas = new StyleContext();
+        styleErroneas = styleContextErroneas.addStyle("erroneas", null);
+        StyleConstants.setForeground(styleErroneas, Color.red);
+        StyleConstants.setUnderline(styleErroneas, true);
 
-        this.setLayout(new BorderLayout());
-        this.add(panelSuperior, BorderLayout.NORTH);
-        this.add(panelCentral, BorderLayout.CENTER);
-        this.add(panelInferior, BorderLayout.SOUTH);
-        this.setPreferredSize(new Dimension(800, 600));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        textPane.setFont(new java.awt.Font("Dubai", 0, 14));
+        jScrollPane1.setViewportView(textPane);
 
+        botonGuardar.setText("Guardar texto");
+        botonGuardar.addActionListener((ActionEvent e) -> {
+          this.prog.getModelo().setTexto(this.textPane.getText());
+          this.prog.notificar("Texto guardado");
+        });
+        botonCorregir.setText("Corregir");
+        botonCorregir.addActionListener((ActionEvent e) -> {
+          this.prog.notificar("Corregir texto");
+        });
+
+        labelPalabrasTotales.setText("Palabras totales: "+this.prog.getModelo().getnPalabrasTotales());
+        labelPalabrasErroneas.setText("Palabras erróneas: "+this.prog.getModelo().getnPalabrasErroneas());
+        labelIdioma.setText("Idioma: "+this.prog.getModelo().getIdioma());
+        barraProgreso.setIndeterminate(true);
+
+        GroupLayout layout = new GroupLayout(this.getContentPane());
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(100, 100, 100)
+                .addComponent(botonGuardar)
+                .addGap(25, 25, 25)
+                .addComponent(botonCorregir)
+                .addGap(100, 100, 100)
+                .addComponent(labelIdioma)
+                .addGap(25, 25, 25)
+                .addComponent(labelPalabrasTotales)
+                .addGap(25, 25, 25)
+                .addComponent(labelPalabrasErroneas)
+                .addGap(100, 100, 100))
+            .addComponent(barraProgreso, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonGuardar, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonCorregir, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelPalabrasTotales)
+                    .addComponent(labelPalabrasErroneas)
+                    .addComponent(labelIdioma))
+                .addGap(25, 25, 25)
+                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 465, GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(barraProgreso, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE))
+        );
+        
+        this.getContentPane().setLayout(layout);
+        this.pack();
+        this.setResizable(false);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
                 | UnsupportedLookAndFeelException ex) {
             informaError(ex);
         }
-        this.pack();
-        this.setResizable(false);
+        SwingUtilities.updateComponentTreeUI(this);
         this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    /**
-     * Método notificar de la interfaz de eventos
-     *
-     * @param s
-     */
+    // Método notificar de la interfaz de eventos
     @Override
     public void notificar(String s) {
         
