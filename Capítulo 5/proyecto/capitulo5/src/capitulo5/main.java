@@ -38,7 +38,7 @@ public class main implements PorEventos {
     // Función para gestionar el patrón de eventos centralizado
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Texto guardado") || s.startsWith("Corregir texto")) {
+        if (s.startsWith("Texto guardado") || s.startsWith("Comprobar texto") || s.startsWith("Corregir palabras")) {
             this.con.notificar(s);
         }
     }

@@ -17,7 +17,7 @@ import javax.swing.text.StyleContext;
  */
 public class Vista extends JFrame implements PorEventos {
     private main prog;
-    private JButton botonCorregir, botonGuardar;
+    private JButton botonCorregir, botonGuardar, botonComprobar;
     private JLabel labelIdioma, labelPalabrasErroneas, labelPalabrasTotales;
     private JScrollPane jScrollPane1;
     private JTextPane textPane;
@@ -45,6 +45,7 @@ public class Vista extends JFrame implements PorEventos {
         jScrollPane1 = new JScrollPane();
         document = new DefaultStyledDocument();
         textPane = new JTextPane(document);
+        botonComprobar = new JButton();
         botonCorregir = new JButton();
         botonGuardar = new JButton();
         labelPalabrasTotales = new JLabel();
@@ -64,19 +65,28 @@ public class Vista extends JFrame implements PorEventos {
         jScrollPane1.setViewportView(textPane);
 
         botonGuardar.setText("Guardar texto");
+        botonGuardar.setBackground(new Color(255, 255, 255));
         botonGuardar.addActionListener((ActionEvent e) -> {
           this.prog.getModelo().setTexto(this.textPane.getText());
           this.prog.notificar("Texto guardado");
         });
-        botonCorregir.setText("Corregir");
+        botonComprobar.setText("Comprobar texto");
+        botonComprobar.setBackground(new Color(255, 255, 255));
+        botonComprobar.addActionListener((ActionEvent e) -> {
+          this.prog.notificar("Comprobar texto");
+        });
+        botonCorregir.setText("Corregir palabras erróneas");
+        botonCorregir.setBackground(new Color(255, 255, 255));
         botonCorregir.addActionListener((ActionEvent e) -> {
-          this.prog.notificar("Corregir texto");
+          this.prog.notificar("Corregir palabras");
         });
 
         labelPalabrasTotales.setText("Palabras totales: "+this.prog.getModelo().getnPalabrasTotales());
         labelPalabrasErroneas.setText("Palabras erróneas: "+this.prog.getModelo().getnPalabrasErroneas());
         labelIdioma.setText("Idioma: "+this.prog.getModelo().getIdioma());
         barraProgreso.setIndeterminate(true);
+        barraProgreso.setBackground(new Color(0, 255, 255));
+        barraProgreso.setForeground(new Color(0, 51, 204));
 
         GroupLayout layout = new GroupLayout(this.getContentPane());
         layout.setHorizontalGroup(
@@ -85,6 +95,8 @@ public class Vista extends JFrame implements PorEventos {
             .addGroup(layout.createSequentialGroup()
                 .addGap(100, 100, 100)
                 .addComponent(botonGuardar)
+                .addGap(25, 25, 25)
+                .addComponent(botonComprobar)
                 .addGap(25, 25, 25)
                 .addComponent(botonCorregir)
                 .addGap(100, 100, 100)
@@ -102,6 +114,7 @@ public class Vista extends JFrame implements PorEventos {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonGuardar, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonComprobar, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
                     .addComponent(botonCorregir, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelPalabrasTotales)
                     .addComponent(labelPalabrasErroneas)
@@ -115,13 +128,6 @@ public class Vista extends JFrame implements PorEventos {
         this.getContentPane().setLayout(layout);
         this.pack();
         this.setResizable(false);
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-                | UnsupportedLookAndFeelException ex) {
-            informaError(ex);
-        }
-        SwingUtilities.updateComponentTreeUI(this);
         this.setVisible(true);
     }
 

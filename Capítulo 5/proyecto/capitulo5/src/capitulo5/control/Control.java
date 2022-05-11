@@ -16,14 +16,18 @@ public class Control extends Thread implements PorEventos {
     // Método notificar de la intefaz por eventos
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Corregir texto")) {
-            this.corregirTexto();
-        } else if (s.startsWith("Texto guardado")) {
+        if (s.startsWith("Texto guardado")) {
             this.analizarTexto();
+        } else if (s.startsWith("Comprobar texto")) {
+            this.comprobarTexto();
+        } else if (s.startsWith("Corregir palabras")) {
+            this.corregirPalabras();
         }
     }
     
-    private void corregirTexto() {}
-    
     private void analizarTexto() {}
+    
+    private void comprobarTexto() {}
+    
+    private void corregirPalabras() {}
 }
