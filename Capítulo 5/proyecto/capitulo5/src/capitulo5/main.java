@@ -40,6 +40,8 @@ public class main implements PorEventos {
     public void notificar(String s) {
         if (s.startsWith("Texto guardado") || s.startsWith("Comprobar texto") || s.startsWith("Corregir palabras")) {
             this.con.notificar(s);
+        } else if (s.startsWith("Idioma detectado") || s.startsWith("Texto comprobado")) {
+            this.vis.notificar(s);
         }
     }
 }

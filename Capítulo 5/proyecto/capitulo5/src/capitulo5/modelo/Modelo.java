@@ -12,13 +12,10 @@ import java.util.Map;
 public class Modelo implements PorEventos {
     private main prog;
     private String texto = "";
-    private Idioma idioma = Idioma.ES;
+    private Idioma idioma = Idioma.DESCONOCIDO;
     private File diccionario = null;
-    private int nPalabrasTotales = 0, nPalabrasErroneas = 0;
-    // esto seguramente se tenga que implementar de otra forma pero para tener una
-    // idea inicial
-    private String[] palabrasErroneas, palabrasTexto;
-    private Map<String, ArrayList<String>> sugerencias;
+    private Palabra[] palabrasTexto = {};
+    private Map<Palabra, ArrayList<String>> sugerencias;
 
     public Modelo(main p) {
         prog = p;
@@ -48,43 +45,19 @@ public class Modelo implements PorEventos {
         this.diccionario = diccionario;
     }
 
-    public int getnPalabrasTotales() {
-        return nPalabrasTotales;
-    }
-
-    public void setnPalabrasTotales(int nPalabrasTotales) {
-        this.nPalabrasTotales = nPalabrasTotales;
-    }
-
-    public int getnPalabrasErroneas() {
-        return nPalabrasErroneas;
-    }
-
-    public void setnPalabrasErroneas(int nPalabrasErroneas) {
-        this.nPalabrasErroneas = nPalabrasErroneas;
-    }
-
-    public String[] getPalabrasErroneas() {
-        return palabrasErroneas;
-    }
-
-    public void setPalabrasErroneas(String[] palabrasErroneas) {
-        this.palabrasErroneas = palabrasErroneas;
-    }
-
-    public String[] getPalabrasTexto() {
+    public Palabra[] getPalabrasTexto() {
         return palabrasTexto;
     }
 
-    public void setPalabrasTexto(String[] palabrasTexto) {
+    public void setPalabrasTexto(Palabra[] palabrasTexto) {
         this.palabrasTexto = palabrasTexto;
     }
 
-    public Map<String, ArrayList<String>> getSugerencias() {
+    public Map<Palabra, ArrayList<String>> getSugerencias() {
         return sugerencias;
     }
 
-    public void setSugerencias(Map<String, ArrayList<String>> sugerencias) {
+    public void setSugerencias(Map<Palabra, ArrayList<String>> sugerencias) {
         this.sugerencias = sugerencias;
     }
 

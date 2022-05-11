@@ -3,6 +3,7 @@ package capitulo5.vista;
 import static capitulo5.Error.informaError;
 import capitulo5.PorEventos;
 import capitulo5.main;
+import capitulo5.modelo.Palabra;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
@@ -31,12 +32,6 @@ public class Vista extends JFrame implements PorEventos {
         this.setTitle(titol);
         this.setIconImage(new ImageIcon("logo.png").getImage());
         this.initComponents();
-        try {
-            this.document.insertString(0, "Esto es una prueba de palabras incorrectas.\n", styleErroneas);
-            this.document.insertString(this.document.getLength(), "Esto es una prueba de palabras correctas.", styleCorrectas);
-        } catch (BadLocationException ex) {
-            informaError(ex);
-        }
     }
     
     private void initComponents() {
@@ -81,8 +76,8 @@ public class Vista extends JFrame implements PorEventos {
           this.prog.notificar("Corregir palabras");
         });
 
-        labelPalabrasTotales.setText("Palabras totales: "+this.prog.getModelo().getnPalabrasTotales());
-        labelPalabrasErroneas.setText("Palabras erróneas: "+this.prog.getModelo().getnPalabrasErroneas());
+        labelPalabrasTotales.setText("Palabras totales: "+this.prog.getModelo().getPalabrasTexto().length);
+        labelPalabrasErroneas.setText("Palabras erróneas: "+this.prog.getControl().getPalabrasErroneas(this.prog.getModelo().getPalabrasTexto()).length);
         labelIdioma.setText("Idioma: "+this.prog.getModelo().getIdioma());
         barraProgreso.setIndeterminate(true);
         barraProgreso.setBackground(new Color(0, 255, 255));
@@ -134,6 +129,38 @@ public class Vista extends JFrame implements PorEventos {
     // Método notificar de la interfaz de eventos
     @Override
     public void notificar(String s) {
-        
+        if (s.startsWith("Idioma detectado")) {
+            this.labelIdioma.setText("Idioma: "+this.prog.getModelo().getIdioma().toString());
+            this.labelPalabrasTotales.setText("Palabras totales: "+this.prog.getModelo().getPalabrasTexto().length);
+        } else if (s.startsWith("Texto comprobado")) {
+            int erroneas = 0;
+            boolean esPrimera = true;
+            this.textPane.setText("");
+            for (Palabra palabra : this.prog.getModelo().getPalabrasTexto()) {
+                if (!esPrimera) {
+                    try {
+                        this.document.insertString(this.document.getLength(), " ", styleCorrectas);
+                    } catch (BadLocationException ex) {
+                        informaError(ex);
+                    }
+                }
+                if (palabra.isErronea()) {
+                    erroneas++;
+                    try {
+                        this.document.insertString(this.document.getLength(), palabra.getTexto(), styleErroneas);
+                    } catch (BadLocationException ex) {
+                        informaError(ex);
+                    }
+                } else {
+                    try {
+                        this.document.insertString(this.document.getLength(), palabra.getTexto(), styleCorrectas);
+                    } catch (BadLocationException ex) {
+                        informaError(ex);
+                    }
+                }
+                if (esPrimera) esPrimera = !esPrimera;
+            }
+            labelPalabrasErroneas.setText("Palabras erróneas: "+erroneas);
+        }
     }
 }
