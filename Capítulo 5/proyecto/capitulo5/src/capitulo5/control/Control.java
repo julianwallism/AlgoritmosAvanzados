@@ -16,24 +16,37 @@ import java.util.List;
 /**
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
-public class Control extends Thread implements PorEventos {
-
+public class Control implements PorEventos {
     private final main prog;
 
     public Control(main p) {
         this.prog = p;
     }
+    
+    public String[] readLines(File file) throws IOException {
+        FileReader fileReader = new FileReader(file.getName());
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        List<String> lines = new ArrayList<String>();
+        String line = null;
+        while ((line = bufferedReader.readLine()) != null) {
+            lines.add(line);
+        }
+        bufferedReader.close();
+        return lines.toArray(new String[lines.size()]);
+    }
 
     // Método notificar de la intefaz por eventos
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Texto guardado")) {
-            this.decideIdioma();
-        } else if (s.startsWith("Comprobar texto")) {
+        if (s.startsWith("Comprobar texto")) {
             this.decideIdioma();
             this.comprobarTexto();
-        } else if (s.startsWith("Corregir palabras")) {
-            this.corregirPalabras();
+            this.prog.notificar("Texto comprobado");
+        } else if (s.startsWith("Buscar sugerencias")) {
+            this.buscarSugerencias();
+        } else if (s.startsWith("Actualizar")) {
+            this.comprobarTexto();
+            this.prog.notificar("Actualizado");
         }
     }
 
@@ -67,27 +80,19 @@ public class Control extends Thread implements PorEventos {
             ind++;
         }
 
-        System.out.println(frec[0]);
-        System.out.println(frec[1]);
-        System.out.println(frec[2]);
-
         // En caso de empate ingles>catalan>español
         if (frec[0] == 0 && frec[1] == 0 && frec[2] == 0) {
             this.prog.getModelo().setIdioma(Idioma.DESCONOCIDO);
             this.prog.getModelo().setDiccionario(null);
-            System.out.println("Ninguno");
         } else if (frec[0] > frec[1] && frec[0] > frec[2]) {
             this.prog.getModelo().setIdioma(Idioma.ESPAÑOL);
             this.prog.getModelo().setDiccionario(esp);
-            System.out.println("Español");
         } else if (frec[1] >= frec[0] && frec[1] > frec[2]) {
             this.prog.getModelo().setIdioma(Idioma.CATALÁN);
             this.prog.getModelo().setDiccionario(cat);
-            System.out.println("Catalan");
         } else if (frec[2] >= frec[0] && frec[2] >= frec[1]) {
             this.prog.getModelo().setIdioma(Idioma.INGLÉS);
             this.prog.getModelo().setDiccionario(eng);
-            System.out.println("Ingles");
         }
     }
 
@@ -110,7 +115,6 @@ public class Control extends Thread implements PorEventos {
             if (!Arrays.asList(palabrasDiccionario).contains(palabra)) {
                 palabrasErroneasAux[ind] = palabra;
                 ind++;
-                System.out.println(palabra);
             }
         }
         String[] palabrasErroneas = new String[ind];
@@ -125,7 +129,7 @@ public class Control extends Thread implements PorEventos {
      * Given an array of incorrect words and a dictonary, this method corrects
      * the words using levenshtein distance.
      */
-    private void corregirPalabras() {
+    private void buscarSugerencias() {
         File dic = this.prog.getModelo().getDiccionario();
         // read all lines from file into string array
         String[] palabrasDiccionario = null;
@@ -149,9 +153,6 @@ public class Control extends Thread implements PorEventos {
                     sugerenciasPalabra.add(palabraDiccionario);
                 }
             }
-            // Print the suggestions for each word
-            System.out.println("Sugerencias para " + palabra + ": ");
-            System.out.println(sugerenciasPalabra);
             sugerencias.put(palabra, sugerenciasPalabra);
         }
         this.prog.getModelo().setSugerencias(sugerencias);
@@ -172,21 +173,5 @@ public class Control extends Thread implements PorEventos {
             }
         }
         return dist[word1.length][word2.length];
-    }
-
-    private char[] minusLastLetter(char[] word) {
-        return Arrays.copyOfRange(word, 0, word.length - 1);
-    }
-
-    public String[] readLines(File file) throws IOException {
-        FileReader fileReader = new FileReader(file.getName());
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        List<String> lines = new ArrayList<String>();
-        String line = null;
-        while ((line = bufferedReader.readLine()) != null) {
-            lines.add(line);
-        }
-        bufferedReader.close();
-        return lines.toArray(new String[lines.size()]);
     }
 }

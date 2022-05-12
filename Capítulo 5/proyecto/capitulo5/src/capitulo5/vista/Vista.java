@@ -5,18 +5,20 @@ import capitulo5.PorEventos;
 import capitulo5.main;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
+import javax.swing.text.Utilities;
 
 /**
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
 public class Vista extends JFrame implements PorEventos {
-
     private main prog;
     private JButton botonCorregir, botonComprobar;
     private JLabel labelIdioma, labelPalabrasErroneas, labelPalabrasTotales;
@@ -28,16 +30,10 @@ public class Vista extends JFrame implements PorEventos {
     private DefaultStyledDocument document;
 
     public Vista(String titol, main p) {
+        super(titol);
         this.prog = p;
-        this.setTitle(titol);
         this.setIconImage(new ImageIcon("logo.png").getImage());
         this.initComponents();
-        try {
-            this.document.insertString(0, "Esto es una prueba de palabras incorrectas.\n", styleErroneas);
-            this.document.insertString(this.document.getLength(), "Esto es una prueba de palabras correctas.", styleCorrectas);
-        } catch (BadLocationException ex) {
-            informaError(ex);
-        }
     }
 
     private void initComponents() {
@@ -46,6 +42,43 @@ public class Vista extends JFrame implements PorEventos {
         jScrollPane1 = new JScrollPane();
         document = new DefaultStyledDocument();
         textPane = new JTextPane(document);
+        textPane.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                try {
+                    String pal = null;
+                    int pt = textPane.viewToModel2D(evt.getPoint());
+                    int spt = Utilities.getWordStart(textPane, pt);
+                    int ept = Utilities.getWordEnd(textPane, pt);
+                    textPane.setSelectionStart(spt);
+                    textPane.setSelectionEnd(ept);
+                    pal = textPane.getSelectedText();
+                    for (String err : prog.getModelo().getPalabrasErroneas()) {
+                        if (err.equals(pal)) {
+                            abrirDialog(pal);
+                        }
+                    }
+                } catch (Exception e) {
+                    informaError(e);
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
         botonComprobar = new JButton();
         botonCorregir = new JButton();
         labelPalabrasTotales = new JLabel();
@@ -70,14 +103,14 @@ public class Vista extends JFrame implements PorEventos {
             this.prog.getModelo().setTexto(this.textPane.getText());
             this.prog.notificar("Comprobar texto");
         });
-        botonCorregir.setText("Corregir palabras erróneas");
+        botonCorregir.setText("Buscar sugerencias");
         botonCorregir.setBackground(new Color(255, 255, 255));
         botonCorregir.addActionListener((ActionEvent e) -> {
-            this.prog.notificar("Corregir palabras");
+            this.prog.notificar("Buscar sugerencias");
         });
 
-        labelPalabrasTotales.setText("Palabras totales: " + this.prog.getModelo().getnPalabrasTotales());
-        labelPalabrasErroneas.setText("Palabras erróneas: " + this.prog.getModelo().getnPalabrasErroneas());
+        labelPalabrasTotales.setText("Palabras totales: " + this.prog.getModelo().getPalabrasTexto().length);
+        labelPalabrasErroneas.setText("Palabras erróneas: " + this.prog.getModelo().getPalabrasErroneas().length);
         labelIdioma.setText("Idioma: " + this.prog.getModelo().getIdioma());
         barraProgreso.setIndeterminate(true);
         barraProgreso.setBackground(new Color(0, 255, 255));
@@ -122,10 +155,50 @@ public class Vista extends JFrame implements PorEventos {
         this.setResizable(false);
         this.setVisible(true);
     }
-
+    
     // Método notificar de la interfaz de eventos
     @Override
     public void notificar(String s) {
+        if (s.startsWith("Texto comprobado")) {
+            this.actualizaLabels();
+            this.resaltaPalabrasErroneas();
+        } else if (s.startsWith("Actualizado")) {
+            this.actualizaLabels();
+        }
+    }
+    
+    private void actualizaLabels() {
+        this.labelIdioma.setText("Idioma: " + this.prog.getModelo().getIdioma().toString());
+        this.labelPalabrasTotales.setText("Palabras totales: " + this.prog.getModelo().getPalabrasTexto().length);
+        this.labelPalabrasErroneas.setText("Palabras erróneas: " + this.prog.getModelo().getPalabrasErroneas().length);
+    }
 
+    private void resaltaPalabrasErroneas() {
+        for (String err : this.prog.getModelo().getPalabrasErroneas()) {
+            try {
+                this.document.replace(this.textPane.getText().indexOf(err), err.length(), err, styleErroneas);
+            } catch (BadLocationException ex) {
+                informaError(ex);
+            }
+        }
+    }
+
+    private void abrirDialog(String palabra) {
+        String palabraSeleccionada = (String) JOptionPane.showInputDialog(
+                null,
+                "¿Qué palabra quieres sustituir por la errónea?",
+                "Corregir palabra",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                this.prog.getModelo().getSugerencias().get(palabra).toArray(),
+                this.prog.getModelo().getSugerencias().get(palabra).toArray()[0]);
+        int dif = palabra.length() - palabraSeleccionada.length();
+        try {
+            this.document.replace(this.textPane.getText().indexOf(palabra), palabraSeleccionada.length()+dif, palabraSeleccionada, styleCorrectas);
+        } catch (BadLocationException ex) {
+            informaError(ex);
+        }
+        this.prog.getModelo().setTexto(this.textPane.getText());
+        this.prog.notificar("Actualizar");
     }
 }
