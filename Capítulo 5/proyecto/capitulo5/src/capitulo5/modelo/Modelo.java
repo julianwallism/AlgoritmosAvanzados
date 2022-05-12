@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public class Modelo implements PorEventos {
     private main prog;
-    private String texto = "";
-    private Idioma idioma = Idioma.ES;
+    private String texto;
+    private Idioma idioma = Idioma.ESPAÑOL;
     private File diccionario = null;
     private int nPalabrasTotales = 0, nPalabrasErroneas = 0;
     // esto seguramente se tenga que implementar de otra forma pero para tener una
@@ -30,6 +30,7 @@ public class Modelo implements PorEventos {
 
     public void setTexto(String texto) {
         this.texto = texto;
+        parseaPalabras();
     }
 
     public Idioma getIdioma() {
@@ -86,6 +87,19 @@ public class Modelo implements PorEventos {
 
     public void setSugerencias(Map<String, ArrayList<String>> sugerencias) {
         this.sugerencias = sugerencias;
+    }
+
+    public void parseaPalabras() {
+        this.palabrasTexto = texto.toLowerCase().split(
+                "[\\s,\\.\\?\\!\\:\\;\\-\\_\\=\\+\\(\\)\\{\\}\\[\\]\\|\\\\\\/\\*\\&\\^\\%\\$\\#\\@\\~\\`\\´\\¨\\¬\\¦\\¡\\¿]");
+        // create new array with only the words that are not empty
+        ArrayList<String> palabras = new ArrayList<>();
+        for (String palabra : palabrasTexto) {
+            if (!palabra.isEmpty()) {
+                palabras.add(palabra);
+            }
+        }
+        palabrasTexto = palabras.toArray(new String[palabras.size()]);
     }
 
     // Método notificar de la intefaz por eventos

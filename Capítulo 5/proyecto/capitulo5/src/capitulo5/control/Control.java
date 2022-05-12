@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
@@ -32,6 +30,7 @@ public class Control extends Thread implements PorEventos {
         if (s.startsWith("Texto guardado")) {
             this.decideIdioma();
         } else if (s.startsWith("Comprobar texto")) {
+            this.decideIdioma();
             this.comprobarTexto();
         } else if (s.startsWith("Corregir palabras")) {
             this.corregirPalabras();
@@ -49,9 +48,8 @@ public class Control extends Thread implements PorEventos {
         File esp = new File("esp.dic");
         File cat = new File("cat.dic");
         File eng = new File("eng.dic");
-        String[] palabrasTexto = this.prog.getModelo().getTexto().split(" ");
-        palabrasTexto = refinaPalabras(palabrasTexto);
-        File[] diccionarios = {esp, cat, eng};
+        String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
+        File[] diccionarios = { esp, cat, eng };
         int[] frec = new int[3];
 
         int ind = 0;
@@ -72,22 +70,22 @@ public class Control extends Thread implements PorEventos {
         System.out.println(frec[0]);
         System.out.println(frec[1]);
         System.out.println(frec[2]);
-        
-        //En caso de empate ingles>catalan>español
+
+        // En caso de empate ingles>catalan>español
         if (frec[0] == 0 && frec[1] == 0 && frec[2] == 0) {
-            this.prog.getModelo().setIdioma(Idioma.UNKNOWN);
+            this.prog.getModelo().setIdioma(Idioma.DESCONOCIDO);
             this.prog.getModelo().setDiccionario(null);
             System.out.println("Ninguno");
         } else if (frec[0] > frec[1] && frec[0] > frec[2]) {
-            this.prog.getModelo().setIdioma(Idioma.ES);
+            this.prog.getModelo().setIdioma(Idioma.ESPAÑOL);
             this.prog.getModelo().setDiccionario(esp);
             System.out.println("Español");
         } else if (frec[1] >= frec[0] && frec[1] > frec[2]) {
-            this.prog.getModelo().setIdioma(Idioma.CAT);
+            this.prog.getModelo().setIdioma(Idioma.CATALÁN);
             this.prog.getModelo().setDiccionario(cat);
             System.out.println("Catalan");
         } else if (frec[2] >= frec[0] && frec[2] >= frec[1]) {
-            this.prog.getModelo().setIdioma(Idioma.ENG);
+            this.prog.getModelo().setIdioma(Idioma.INGLÉS);
             this.prog.getModelo().setDiccionario(eng);
             System.out.println("Ingles");
         }
@@ -105,8 +103,7 @@ public class Control extends Thread implements PorEventos {
             palabrasDiccionario = readLines(dic);
         } catch (IOException ex) {
         }
-        String[] palabrasTexto = this.prog.getModelo().getTexto().split(" ");
-        palabrasTexto = refinaPalabras(palabrasTexto);
+        String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
         String[] palabrasErroneasAux = new String[palabrasTexto.length];
         int ind = 0;
         for (String palabra : palabrasTexto) {
@@ -120,7 +117,7 @@ public class Control extends Thread implements PorEventos {
         for (int i = 0; i < ind; i++) {
             palabrasErroneas[i] = palabrasErroneasAux[i];
         }
-        
+
         this.prog.getModelo().setPalabrasErroneas(palabrasErroneas);
     }
 
@@ -143,7 +140,7 @@ public class Control extends Thread implements PorEventos {
             ArrayList<String> sugerenciasPalabra = new ArrayList<String>();
             int min = Integer.MAX_VALUE;
             for (String palabraDiccionario : palabrasDiccionario) {
-                int distancia = distDeLevenshtein(palabra.toCharArray(), palabraDiccionario.toCharArray());
+                int distancia = distDeLevenshteinIterative(palabra.toCharArray(), palabraDiccionario.toCharArray());
                 if (distancia == min) {
                     sugerenciasPalabra.add(palabraDiccionario);
                 } else if (distancia < min) {
@@ -152,7 +149,7 @@ public class Control extends Thread implements PorEventos {
                     sugerenciasPalabra.add(palabraDiccionario);
                 }
             }
-            //Print the suggestions for each word
+            // Print the suggestions for each word
             System.out.println("Sugerencias para " + palabra + ": ");
             System.out.println(sugerenciasPalabra);
             sugerencias.put(palabra, sugerenciasPalabra);
@@ -160,26 +157,21 @@ public class Control extends Thread implements PorEventos {
         this.prog.getModelo().setSugerencias(sugerencias);
     }
 
-    private int distDeLevenshtein(char[] word1, char[] word2) {
-        int coste = 0;
-        if (word1.length == 0 && word2.length == 0) {
-            return 0;
-        } else if (word2.length == 0) {
-            coste = distDeLevenshtein(minusLastLetter(word1), word2) + 1;
-        } else if (word1.length == 0) {
-            coste = distDeLevenshtein(word1, minusLastLetter(word2)) + 1;
-        } else {
-            int case1 = distDeLevenshtein(minusLastLetter(word1), word2) + 1;
-            int case2 = distDeLevenshtein(word1, minusLastLetter(word2)) + 1;
-            int case3;
-            if (word1[word1.length - 1] == word2[word2.length - 1]) {
-                case3 = distDeLevenshtein(minusLastLetter(word1), minusLastLetter(word2));
-            } else {
-                case3 = distDeLevenshtein(minusLastLetter(word1), minusLastLetter(word2)) + 1;
-            }
-            coste = Math.min(case1, Math.min(case2, case3));
+    private int distDeLevenshteinIterative(char[] word1, char[] word2) {
+        int[][] dist = new int[word1.length + 1][word2.length + 1];
+        for (int i = 0; i <= word1.length; i++) {
+            dist[i][0] = i;
         }
-        return coste;
+        for (int j = 0; j <= word2.length; j++) {
+            dist[0][j] = j;
+        }
+        for (int i = 1; i <= word1.length; i++) {
+            for (int j = 1; j <= word2.length; j++) {
+                int cost = (word1[i - 1] == word2[j - 1]) ? 0 : 1;
+                dist[i][j] = Math.min(Math.min(dist[i - 1][j] + 1, dist[i][j - 1] + 1), dist[i - 1][j - 1] + cost);
+            }
+        }
+        return dist[word1.length][word2.length];
     }
 
     private char[] minusLastLetter(char[] word) {
@@ -197,22 +189,4 @@ public class Control extends Thread implements PorEventos {
         bufferedReader.close();
         return lines.toArray(new String[lines.size()]);
     }
-
-    private String[] refinaPalabras(String[] palabras) {
-        // Given a string[] of words delete the commas and dots
-        String[] palabrasRefinadas = palabras;
-        int ind = 0;
-        for (String palabra : palabras) {
-            // Create a regex for any type of word followed by a comma, a dot
-            String regex = "([!-~]+)[,.;!?)}]";
-            // Check if the word passes the first regex
-            if (palabra.matches(regex)) {
-                palabra = palabra.replaceFirst("[,.;!?)}]", "");
-                palabrasRefinadas[ind] = palabra;
-            }
-            ind++;
-        }
-        return palabrasRefinadas;
-    }
-
 }
