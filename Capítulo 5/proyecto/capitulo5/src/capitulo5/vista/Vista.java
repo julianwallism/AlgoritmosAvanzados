@@ -175,10 +175,16 @@ public class Vista extends JFrame implements PorEventos {
 
     private void resaltaPalabrasErroneas() {
         for (String err : this.prog.getModelo().getPalabrasErroneas()) {
-            try {
-                this.document.replace(this.textPane.getText().indexOf(err), err.length(), err, styleErroneas);
-            } catch (BadLocationException ex) {
-                informaError(ex);
+            int i = this.textPane.getText().indexOf(err);
+            int prevI;
+            while (i != -1) { // cambiamos todas las ocurrencias de la palabra
+                prevI = i;
+                try {
+                    this.document.replace(i, err.length(), err, styleErroneas);
+                } catch (BadLocationException ex) {
+                    informaError(ex);
+                }
+                i = this.textPane.getText().indexOf(err, prevI+1);
             }
         }
     }
