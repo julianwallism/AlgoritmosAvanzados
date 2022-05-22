@@ -7,6 +7,9 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
@@ -19,6 +22,7 @@ import javax.swing.text.Utilities;
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
 public class Vista extends JFrame implements PorEventos {
+
     private main prog;
     private JButton botonCorregir, botonComprobar;
     private JLabel labelIdioma, labelPalabrasErroneas, labelPalabrasTotales;
@@ -55,7 +59,8 @@ public class Vista extends JFrame implements PorEventos {
                     pal = textPane.getSelectedText();
                     for (String err : prog.getModelo().getPalabrasErroneas()) {
                         if (err.equals(pal)) {
-                            abrirDialog(pal);
+                            int indxInici = textPane.getSelectionStart();
+                            abrirDialog(pal,indxInici);
                         }
                     }
                 } catch (Exception e) {
@@ -132,30 +137,32 @@ public class Vista extends JFrame implements PorEventos {
                                 .addGap(25, 25, 25)
                                 .addComponent(labelPalabrasErroneas)
                                 .addGap(100, 100, 100))
-                        .addComponent(barraProgreso, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+                        .addComponent(barraProgreso, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+                                Short.MAX_VALUE));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(25, 25, 25)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(botonComprobar, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(botonCorregir, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(botonComprobar, GroupLayout.PREFERRED_SIZE, 52,
+                                                GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(botonCorregir, GroupLayout.PREFERRED_SIZE, 52,
+                                                GroupLayout.PREFERRED_SIZE)
                                         .addComponent(labelPalabrasTotales)
                                         .addComponent(labelPalabrasErroneas)
                                         .addComponent(labelIdioma))
                                 .addGap(25, 25, 25)
                                 .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 465, GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
-                                .addComponent(barraProgreso, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE))
-        );
+                                .addComponent(barraProgreso, GroupLayout.PREFERRED_SIZE, 10,
+                                        GroupLayout.PREFERRED_SIZE)));
 
         this.getContentPane().setLayout(layout);
         this.pack();
         this.setResizable(false);
         this.setVisible(true);
     }
-    
+
     // Método notificar de la interfaz de eventos
     @Override
     public void notificar(String s) {
@@ -166,7 +173,7 @@ public class Vista extends JFrame implements PorEventos {
             this.actualizaLabels();
         }
     }
-    
+
     private void actualizaLabels() {
         this.labelIdioma.setText("Idioma: " + this.prog.getModelo().getIdioma().toString());
         this.labelPalabrasTotales.setText("Palabras totales: " + this.prog.getModelo().getPalabrasTexto().length);
@@ -174,33 +181,39 @@ public class Vista extends JFrame implements PorEventos {
     }
 
     private void resaltaPalabrasErroneas() {
-        for (String err : this.prog.getModelo().getPalabrasErroneas()) {
-            int i = this.textPane.getText().indexOf(err);
-            int prevI;
-            while (i != -1) { // cambiamos todas las ocurrencias de la palabra
-                prevI = i;
+        String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
+        String[] palabrasErroneas = this.prog.getModelo().getPalabrasErroneas();
+        String texto = this.textPane.getText();
+        int indexAux = 0, index;
+        for (String palabra : palabrasTexto) {
+            index = texto.indexOf(palabra, indexAux) + palabra.length();
+            String aux = texto.substring(indexAux + 1, index);
+            System.out.println(aux);
+            // if palabras erroneas contains palabra
+            if (Arrays.asList(palabrasErroneas).contains(palabra)) {
                 try {
-                    this.document.replace(i, err.length(), err, styleErroneas);
+                    this.document.replace(indexAux + 1, aux.length(), aux, styleErroneas);
                 } catch (BadLocationException ex) {
                     informaError(ex);
                 }
-                i = this.textPane.getText().indexOf(err, prevI+1);
             }
+            indexAux = index;
         }
     }
 
-    private void abrirDialog(String palabra) {
+    private void abrirDialog(String palabraErronea, int indxInici) {
         String palabraSeleccionada = (String) JOptionPane.showInputDialog(
                 null,
                 "¿Qué palabra quieres sustituir por la errónea?",
                 "Corregir palabra",
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                this.prog.getModelo().getSugerencias().get(palabra).toArray(),
-                this.prog.getModelo().getSugerencias().get(palabra).toArray()[0]);
-        int dif = palabra.length() - palabraSeleccionada.length();
+                this.prog.getModelo().getSugerencias().get(palabraErronea).toArray(),
+                this.prog.getModelo().getSugerencias().get(palabraErronea).toArray()[0]);
+        int dif = palabraErronea.length() - palabraSeleccionada.length();
         try {
-            this.document.replace(this.textPane.getText().indexOf(palabra), palabraSeleccionada.length()+dif, palabraSeleccionada, styleCorrectas);
+            this.document.replace(indxInici, palabraSeleccionada.length() + dif,
+                    palabraSeleccionada, styleCorrectas);
         } catch (BadLocationException ex) {
             informaError(ex);
         }
