@@ -12,17 +12,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
-public class Control implements PorEventos {
+public class Control extends Thread implements PorEventos {
+
     private final main prog;
+    private boolean executat;
 
     public Control(main p) {
         this.prog = p;
     }
-    
+
+    @Override
+    public void run() {
+        this.executat = true;
+        this.decideIdioma();
+        this.comprobarTexto();
+        this.buscarSugerencias();
+    }
+
     public String[] readLines(File file) throws IOException {
         FileReader fileReader = new FileReader(file.getName());
         BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -39,11 +51,17 @@ public class Control implements PorEventos {
     @Override
     public void notificar(String s) {
         if (s.startsWith("Comprobar texto")) {
-            this.decideIdioma();
-            this.comprobarTexto();
+
+            if (!this.executat) {
+                this.start();
+            } else {
+                System.out.println("Programa reanudat");
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+            }
             this.prog.notificar("Texto comprobado");
-        } else if (s.startsWith("Buscar sugerencias")) {
-            this.buscarSugerencias();
         } else if (s.startsWith("Actualizar")) {
             this.comprobarTexto();
             this.prog.notificar("Actualizado");
@@ -62,7 +80,7 @@ public class Control implements PorEventos {
         File cat = new File("cat.dic");
         File eng = new File("eng.dic");
         String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
-        File[] diccionarios = { esp, cat, eng };
+        File[] diccionarios = {esp, cat, eng};
         int[] frec = new int[3];
 
         int ind = 0;

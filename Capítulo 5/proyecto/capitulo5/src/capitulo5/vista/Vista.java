@@ -7,8 +7,11 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Style;
@@ -20,8 +23,10 @@ import javax.swing.text.Utilities;
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
 public class Vista extends JFrame implements PorEventos {
+
     private final main prog;
-    private JButton botonCorregir, botonComprobar;
+    private JButton botonComprobar, botonAbrirTXT, botonGuardarTXT;
+    private JFileChooser fileChooser;
     private JLabel labelIdioma, labelPalabrasErroneas, labelPalabrasTotales;
     private JScrollPane jScrollPane1;
     private JTextPane textPane;
@@ -29,14 +34,14 @@ public class Vista extends JFrame implements PorEventos {
     private StyleContext styleContextCorrectas, styleContextErroneas;
     private Style styleCorrectas, styleErroneas;
     private DefaultStyledDocument document;
-    
+
     public Vista(String titol, main p) {
         super(titol);
         this.prog = p;
         this.setIconImage(new ImageIcon("logo.png").getImage());
         this.initComponents();
     }
-    
+
     // Método notificar de la interfaz de eventos
     @Override
     public void notificar(String s) {
@@ -68,7 +73,7 @@ public class Vista extends JFrame implements PorEventos {
                     for (String err : prog.getModelo().getPalabrasErroneas()) {
                         if (err.equals(pal)) {
                             int indxInici = textPane.getSelectionStart();
-                            abrirDialog(pal,indxInici);
+                            abrirDialog(pal, indxInici);
                         }
                     }
                 } catch (Exception e) {
@@ -93,7 +98,10 @@ public class Vista extends JFrame implements PorEventos {
             }
         });
         botonComprobar = new JButton();
-        botonCorregir = new JButton();
+        botonAbrirTXT = new JButton();
+        fileChooser = new JFileChooser();
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
+        botonGuardarTXT = new JButton();
         labelPalabrasTotales = new JLabel();
         labelPalabrasErroneas = new JLabel();
         labelIdioma = new JLabel();
@@ -116,10 +124,43 @@ public class Vista extends JFrame implements PorEventos {
             this.prog.getModelo().setTexto(this.textPane.getText());
             this.prog.notificar("Comprobar texto");
         });
-        botonCorregir.setText("Buscar sugerencias");
-        botonCorregir.setBackground(new Color(255, 255, 255));
-        botonCorregir.addActionListener((ActionEvent e) -> {
-            this.prog.notificar("Buscar sugerencias");
+
+        // Cuando se clickea el botón abrir, se abre un JFileChooser
+        botonAbrirTXT.setText("Abrir fichero");
+        botonAbrirTXT.setBackground(new Color(255, 255, 255));
+        botonAbrirTXT.addActionListener((ActionEvent e) -> {
+            // Solo se pueden elegir archivos .txt
+            fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
+            int returnVal = fileChooser.showOpenDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                // Si se elige un fichero se carga en el textPane
+                //Get content from selected file
+                try {
+                    String content = new String(Files.readAllBytes(fileChooser.getSelectedFile().toPath()));
+                    textPane.setText(content);
+                    this.prog.getModelo().setTexto(content);
+                } catch (IOException ex) {
+                    informaError(ex);
+                }
+            }
+        });
+
+        //Cuando se clica en el botón guardar, se abre un JFileChooser para guardar el texto
+        botonGuardarTXT.setText("Guardar fichero");
+        botonGuardarTXT.setBackground(new Color(255, 255, 255));
+        botonGuardarTXT.addActionListener((ActionEvent e) -> {
+            // Solo se pueden elegir archivos .txt
+            fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
+            int returnVal = fileChooser.showSaveDialog(this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                // Si se elige un fichero se guarda el texto
+                //Get content from selected file
+                try {
+                    Files.write(fileChooser.getSelectedFile().toPath(), textPane.getText().getBytes());
+                } catch (IOException ex) {
+                    informaError(ex);
+                }
+            }
         });
 
         labelPalabrasTotales.setText("Palabras totales: " + this.prog.getModelo().getPalabrasTexto().length);
@@ -137,7 +178,9 @@ public class Vista extends JFrame implements PorEventos {
                                 .addGap(100, 100, 100)
                                 .addComponent(botonComprobar)
                                 .addGap(25, 25, 25)
-                                .addComponent(botonCorregir)
+                                .addComponent(botonAbrirTXT)
+                                .addGap(25, 25, 25)
+                                .addComponent(botonGuardarTXT)
                                 .addGap(100, 100, 100)
                                 .addComponent(labelIdioma)
                                 .addGap(25, 25, 25)
@@ -154,7 +197,9 @@ public class Vista extends JFrame implements PorEventos {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(botonComprobar, GroupLayout.PREFERRED_SIZE, 52,
                                                 GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(botonCorregir, GroupLayout.PREFERRED_SIZE, 52,
+                                        .addComponent(botonAbrirTXT, GroupLayout.PREFERRED_SIZE, 52,
+                                                GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(botonGuardarTXT, GroupLayout.PREFERRED_SIZE, 52,
                                                 GroupLayout.PREFERRED_SIZE)
                                         .addComponent(labelPalabrasTotales)
                                         .addComponent(labelPalabrasErroneas)
@@ -183,18 +228,20 @@ public class Vista extends JFrame implements PorEventos {
         String texto = this.textPane.getText();
         int indexAux = 0, index;
         for (String palabra : palabrasTexto) {
-            index = texto.indexOf(palabra, indexAux) + palabra.length();
-            String aux = texto.substring(indexAux + 1, index);
-            System.out.println(aux);
-            // if palabras erroneas contains palabra
-            if (Arrays.asList(palabrasErroneas).contains(palabra)) {
-                try {
-                    this.document.replace(indexAux + 1, aux.length(), aux, styleErroneas);
-                } catch (BadLocationException ex) {
-                    informaError(ex);
+            if (palabra != "") {
+                index = texto.indexOf(palabra, indexAux) + palabra.length();
+                String aux = texto.substring(indexAux + 1, index);
+                System.out.println(aux);
+                // if palabras erroneas contains palabra
+                if (Arrays.asList(palabrasErroneas).contains(palabra)) {
+                    try {
+                        this.document.replace(indexAux + 1, aux.length(), aux, styleErroneas);
+                    } catch (BadLocationException ex) {
+                        informaError(ex);
+                    }
                 }
+                indexAux = index;
             }
-            indexAux = index;
         }
     }
 
