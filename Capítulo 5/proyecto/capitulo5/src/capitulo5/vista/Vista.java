@@ -8,8 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
@@ -22,8 +20,7 @@ import javax.swing.text.Utilities;
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
 public class Vista extends JFrame implements PorEventos {
-
-    private main prog;
+    private final main prog;
     private JButton botonCorregir, botonComprobar;
     private JLabel labelIdioma, labelPalabrasErroneas, labelPalabrasTotales;
     private JScrollPane jScrollPane1;
@@ -32,12 +29,23 @@ public class Vista extends JFrame implements PorEventos {
     private StyleContext styleContextCorrectas, styleContextErroneas;
     private Style styleCorrectas, styleErroneas;
     private DefaultStyledDocument document;
-
+    
     public Vista(String titol, main p) {
         super(titol);
         this.prog = p;
         this.setIconImage(new ImageIcon("logo.png").getImage());
         this.initComponents();
+    }
+    
+    // Método notificar de la interfaz de eventos
+    @Override
+    public void notificar(String s) {
+        if (s.startsWith("Texto comprobado")) {
+            this.actualizaLabels();
+            this.resaltaPalabrasErroneas();
+        } else if (s.startsWith("Actualizado")) {
+            this.actualizaLabels();
+        }
     }
 
     private void initComponents() {
@@ -161,17 +169,6 @@ public class Vista extends JFrame implements PorEventos {
         this.pack();
         this.setResizable(false);
         this.setVisible(true);
-    }
-
-    // Método notificar de la interfaz de eventos
-    @Override
-    public void notificar(String s) {
-        if (s.startsWith("Texto comprobado")) {
-            this.actualizaLabels();
-            this.resaltaPalabrasErroneas();
-        } else if (s.startsWith("Actualizado")) {
-            this.actualizaLabels();
-        }
     }
 
     private void actualizaLabels() {

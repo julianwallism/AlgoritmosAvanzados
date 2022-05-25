@@ -9,7 +9,7 @@ import java.util.Map;
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
 public class Modelo {
-    private main prog;
+    private final main prog;
     private String texto;
     private Idioma idioma = Idioma.DESCONOCIDO;
     private File diccionario = null;
