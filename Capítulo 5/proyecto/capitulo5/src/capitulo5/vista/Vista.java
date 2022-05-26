@@ -48,6 +48,7 @@ public class Vista extends JFrame implements PorEventos {
         if (s.startsWith("Texto comprobado")) {
             this.actualizaLabels();
             this.resaltaPalabrasErroneas();
+            this.barraProgreso.setIndeterminate(false);
         } else if (s.startsWith("Actualizado")) {
             this.actualizaLabels();
         }
@@ -122,6 +123,7 @@ public class Vista extends JFrame implements PorEventos {
         botonComprobar.setBackground(new Color(255, 255, 255));
         botonComprobar.addActionListener((ActionEvent e) -> {
             this.prog.getModelo().setTexto(this.textPane.getText());
+            this.barraProgreso.setIndeterminate(true);
             this.prog.notificar("Comprobar texto");
         });
 
@@ -166,7 +168,6 @@ public class Vista extends JFrame implements PorEventos {
         labelPalabrasTotales.setText("Palabras totales: " + this.prog.getModelo().getPalabrasTexto().length);
         labelPalabrasErroneas.setText("Palabras erróneas: " + this.prog.getModelo().getPalabrasErroneas().length);
         labelIdioma.setText("Idioma: " + this.prog.getModelo().getIdioma());
-        barraProgreso.setIndeterminate(true);
         barraProgreso.setBackground(new Color(0, 255, 255));
         barraProgreso.setForeground(new Color(0, 51, 204));
 
@@ -226,20 +227,29 @@ public class Vista extends JFrame implements PorEventos {
         String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
         String[] palabrasErroneas = this.prog.getModelo().getPalabrasErroneas();
         String texto = this.textPane.getText();
-        int indexAux = 0, index;
+        //indexAux guarda por que parte del texto vamos, indice guarda el índice
+        //del último caracter de la palabra a marcar
+        int indexAux = 0, index = 0;
+        // Por cada palabra del texto
         for (String palabra : palabrasTexto) {
+            //Si no es nula
             if (palabra != "") {
+                // Si palabras erroneas contains palabra
+                //Buscamos su primera aparición despues de indiceAux
                 index = texto.indexOf(palabra, indexAux) + palabra.length();
-                String aux = texto.substring(indexAux + 1, index);
-                System.out.println(aux);
-                // if palabras erroneas contains palabra
                 if (Arrays.asList(palabrasErroneas).contains(palabra)) {
+                    // Como indexAux guarda el índice del primer caracter de la 
+                    // palabra y indice el del útlimo sacamos la palabra del texto con un substring
+                    String aux = texto.substring(indexAux + 1, index);
+                    System.out.println(aux);
                     try {
+                        //Una vez tenemos la palabra podemos pintarla
                         this.document.replace(indexAux + 1, aux.length(), aux, styleErroneas);
                     } catch (BadLocationException ex) {
                         informaError(ex);
                     }
                 }
+                //hAcemos un update del indice
                 indexAux = index;
             }
         }

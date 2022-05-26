@@ -1,5 +1,6 @@
 package capitulo5.control;
 
+import static capitulo5.Error.informaError;
 import java.util.Arrays;
 
 import capitulo5.PorEventos;
@@ -12,8 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
@@ -21,7 +20,7 @@ import java.util.logging.Logger;
 public class Control extends Thread implements PorEventos {
 
     private final main prog;
-    private boolean executat;
+    private boolean executat = false, donali = true;
 
     public Control(main p) {
         this.prog = p;
@@ -29,13 +28,39 @@ public class Control extends Thread implements PorEventos {
 
     @Override
     public void run() {
-        this.executat = true;
-        this.decideIdioma();
-        this.comprobarTexto();
-        this.buscarSugerencias();
+        while (true) {
+            if (donali) {
+                this.decideIdioma();
+                this.comprobarTexto();
+                this.buscarSugerencias();
+                this.prog.notificar("Texto comprobado");
+                this.donali = false;
+            }
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException ex) {
+                informaError(ex);
+            }
+        }
     }
 
-    public String[] readLines(File file) throws IOException {
+    // Método notificar de la intefaz por eventos
+    @Override
+    public void notificar(String s) {
+        if (s.startsWith("Comprobar texto")) {
+            if (!this.executat) {
+                this.start();
+                this.executat = true;
+            } else {
+                this.donali = true;
+            }
+        } else if (s.startsWith("Actualizar")) {
+            this.comprobarTexto();
+            this.prog.notificar("Actualizado");
+        }
+    }
+
+    private String[] readLines(File file) throws IOException {
         FileReader fileReader = new FileReader(file.getName());
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         List<String> lines = new ArrayList<String>();
@@ -47,31 +72,10 @@ public class Control extends Thread implements PorEventos {
         return lines.toArray(new String[lines.size()]);
     }
 
-    // Método notificar de la intefaz por eventos
-    @Override
-    public void notificar(String s) {
-        if (s.startsWith("Comprobar texto")) {
-
-            if (!this.executat) {
-                this.start();
-            } else {
-                System.out.println("Programa reanudat");
-            }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-            }
-            this.prog.notificar("Texto comprobado");
-        } else if (s.startsWith("Actualizar")) {
-            this.comprobarTexto();
-            this.prog.notificar("Actualizado");
-        }
-    }
-
     /**
      * Este método decide el idioma del texto basandose en la cantidad de
      * palabras que pertenecen a cada idioma, y en caso de que no se encuentre
-     * ninguno se asigna el idioma UNKNOWN.
+     * ninguno se asigna el idioma DESCONOCIDO.
      *
      * @return void
      */
@@ -98,7 +102,6 @@ public class Control extends Thread implements PorEventos {
             ind++;
         }
 
-        // En caso de empate ingles>catalan>español
         if (frec[0] == 0 && frec[1] == 0 && frec[2] == 0) {
             this.prog.getModelo().setIdioma(Idioma.DESCONOCIDO);
             this.prog.getModelo().setDiccionario(null);
