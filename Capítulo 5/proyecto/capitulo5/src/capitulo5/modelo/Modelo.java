@@ -71,7 +71,7 @@ public class Modelo {
 
     public void parseaPalabras() {
         this.palabrasTexto = texto.toLowerCase().split(
-                "[\\s,\\.\\?\\!\\:\\;\\-\\_\\=\\+\\(\\)\\{\\}\\[\\]\\|\\\\\\/\\*\\&\\^\\%\\$\\#\\@\\~\\`\\´\\¨\\¬\\¦\\¡\\¿]");
+                "[\\s,\\.\\?\\!\\:\\;\\-\\_\\=\\+\\(\\)\\{\\}\\[\\]\\|\\\\\\/\\*\\&\\^\\%\\$\\#\\@\\~\\'\"\\`\\´\\¨\\¬\\¦\\¡\\¿]");
         // create new array with only the words that are not empty
         ArrayList<String> palabras = new ArrayList<>();
         for (String palabra : palabrasTexto) {
