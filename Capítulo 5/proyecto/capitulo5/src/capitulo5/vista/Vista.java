@@ -262,14 +262,16 @@ public class Vista extends JFrame implements PorEventos {
                 null,
                 this.prog.getModelo().getSugerencias().get(palabraErronea).toArray(),
                 this.prog.getModelo().getSugerencias().get(palabraErronea).toArray()[0]);
-        int dif = palabraErronea.length() - palabraSeleccionada.length();
-        try {
-            this.document.replace(indxInici, palabraSeleccionada.length() + dif,
-                    palabraSeleccionada, styleCorrectas);
-        } catch (BadLocationException ex) {
-            informaError(ex);
+        if (palabraSeleccionada != null) {
+            int dif = palabraErronea.length() - palabraSeleccionada.length();
+            try {
+                this.document.replace(indxInici, palabraSeleccionada.length() + dif,
+                        palabraSeleccionada, styleCorrectas);
+            } catch (BadLocationException ex) {
+                informaError(ex);
+            }
+            this.prog.getModelo().setTexto(this.textPane.getText());
+            this.prog.notificar("Actualizar");
         }
-        this.prog.getModelo().setTexto(this.textPane.getText());
-        this.prog.notificar("Actualizar");
     }
 }
