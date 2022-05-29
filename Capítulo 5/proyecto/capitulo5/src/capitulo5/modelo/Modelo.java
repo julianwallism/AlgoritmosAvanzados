@@ -14,7 +14,8 @@ public class Modelo {
     private String texto;
     private Idioma idioma = Idioma.DESCONOCIDO;
     private String[] palabrasErroneas = {}, palabrasTexto = {}, palabrasDiccionario = {};
-
+    private Map<String, ArrayList<String>> sugerencias;
+	
     public String[] getPalabrasDiccionario() {
         return palabrasDiccionario;
     }
@@ -22,7 +23,6 @@ public class Modelo {
     public void setPalabrasDiccionario(String[] palabrasDiccionario) {
         this.palabrasDiccionario = palabrasDiccionario;
     }
-    private Map<String, ArrayList<String>> sugerencias;
 
     public Modelo(main p) {
         prog = p;
