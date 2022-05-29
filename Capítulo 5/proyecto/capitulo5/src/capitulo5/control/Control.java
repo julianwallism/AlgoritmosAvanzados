@@ -93,6 +93,7 @@ public class Control extends Thread implements PorEventos {
             try {
                 palabrasDiccionario = readLines(diccionario);
             } catch (IOException ex) {
+                informaError(ex);
             }
             for (String palabra : palabrasTexto) {
                 if (Arrays.asList(palabrasDiccionario).contains(palabra)) {
@@ -128,6 +129,7 @@ public class Control extends Thread implements PorEventos {
         try {
             palabrasDiccionario = readLines(dic);
         } catch (IOException ex) {
+            informaError(ex);
         }
         String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
         String[] palabrasErroneasAux = new String[palabrasTexto.length];
@@ -157,6 +159,7 @@ public class Control extends Thread implements PorEventos {
         try {
             palabrasDiccionario = readLines(dic);
         } catch (IOException ex) {
+            informaError(ex);
         }
         String[] palabrasErroneas = this.prog.getModelo().getPalabrasErroneas();
         // Create a map with string as key and arraylist as value

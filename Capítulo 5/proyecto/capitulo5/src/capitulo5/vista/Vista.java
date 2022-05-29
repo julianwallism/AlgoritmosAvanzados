@@ -123,8 +123,10 @@ public class Vista extends JFrame implements PorEventos {
         botonComprobar.setBackground(new Color(255, 255, 255));
         botonComprobar.addActionListener((ActionEvent e) -> {
             this.prog.getModelo().setTexto(this.textPane.getText());
-            this.barraProgreso.setIndeterminate(true);
-            this.prog.notificar("Comprobar texto");
+            if (this.textPane.getText().length() > 0) {
+                this.barraProgreso.setIndeterminate(true);
+                this.prog.notificar("Comprobar texto");
+            }
         });
 
         // Cuando se clickea el botón abrir, se abre un JFileChooser
@@ -133,10 +135,8 @@ public class Vista extends JFrame implements PorEventos {
         botonAbrirTXT.addActionListener((ActionEvent e) -> {
             // Solo se pueden elegir archivos .txt
             fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
-            int returnVal = fileChooser.showOpenDialog(this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 // Si se elige un fichero se carga en el textPane
-                //Get content from selected file
                 try {
                     String content = new String(Files.readAllBytes(fileChooser.getSelectedFile().toPath()));
                     textPane.setText(content);
@@ -153,10 +153,8 @@ public class Vista extends JFrame implements PorEventos {
         botonGuardarTXT.addActionListener((ActionEvent e) -> {
             // Solo se pueden elegir archivos .txt
             fileChooser.setFileFilter(new FileNameExtensionFilter("*.txt", "txt"));
-            int returnVal = fileChooser.showSaveDialog(this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION && this.textPane.getText().length() > 0) {
                 // Si se elige un fichero se guarda el texto
-                //Get content from selected file
                 try {
                     Files.write(fileChooser.getSelectedFile().toPath(), textPane.getText().getBytes());
                 } catch (IOException ex) {
@@ -227,29 +225,30 @@ public class Vista extends JFrame implements PorEventos {
         String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
         String[] palabrasErroneas = this.prog.getModelo().getPalabrasErroneas();
         String texto = this.textPane.getText();
-        //indexAux guarda por que parte del texto vamos, indice guarda el índice
-        //del último caracter de la palabra a marcar
+        // indexAux guarda por qué parte del texto vamos, indice guarda el índice
+        // del último caracter de la palabra a marcar
         int indexAux = 0, index = 0;
         // Por cada palabra del texto
         for (String palabra : palabrasTexto) {
-            //Si no es nula
+            // Si no es nula
             if (palabra != "") {
-                // Si palabras erroneas contains palabra
-                //Buscamos su primera aparición despues de indiceAux
+                // Si palabra es una palabra errónea
+                // Buscamos su primera aparición despues de indiceAux
                 index = texto.indexOf(palabra, indexAux) + palabra.length();
                 if (Arrays.asList(palabrasErroneas).contains(palabra)) {
                     // Como indexAux guarda el índice del primer caracter de la 
-                    // palabra y indice el del útlimo sacamos la palabra del texto con un substring
+                    // palabra y indice el del útlimo sacamos la palabra del 
+                    // texto con un substring
                     String aux = texto.substring(indexAux + 1, index);
                     System.out.println(aux);
                     try {
-                        //Una vez tenemos la palabra podemos pintarla
+                        // Una vez tenemos la palabra podemos pintarla
                         this.document.replace(indexAux + 1, aux.length(), aux, styleErroneas);
                     } catch (BadLocationException ex) {
                         informaError(ex);
                     }
                 }
-                //hAcemos un update del indice
+                // Hacemos un update del indice
                 indexAux = index;
             }
         }
