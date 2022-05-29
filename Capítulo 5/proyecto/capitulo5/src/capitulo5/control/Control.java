@@ -66,6 +66,13 @@ public class Control extends Thread implements PorEventos {
         }
     }
 
+    /**
+     * Método que devuelve un string array con todas las lineas del fichero 
+     * pasado por parámetro
+     * @param file
+     * @return
+     * @throws IOException 
+     */
     private String[] readLines(File file) throws IOException {
         FileReader fileReader = new FileReader(file.getName());
         BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -89,23 +96,29 @@ public class Control extends Thread implements PorEventos {
         File esp = new File("esp.dic");
         File cat = new File("cat.dic");
         File eng = new File("eng.dic");
+         File[] diccionarios = {esp, cat, eng};
+
         String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
+        
         String[] palabrasErroneasEsp = new String[palabrasTexto.length];
         String[] palabrasErroneasCat = new String[palabrasTexto.length];
         String[] palabrasErroneasIng = new String[palabrasTexto.length];
-        File[] diccionarios = {esp, cat, eng};
         String[][] palabrasErroneasAux = {palabrasErroneasEsp, palabrasErroneasCat, palabrasErroneasIng};
+        
         int[] frec = new int[3];
         int[] tamañoErroneas = new int[3];
 
         int ind1 = 0;
         for (File diccionario : diccionarios) {
+            
             String[] palabrasDiccionario = null;
+            
             try {
                 palabrasDiccionario = readLines(diccionario);
             } catch (IOException ex) {
                 informaError(ex);
             }
+            
             int ind2 = 0;
             for (String palabra : palabrasTexto) {
                 if (Arrays.asList(palabrasDiccionario).contains(palabra)) {
@@ -153,8 +166,8 @@ public class Control extends Thread implements PorEventos {
     }
 
     /**
-     * Given a text and a dictionary, this method checks if the text is
-     * correctly written.
+     * Dadas las palabras de un diccionario el método calcula todas las palabras
+     * erroneas del texto
      *
      */
     private void comprobarTexto() {
@@ -179,8 +192,9 @@ public class Control extends Thread implements PorEventos {
     }
 
     /**
-     * Given an array of incorrect words and a dictonary, this method corrects
-     * the words using levenshtein distance.
+     * Dado un array de palabras incorrectas y un array con las palabras del 
+     * diccionario este método calcula sugerencias mediante la distancia de 
+     * edición de levenshtein
      */
     private void buscarSugerencias() {
         String[] palabrasDiccionario = this.prog.getModelo().getPalabrasDiccionario();
@@ -207,6 +221,14 @@ public class Control extends Thread implements PorEventos {
         }
     }
 
+    /**
+     * Método que dadas dos palabras calcula la distancia de edición de Levenshtein
+     * de manera iterativa
+     * 
+     * @param word1
+     * @param word2
+     * @return 
+     */
     private int distDeLevenshtein(char[] word1, char[] word2) {
         int[][] dist = new int[word1.length + 1][word2.length + 1];
         for (int i = 0; i <= word1.length; i++) {
