@@ -9,10 +9,19 @@ import java.util.Map;
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
 public class Modelo {
+
     private final main prog;
     private String texto;
     private Idioma idioma = Idioma.DESCONOCIDO;
-    private String[] palabrasErroneas = {}, palabrasTexto = {};
+    private String[] palabrasErroneas = {}, palabrasTexto = {}, palabrasDiccionario = {};
+
+    public String[] getPalabrasDiccionario() {
+        return palabrasDiccionario;
+    }
+
+    public void setPalabrasDiccionario(String[] palabrasDiccionario) {
+        this.palabrasDiccionario = palabrasDiccionario;
+    }
     private Map<String, ArrayList<String>> sugerencias;
 
     public Modelo(main p) {

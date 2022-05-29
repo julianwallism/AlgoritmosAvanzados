@@ -33,9 +33,14 @@ public class Control extends Thread implements PorEventos {
         while (true) {
             if (donali) {
                 this.idioma_y_errores();
-                this.buscarSugerencias();
-                this.prog.notificar("Texto comprobado");
-                this.donali = false;
+                if (this.prog.getModelo().getIdioma().equals(Idioma.DESCONOCIDO)) {
+                    this.prog.notificar("No idioma detectado");
+                    this.donali = false;
+                } else {
+                    this.buscarSugerencias();
+                    this.prog.notificar("Texto comprobado");
+                    this.donali = false;
+                }
             }
             try {
                 Thread.sleep(5);

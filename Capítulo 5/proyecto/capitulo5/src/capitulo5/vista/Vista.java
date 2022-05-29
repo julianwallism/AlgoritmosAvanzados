@@ -51,6 +51,9 @@ public class Vista extends JFrame implements PorEventos {
             this.barraProgreso.setIndeterminate(false);
         } else if (s.startsWith("Actualizado")) {
             this.actualizaLabels();
+        } else if (s.startsWith("No idioma detectado")) {
+            JOptionPane.showMessageDialog(null, "No se ha podido detectar ningun idioma.");
+            this.barraProgreso.setIndeterminate(false);
         }
     }
 
@@ -122,11 +125,13 @@ public class Vista extends JFrame implements PorEventos {
         botonComprobar.setText("Comprobar texto");
         botonComprobar.setBackground(new Color(255, 255, 255));
         botonComprobar.addActionListener((ActionEvent e) -> {
-            this.prog.getModelo().setTexto(this.textPane.getText());
-            if (this.textPane.getText().length() > 0) {
-                this.barraProgreso.setIndeterminate(true);
-                this.prog.notificar("Comprobar texto");
+            if (this.textPane.getText().isBlank()) {
+                JOptionPane.showMessageDialog(null, "El texto a detectar no puede ser vacio!");
+                return;
             }
+            this.prog.getModelo().setTexto(this.textPane.getText());
+            this.barraProgreso.setIndeterminate(true);
+            this.prog.notificar("Comprobar texto");
         });
 
         // Cuando se clickea el botón abrir, se abre un JFileChooser
