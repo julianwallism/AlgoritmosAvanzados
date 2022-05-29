@@ -62,12 +62,21 @@ public class Vista extends JFrame implements PorEventos {
         botonGuardar.setText("Guardar texto");
         botonGuardar.setBackground(new Color(255, 255, 255));
         botonGuardar.addActionListener((ActionEvent e) -> {
-          this.prog.getModelo().setTexto(this.textPane.getText());
-          this.prog.notificar("Texto guardado");
+            String texto =  this.textPane.getText();
+            if (texto.isBlank()) {
+                JOptionPane.showMessageDialog(null, "El texto a detectar no puede ser vacio!");
+                return;
+            }
+            this.prog.getModelo().setTexto(texto);
+            this.prog.notificar("Texto guardado");
         });
         botonComprobar.setText("Comprobar texto");
         botonComprobar.setBackground(new Color(255, 255, 255));
         botonComprobar.addActionListener((ActionEvent e) -> {
+          if(this.prog.getModelo().getIdioma().name().equals("DESCONOCIDO") || this.prog.getModelo().getTexto().isEmpty()){
+              JOptionPane.showMessageDialog(null, "Primero guarda un texto valido para corregir.");
+              return;
+          }
           this.prog.notificar("Comprobar texto");
         });
         botonCorregir.setText("Corregir palabras erróneas");
