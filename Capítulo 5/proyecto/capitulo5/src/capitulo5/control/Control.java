@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
@@ -21,6 +23,7 @@ public class Control extends Thread implements PorEventos {
 
     private final main prog;
     private boolean executat = false, donali = true;
+    private String[] palabrasDiccionario;
 
     public Control(main p) {
         this.prog = p;
@@ -30,8 +33,7 @@ public class Control extends Thread implements PorEventos {
     public void run() {
         while (true) {
             if (donali) {
-                this.decideIdioma();
-                this.comprobarTexto();
+                this.idioma_y_errores();
                 this.buscarSugerencias();
                 this.prog.notificar("Texto comprobado");
                 this.donali = false;
@@ -79,15 +81,20 @@ public class Control extends Thread implements PorEventos {
      *
      * @return void
      */
-    private void decideIdioma() {
+    private void idioma_y_errores() {
         File esp = new File("esp.dic");
         File cat = new File("cat.dic");
         File eng = new File("eng.dic");
         String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
+        String[] palabrasErroneasEsp = new String[palabrasTexto.length];
+        String[] palabrasErroneasCat = new String[palabrasTexto.length];
+        String[] palabrasErroneasIng = new String[palabrasTexto.length];
         File[] diccionarios = {esp, cat, eng};
+        String[][] palabrasErroneasAux = {palabrasErroneasEsp, palabrasErroneasCat, palabrasErroneasIng};
         int[] frec = new int[3];
+        int[] tamañoErroneas = new int[3];
 
-        int ind = 0;
+        int ind1 = 0;
         for (File diccionario : diccionarios) {
             String[] palabrasDiccionario = null;
             try {
@@ -95,26 +102,49 @@ public class Control extends Thread implements PorEventos {
             } catch (IOException ex) {
                 informaError(ex);
             }
+            int ind2 = 0;
             for (String palabra : palabrasTexto) {
                 if (Arrays.asList(palabrasDiccionario).contains(palabra)) {
-                    frec[ind]++;
+                    frec[ind1]++;
+                } else {
+                    palabrasErroneasAux[ind1][ind2] = palabra;
+                    tamañoErroneas[ind1]++;
+                    ind2++;
                 }
             }
-            ind++;
+            ind1++;
         }
 
-        if (frec[0] == 0 && frec[1] == 0 && frec[2] == 0) {
-            this.prog.getModelo().setIdioma(Idioma.DESCONOCIDO);
-            this.prog.getModelo().setDiccionario(null);
-        } else if (frec[0] > frec[1] && frec[0] > frec[2]) {
-            this.prog.getModelo().setIdioma(Idioma.ESPAÑOL);
-            this.prog.getModelo().setDiccionario(esp);
-        } else if (frec[1] >= frec[0] && frec[1] > frec[2]) {
-            this.prog.getModelo().setIdioma(Idioma.CATALÁN);
-            this.prog.getModelo().setDiccionario(cat);
-        } else if (frec[2] >= frec[0] && frec[2] >= frec[1]) {
-            this.prog.getModelo().setIdioma(Idioma.INGLÉS);
-            this.prog.getModelo().setDiccionario(eng);
+        try {
+            String[] palabrasErroneas = null;
+            if (frec[0] == 0 && frec[1] == 0 && frec[2] == 0) {
+                this.prog.getModelo().setIdioma(Idioma.DESCONOCIDO);
+            } else if (frec[0] > frec[1] && frec[0] > frec[2]) {
+                this.prog.getModelo().setIdioma(Idioma.ESPAÑOL);
+                palabrasDiccionario = readLines(esp);
+                palabrasErroneas = new String[tamañoErroneas[0]];
+                for (int i = 0; i < tamañoErroneas[0]; i++) {
+                    palabrasErroneas[i] = palabrasErroneasAux[0][i];
+                }
+            } else if (frec[1] >= frec[0] && frec[1] > frec[2]) {
+                this.prog.getModelo().setIdioma(Idioma.CATALÁN);
+                palabrasDiccionario = readLines(cat);
+                palabrasErroneas = new String[tamañoErroneas[1]];
+                for (int i = 0; i < tamañoErroneas[1]; i++) {
+                    palabrasErroneas[i] = palabrasErroneasAux[1][i];
+                }
+            } else if (frec[2] >= frec[0] && frec[2] >= frec[1]) {
+                this.prog.getModelo().setIdioma(Idioma.INGLÉS);
+                palabrasDiccionario = readLines(eng);
+                palabrasErroneas = new String[tamañoErroneas[2]];
+                for (int i = 0; i < tamañoErroneas[2]; i++) {
+                    palabrasErroneas[i] = palabrasErroneasAux[2][i];
+                }
+            }
+            this.prog.getModelo().setPalabrasErroneas(palabrasErroneas);
+
+        } catch (IOException ex) {
+            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -124,28 +154,23 @@ public class Control extends Thread implements PorEventos {
      *
      */
     private void comprobarTexto() {
-        File dic = this.prog.getModelo().getDiccionario();
-        String[] palabrasDiccionario = null;
-        try {
-            palabrasDiccionario = readLines(dic);
-        } catch (IOException ex) {
-            informaError(ex);
-        }
-        String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
-        String[] palabrasErroneasAux = new String[palabrasTexto.length];
-        int ind = 0;
-        for (String palabra : palabrasTexto) {
-            if (!Arrays.asList(palabrasDiccionario).contains(palabra)) {
-                palabrasErroneasAux[ind] = palabra;
-                ind++;
+        if (palabrasDiccionario != null) {
+            String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
+            String[] palabrasErroneasAux = new String[palabrasTexto.length];
+            int ind = 0;
+            for (String palabra : palabrasTexto) {
+                if (!Arrays.asList(palabrasDiccionario).contains(palabra)) {
+                    palabrasErroneasAux[ind] = palabra;
+                    ind++;
+                }
             }
-        }
-        String[] palabrasErroneas = new String[ind];
-        for (int i = 0; i < ind; i++) {
-            palabrasErroneas[i] = palabrasErroneasAux[i];
-        }
+            String[] palabrasErroneas = new String[ind];
+            for (int i = 0; i < ind; i++) {
+                palabrasErroneas[i] = palabrasErroneasAux[i];
+            }
 
-        this.prog.getModelo().setPalabrasErroneas(palabrasErroneas);
+            this.prog.getModelo().setPalabrasErroneas(palabrasErroneas);
+        }
     }
 
     /**
@@ -153,36 +178,30 @@ public class Control extends Thread implements PorEventos {
      * the words using levenshtein distance.
      */
     private void buscarSugerencias() {
-        File dic = this.prog.getModelo().getDiccionario();
-        // read all lines from file into string array
-        String[] palabrasDiccionario = null;
-        try {
-            palabrasDiccionario = readLines(dic);
-        } catch (IOException ex) {
-            informaError(ex);
-        }
-        String[] palabrasErroneas = this.prog.getModelo().getPalabrasErroneas();
-        // Create a map with string as key and arraylist as value
-        HashMap<String, ArrayList<String>> sugerencias = new HashMap<String, ArrayList<String>>();
-        for (String palabra : palabrasErroneas) {
-            ArrayList<String> sugerenciasPalabra = new ArrayList<String>();
-            int min = Integer.MAX_VALUE;
-            for (String palabraDiccionario : palabrasDiccionario) {
-                int distancia = distDeLevenshteinIterative(palabra.toCharArray(), palabraDiccionario.toCharArray());
-                if (distancia == min) {
-                    sugerenciasPalabra.add(palabraDiccionario);
-                } else if (distancia < min) {
-                    min = distancia;
-                    sugerenciasPalabra.clear();
-                    sugerenciasPalabra.add(palabraDiccionario);
+        if (palabrasDiccionario != null) {
+            String[] palabrasErroneas = this.prog.getModelo().getPalabrasErroneas();
+            // Create a map with string as key and arraylist as value
+            HashMap<String, ArrayList<String>> sugerencias = new HashMap<String, ArrayList<String>>();
+            for (String palabra : palabrasErroneas) {
+                ArrayList<String> sugerenciasPalabra = new ArrayList<String>();
+                int min = Integer.MAX_VALUE;
+                for (String palabraDiccionario : palabrasDiccionario) {
+                    int distancia = distDeLevenshtein(palabra.toCharArray(), palabraDiccionario.toCharArray());
+                    if (distancia == min) {
+                        sugerenciasPalabra.add(palabraDiccionario);
+                    } else if (distancia < min) {
+                        min = distancia;
+                        sugerenciasPalabra.clear();
+                        sugerenciasPalabra.add(palabraDiccionario);
+                    }
                 }
+                sugerencias.put(palabra, sugerenciasPalabra);
             }
-            sugerencias.put(palabra, sugerenciasPalabra);
+            this.prog.getModelo().setSugerencias(sugerencias);
         }
-        this.prog.getModelo().setSugerencias(sugerencias);
     }
 
-    private int distDeLevenshteinIterative(char[] word1, char[] word2) {
+    private int distDeLevenshtein(char[] word1, char[] word2) {
         int[][] dist = new int[word1.length + 1][word2.length + 1];
         for (int i = 0; i <= word1.length; i++) {
             dist[i][0] = i;
