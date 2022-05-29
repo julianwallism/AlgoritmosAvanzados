@@ -23,7 +23,6 @@ public class Control extends Thread implements PorEventos {
 
     private final main prog;
     private boolean executat = false, donali = true;
-    private String[] palabrasDiccionario;
 
     public Control(main p) {
         this.prog = p;
@@ -121,21 +120,21 @@ public class Control extends Thread implements PorEventos {
                 this.prog.getModelo().setIdioma(Idioma.DESCONOCIDO);
             } else if (frec[0] > frec[1] && frec[0] > frec[2]) {
                 this.prog.getModelo().setIdioma(Idioma.ESPAÑOL);
-                palabrasDiccionario = readLines(esp);
+                this.prog.getModelo().setPalabrasDiccionario(readLines(esp));
                 palabrasErroneas = new String[tamañoErroneas[0]];
                 for (int i = 0; i < tamañoErroneas[0]; i++) {
                     palabrasErroneas[i] = palabrasErroneasAux[0][i];
                 }
             } else if (frec[1] >= frec[0] && frec[1] > frec[2]) {
                 this.prog.getModelo().setIdioma(Idioma.CATALÁN);
-                palabrasDiccionario = readLines(cat);
+                this.prog.getModelo().setPalabrasDiccionario(readLines(cat));
                 palabrasErroneas = new String[tamañoErroneas[1]];
                 for (int i = 0; i < tamañoErroneas[1]; i++) {
                     palabrasErroneas[i] = palabrasErroneasAux[1][i];
                 }
             } else if (frec[2] >= frec[0] && frec[2] >= frec[1]) {
                 this.prog.getModelo().setIdioma(Idioma.INGLÉS);
-                palabrasDiccionario = readLines(eng);
+                this.prog.getModelo().setPalabrasDiccionario(readLines(eng));
                 palabrasErroneas = new String[tamañoErroneas[2]];
                 for (int i = 0; i < tamañoErroneas[2]; i++) {
                     palabrasErroneas[i] = palabrasErroneasAux[2][i];
@@ -154,6 +153,7 @@ public class Control extends Thread implements PorEventos {
      *
      */
     private void comprobarTexto() {
+        String[] palabrasDiccionario = this.prog.getModelo().getPalabrasDiccionario();
         if (palabrasDiccionario != null) {
             String[] palabrasTexto = this.prog.getModelo().getPalabrasTexto();
             String[] palabrasErroneasAux = new String[palabrasTexto.length];
@@ -178,6 +178,7 @@ public class Control extends Thread implements PorEventos {
      * the words using levenshtein distance.
      */
     private void buscarSugerencias() {
+        String[] palabrasDiccionario = this.prog.getModelo().getPalabrasDiccionario();
         if (palabrasDiccionario != null) {
             String[] palabrasErroneas = this.prog.getModelo().getPalabrasErroneas();
             // Create a map with string as key and arraylist as value
