@@ -240,7 +240,6 @@ public class Vista extends JFrame implements PorEventos {
                     // palabra y indice el del útlimo sacamos la palabra del 
                     // texto con un substring
                     String aux = texto.substring(indexAux + 1, index);
-                    System.out.println(aux);
                     try {
                         // Una vez tenemos la palabra podemos pintarla
                         this.document.replace(indexAux + 1, aux.length(), aux, styleErroneas);
