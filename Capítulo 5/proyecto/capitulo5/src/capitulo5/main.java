@@ -41,11 +41,7 @@ public class main implements PorEventos {
     public void notificar(String s) {
         if (s.startsWith("Comprobar texto") || s.startsWith("Actualizar")) {
             this.con.notificar(s);
-<<<<<<< HEAD
-        } else if (s.startsWith("Idioma detectado") || s.startsWith("Texto comprobado")) {
-=======
         } else if (s.startsWith("Texto comprobado") || s.startsWith("Actualizado") || s.startsWith("No idioma detectado")) {
->>>>>>> sinPalabra
             this.vis.notificar(s);
         }
     }

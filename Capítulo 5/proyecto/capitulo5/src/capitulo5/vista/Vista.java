@@ -3,7 +3,6 @@ package capitulo5.vista;
 import static capitulo5.Error.informaError;
 import capitulo5.PorEventos;
 import capitulo5.main;
-import capitulo5.modelo.Palabra;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -41,8 +40,6 @@ public class Vista extends JFrame implements PorEventos {
         this.prog = p;
         this.setIconImage(new ImageIcon("logo.png").getImage());
         this.initComponents();
-<<<<<<< HEAD
-=======
     }
 
     // Método notificar de la interfaz de eventos
@@ -58,7 +55,6 @@ public class Vista extends JFrame implements PorEventos {
             JOptionPane.showMessageDialog(null, "No se ha podido detectar ningun idioma.");
             this.barraProgreso.setIndeterminate(false);
         }
->>>>>>> sinPalabra
     }
 
     private void initComponents() {
@@ -126,27 +122,6 @@ public class Vista extends JFrame implements PorEventos {
         textPane.setFont(new java.awt.Font("Dubai", 0, 14));
         jScrollPane1.setViewportView(textPane);
 
-<<<<<<< HEAD
-        botonGuardar.setText("Guardar texto");
-        botonGuardar.setBackground(new Color(255, 255, 255));
-        botonGuardar.addActionListener((ActionEvent e) -> {
-            String texto =  this.textPane.getText();
-            if (texto.isBlank()) {
-                JOptionPane.showMessageDialog(null, "El texto a detectar no puede ser vacio!");
-                return;
-            }
-            this.prog.getModelo().setTexto(texto);
-            this.prog.notificar("Texto guardado");
-        });
-        botonComprobar.setText("Comprobar texto");
-        botonComprobar.setBackground(new Color(255, 255, 255));
-        botonComprobar.addActionListener((ActionEvent e) -> {
-          if(this.prog.getModelo().getIdioma().name().equals("DESCONOCIDO") || this.prog.getModelo().getTexto().isEmpty()){
-              JOptionPane.showMessageDialog(null, "Primero guarda un texto valido para corregir.");
-              return;
-          }
-          this.prog.notificar("Comprobar texto");
-=======
         botonComprobar.setText("Comprobar texto");
         botonComprobar.setBackground(new Color(255, 255, 255));
         botonComprobar.addActionListener((ActionEvent e) -> {
@@ -157,7 +132,6 @@ public class Vista extends JFrame implements PorEventos {
             this.prog.getModelo().setTexto(this.textPane.getText());
             this.barraProgreso.setIndeterminate(true);
             this.prog.notificar("Comprobar texto");
->>>>>>> sinPalabra
         });
 
         // Cuando se clickea el botón abrir, se abre un JFileChooser
@@ -194,16 +168,9 @@ public class Vista extends JFrame implements PorEventos {
             }
         });
 
-<<<<<<< HEAD
-        labelPalabrasTotales.setText("Palabras totales: "+this.prog.getModelo().getPalabrasTexto().length);
-        labelPalabrasErroneas.setText("Palabras erróneas: "+this.prog.getControl().getPalabrasErroneas(this.prog.getModelo().getPalabrasTexto()).length);
-        labelIdioma.setText("Idioma: "+this.prog.getModelo().getIdioma());
-        barraProgreso.setIndeterminate(true);
-=======
         labelPalabrasTotales.setText("Palabras totales: " + this.prog.getModelo().getPalabrasTexto().length);
         labelPalabrasErroneas.setText("Palabras erróneas: " + this.prog.getModelo().getPalabrasErroneas().length);
         labelIdioma.setText("Idioma: " + this.prog.getModelo().getIdioma());
->>>>>>> sinPalabra
         barraProgreso.setBackground(new Color(0, 255, 255));
         barraProgreso.setForeground(new Color(0, 51, 204));
 
@@ -253,22 +220,6 @@ public class Vista extends JFrame implements PorEventos {
         this.setVisible(true);
     }
 
-<<<<<<< HEAD
-    // Método notificar de la interfaz de eventos
-    @Override
-    public void notificar(String s) {
-        if (s.startsWith("Idioma detectado")) {
-            this.labelIdioma.setText("Idioma: "+this.prog.getModelo().getIdioma().toString());
-            this.labelPalabrasTotales.setText("Palabras totales: "+this.prog.getModelo().getPalabrasTexto().length);
-        } else if (s.startsWith("Texto comprobado")) {
-            int erroneas = 0;
-            boolean esPrimera = true;
-            this.textPane.setText("");
-            for (Palabra palabra : this.prog.getModelo().getPalabrasTexto()) {
-                if (!esPrimera) {
-                    try {
-                        this.document.insertString(this.document.getLength(), " ", styleCorrectas);
-=======
     private void actualizaLabels() {
         this.labelIdioma.setText("Idioma: " + this.prog.getModelo().getIdioma().toString());
         this.labelPalabrasTotales.setText("Palabras totales: " + this.prog.getModelo().getPalabrasTexto().length);
@@ -297,30 +248,10 @@ public class Vista extends JFrame implements PorEventos {
                     try {
                         // Una vez tenemos la palabra podemos pintarla
                         this.document.replace(indexAux + 1, aux.length(), aux, styleErroneas);
->>>>>>> sinPalabra
                     } catch (BadLocationException ex) {
                         informaError(ex);
                     }
                 }
-<<<<<<< HEAD
-                if (palabra.isErronea()) {
-                    erroneas++;
-                    try {
-                        this.document.insertString(this.document.getLength(), palabra.getTexto(), styleErroneas);
-                    } catch (BadLocationException ex) {
-                        informaError(ex);
-                    }
-                } else {
-                    try {
-                        this.document.insertString(this.document.getLength(), palabra.getTexto(), styleCorrectas);
-                    } catch (BadLocationException ex) {
-                        informaError(ex);
-                    }
-                }
-                if (esPrimera) esPrimera = !esPrimera;
-            }
-            labelPalabrasErroneas.setText("Palabras erróneas: "+erroneas);
-=======
                 // Hacemos un update del indice
                 indexAux = index;
             }
@@ -346,7 +277,6 @@ public class Vista extends JFrame implements PorEventos {
             }
             this.prog.getModelo().setTexto(this.textPane.getText());
             this.prog.notificar("Actualizar");
->>>>>>> sinPalabra
         }
     }
 }

@@ -8,15 +8,6 @@ import java.util.Map;
 /**
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
  */
-<<<<<<< HEAD
-public class Modelo implements PorEventos {
-    private main prog;
-    private String texto = "";
-    private Idioma idioma = Idioma.DESCONOCIDO;
-    private File diccionario = null;
-    private Palabra[] palabrasTexto = {};
-    private Map<Palabra, ArrayList<String>> sugerencias;
-=======
 public class Modelo {
 
     private final main prog;
@@ -32,7 +23,6 @@ public class Modelo {
     public void setPalabrasDiccionario(String[] palabrasDiccionario) {
         this.palabrasDiccionario = palabrasDiccionario;
     }
->>>>>>> sinPalabra
 
     public Modelo(main p) {
         prog = p;
@@ -55,17 +45,6 @@ public class Modelo {
         this.idioma = idioma;
     }
 
-<<<<<<< HEAD
-    public File getDiccionario() {
-        return diccionario;
-    }
-
-    public void setDiccionario(File diccionario) {
-        this.diccionario = diccionario;
-    }
-
-    public Palabra[] getPalabrasTexto() {
-=======
     public String[] getPalabrasErroneas() {
         return palabrasErroneas;
     }
@@ -75,19 +54,18 @@ public class Modelo {
     }
 
     public String[] getPalabrasTexto() {
->>>>>>> sinPalabra
         return palabrasTexto;
     }
 
-    public void setPalabrasTexto(Palabra[] palabrasTexto) {
+    public void setPalabrasTexto(String[] palabrasTexto) {
         this.palabrasTexto = palabrasTexto;
     }
 
-    public Map<Palabra, ArrayList<String>> getSugerencias() {
+    public Map<String, ArrayList<String>> getSugerencias() {
         return sugerencias;
     }
 
-    public void setSugerencias(Map<Palabra, ArrayList<String>> sugerencias) {
+    public void setSugerencias(Map<String, ArrayList<String>> sugerencias) {
         this.sugerencias = sugerencias;
     }
 
