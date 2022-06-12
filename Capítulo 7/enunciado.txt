@@ -1,0 +1,21 @@
+Se trata de generar un programa que usando técnicas probabilistas sea capaz de distinguir, por colorimetría, una bandera de un conjunto maestro de banderas. Es decir, dada una imagen de una bandera (sintética, recomendado HSV o HSB en Java), sea capaz de decirnos de qué bandera se trata.
+
+El programa debe seguir como siempre el patrón MVC. Y debe clasificar cada píxel al color más cercano a un rango de colores que representa el ojo humano. Por ejemplo, se deben tener varios tonos de rojo, entonces si el píxel tratado se asemeja más que a otros colores a algún tono de rojo se le asignará el color rojo. Si esta técnica se lleva a cabo con el cubo de color que corresponde al arco iris más el blanco y el negro, la dispersión colorimétrica de las diferentes imágenes es muy efectiva. Si se hace con RGB el algoritmo no es tan efectivo como con HSV. Con el modelo de color HSV es más fácil discriminar a los colores.
+
+Como característica adicional que refuerza la efectividad del algoritmo, se puede contrastar también el área central de las imágenes, para mejorar la precisión de detección.
+
+Este algoritmo es muy útil por su rapidez y robustez a escalados y rotaciones.
+
+Recuerde que debe adjuntarse una memoria y un vídeo con los parámetros establecidos del curso.
+
+Tal y como se comentó en clase se anexan una serie de archivos ejemplo de varios conceptos y las imágenes de las banderas de países del mundo.
+
+Y tenga en cuenta que con fotografías no funciona.
+
+Opcional en la entrega ordinaria y obligatorio en julio: Transparencia (canal alpha). Acompañado de ejemplos que funcionan de pines, gorras, botellas, tazas, ...
+
+Este algoritmo es una mezcla de técnicas probabilistas numéricas y de probabilistas de Montecarlo.
+
+
+
+Fecha límite para entregar la práctica 26 de junio de 2022.
