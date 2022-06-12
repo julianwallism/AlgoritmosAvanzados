@@ -41,6 +41,8 @@ public class main implements PorEventos {
     public void notificar(String s) {
         if (s.startsWith("Ejecutar")) {
             con.notificar(s);
+        } else if (s.startsWith("Ejecución terminada")) {
+            vis.notificar(s);
         }
     }
 }

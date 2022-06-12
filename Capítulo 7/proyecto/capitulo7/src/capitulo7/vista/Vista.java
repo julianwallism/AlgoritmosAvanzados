@@ -32,7 +32,10 @@ public class Vista extends JFrame implements PorEventos {
     // Método notificar de la interfaz de eventos
     @Override
     public void notificar(String s) {
-
+        if (s.startsWith("Ejecución terminada")) {
+            barraProgreso.setIndeterminate(false);
+            labelPais.setText("País: "+this.prog.getModelo().getPais());
+        }
     }
 
     private void initComponents() {
@@ -61,6 +64,7 @@ public class Vista extends JFrame implements PorEventos {
 
         botonEjecutar.addActionListener((ActionEvent e) -> {
             this.prog.notificar("Ejecutar");
+            barraProgreso.setIndeterminate(true);
         });
 
         labelPais.setText("País: " + this.prog.getModelo().getPais());

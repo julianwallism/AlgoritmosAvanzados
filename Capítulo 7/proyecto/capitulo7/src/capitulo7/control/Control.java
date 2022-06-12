@@ -18,15 +18,16 @@ public class Control extends Thread implements PorEventos {
 
     @Override
     public void run() {
-        while (true) {
-            if (donali) {
-
-            }
-            try {
+        try {
+            while (true) {
+                if (donali) {
+                    Thread.sleep(2500);
+                    this.prog.notificar("Ejecución terminada");
+                }
                 Thread.sleep(5);
-            } catch (InterruptedException ex) {
-                informaError(ex);
             }
+        } catch (InterruptedException ex) {
+            informaError(ex);
         }
     }
 
