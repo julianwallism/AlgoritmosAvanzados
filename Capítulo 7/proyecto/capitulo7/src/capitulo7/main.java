@@ -5,7 +5,7 @@ import capitulo7.modelo.Modelo;
 import capitulo7.vista.Vista;
 
 /**
- * @authors Víctor Blanes, Dawid Roch y Julià Wallis
+ * @authors Víctor Blanes, Dawid Roch y Juli� Wallis
  */
 public class main implements PorEventos {
 

@@ -21,6 +21,7 @@ public class Vista extends JFrame implements PorEventos {
     private JFileChooser fileChooser;
     private JLabel labelPais, imagenBandera;
     private JProgressBar barraProgreso;
+    private JSeparator separador;
 
     public Vista(String titol, main p) {
         super(titol);
@@ -39,12 +40,13 @@ public class Vista extends JFrame implements PorEventos {
     }
 
     private void initComponents() {
+        separador = new JSeparator();
         fileChooser = new JFileChooser();
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Imágenes", "png", "jpg"));
         barraProgreso = new JProgressBar();
         botonAbrirImagen = new JButton("Escoger imagen");
         botonAbrirImagen.setBackground(new Color(255, 255, 255));
-        botonEjecutar = new JButton("Ejecutar");
+        botonEjecutar = new JButton("Adivinar país");
         botonEjecutar.setBackground(new Color(255, 255, 255));
         labelPais = new JLabel();
         imagenBandera = new JLabel();
@@ -68,8 +70,8 @@ public class Vista extends JFrame implements PorEventos {
         });
 
         labelPais.setText("País: " + this.prog.getModelo().getPais());
-        barraProgreso.setBackground(new Color(0, 255, 255));
-        barraProgreso.setForeground(new Color(0, 51, 204));
+        barraProgreso.setBackground(new Color(255, 255, 255));
+        barraProgreso.setForeground(new Color(127, 127, 127));
 
         GroupLayout layout = new GroupLayout(this.getContentPane());
         layout.setHorizontalGroup(
@@ -83,8 +85,8 @@ public class Vista extends JFrame implements PorEventos {
                                 .addGap(100, 100, 100)
                                 .addComponent(labelPais)
                                 .addGap(100, 100, 100))
-                        .addComponent(barraProgreso, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-                                Short.MAX_VALUE));
+                        .addComponent(barraProgreso, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(separador, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -95,6 +97,8 @@ public class Vista extends JFrame implements PorEventos {
                                         .addComponent(botonEjecutar, GroupLayout.PREFERRED_SIZE, 52,
                                                 GroupLayout.PREFERRED_SIZE)
                                         .addComponent(labelPais))
+                                .addGap(25, 25, 25)
+                                .addComponent(separador, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(25, 25, 25)
                                 .addComponent(imagenBandera, GroupLayout.PREFERRED_SIZE, 465, GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
