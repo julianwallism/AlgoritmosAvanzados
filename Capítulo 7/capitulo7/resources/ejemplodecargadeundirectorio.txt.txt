@@ -1,0 +1,33 @@
+
+    private void cargarBaseDatos(String base) {
+        try {
+            if (bd == null) {
+                File af = new File("basedatos.ltim");
+                if (!af.exists()) { // la base de datos no está hecha
+                    bd = new HashMap<>();
+                    URL bandsIMG = getClass().getResource(base);
+                    BufferedImage img;
+                    File dir = new File(bandsIMG.toURI());
+                    String[] ficheros = dir.list();
+                    for (int i = 0; i < ficheros.length; i++) {
+                        img = leerImagen(base + ficheros[i]);
+                        procesarBD(img, ficheros[i]);
+                        grabarBD();
+                    }
+                } else {
+                    leerBD();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+	Tal como os dije en clase, aquí tenéis un ejemplo de como cargar los archivosde un directorio.
+	
+	Recordad que la técnica es mirar si ya se tiene el archivo de resultados reales. Si se tiene se carga.
+	
+	En caso de no existir, debemos analizar con el algoritmo real los diferentes archivos de banderas,
+	con la finalidad de tenerlos calculados y grabarlos, para que en otra ejecución no se tenga que hacer. El proceso
+	de analizar todas las banderas con el algoritmo tradiciomal puede durar varios minutos.

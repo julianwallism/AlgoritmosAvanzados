@@ -18,4 +18,4 @@ Este algoritmo es una mezcla de técnicas probabilistas numéricas y de probabil
 
 
 
-Fecha límite para entregar la práctica 26 de junio de 2022.
+Fecha límite para entregar la práctica 26 de junio de 2022
