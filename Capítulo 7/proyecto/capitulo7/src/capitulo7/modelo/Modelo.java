@@ -1,5 +1,6 @@
 package capitulo7.modelo;
 
+import static capitulo7.Error.informaError;
 import capitulo7.PorEventos;
 import capitulo7.main;
 import java.awt.Color;
@@ -21,9 +22,9 @@ public class Modelo implements PorEventos {
 
     private final main prog;
     private String pais = "";
-    private BufferedImage imagen;
+    private BufferedImage imagen = null;
     private HashMap bd;
-    private int porcentajeMuestreo;
+    private int porcentajeMuestreo = 20;
 
     public HashMap getBD() {
         return bd;
@@ -62,7 +63,6 @@ public class Modelo implements PorEventos {
             if (bd == null) {
                 File af = new File("basedatos.txt");
                 if (!af.exists()) { // la base de datos no está hecha
-                    System.out.println("a");
                     bd = new HashMap<>();
                     // For each file in the directory call the function to process it
                     for (File f : new File("flags/").listFiles()) {
@@ -75,8 +75,8 @@ public class Modelo implements PorEventos {
                     leerBD();
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            informaError(ex);
         }
     }
 
@@ -98,8 +98,8 @@ public class Modelo implements PorEventos {
             }
 
             bd.put(f.getName(), colores);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            informaError(ex);
         }
     }
 
@@ -109,8 +109,8 @@ public class Modelo implements PorEventos {
             ObjectInputStream ois = new ObjectInputStream(fis);
             bd = (HashMap) ois.readObject();
             ois.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            informaError(ex);
         }
     }
 
@@ -120,8 +120,8 @@ public class Modelo implements PorEventos {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(bd);
             oos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            informaError(ex);
         }
     }
 
@@ -131,13 +131,4 @@ public class Modelo implements PorEventos {
             cargarBD();
         }
     }
-
-    /**
-     * De esta forma podemos leer las imágenes teniendo los archivos enla parte
-     * del código. Así se puede distribuir un programa con los archivos de
-     * imágenes incrustados.
-     *
-     * No es obligatorio hacerlo así.
-     *
-     */
 }

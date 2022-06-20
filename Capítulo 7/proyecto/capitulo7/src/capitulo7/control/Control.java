@@ -27,10 +27,9 @@ public class Control extends Thread implements PorEventos {
         try {
             while (true) {
                 if (donali) {
-                    Thread.sleep(2500);
                     muestreo();
                     this.prog.notificar("Ejecución terminada");
-
+                    donali = false;
                 }
                 Thread.sleep(5);
             }
@@ -42,28 +41,29 @@ public class Control extends Thread implements PorEventos {
     private void muestreo() {
         int porcentajeMuestreo = prog.getModelo().getPorcentajeMuestreo();
         BufferedImage imagen = prog.getModelo().getImagen();
-        int N_muestreo = (imagen.getWidth() * imagen.getHeight() * porcentajeMuestreo) / 100;
-        System.out.println(N_muestreo);
-        double[] colores = new double[7];
-        Paleta p = new Paleta();
+        if (imagen != null) {
+            int N_muestreo = (imagen.getWidth() * imagen.getHeight() * porcentajeMuestreo) / 100;
+            double[] colores = new double[7];
+            Paleta p = new Paleta();
 
-        for (int i = 0; i < N_muestreo; i++) {
-            int x = (int) (Math.random() * imagen.getWidth());
-            int y = (int) (Math.random() * imagen.getHeight());
-            Color c = new Color(imagen.getRGB(x, y));
-            int idx = p.analizarColor(c);
-            colores[idx]++;
+            for (int i = 0; i < N_muestreo; i++) {
+                int x = (int) (Math.random() * imagen.getWidth());
+                int y = (int) (Math.random() * imagen.getHeight());
+                Color c = new Color(imagen.getRGB(x, y));
+                int idx = p.analizarColor(c);
+                colores[idx]++;
+            }
+
+            for (int i = 0; i < 7; i++) {
+                colores[i] /= N_muestreo;
+            }
+
+            // Menor distancia entre los colores
+            menorDistancia(colores);
         }
-
-        for (int i = 0; i < 7; i++) {
-            colores[i] /= N_muestreo;
-        }
-
-        // Menor distancia entre los colores
-        menorDistancia(colores);
     }
 
-    // Find the minimum distance between the color given and the colors in the bd
+// Find the minimum distance between the color given and the colors in the bd
     private void menorDistancia(double[] colores) {
         HashMap bd = prog.getModelo().getBD();
         String pais = "";
@@ -76,8 +76,7 @@ public class Control extends Thread implements PorEventos {
                 pais = (String) key;
             }
         }
-        System.out.println("El país más parecido es " + pais);
-        this.prog.notificar("El país más parecido es " + pais);
+        this.prog.getModelo().setPais(pais.replaceAll(".png", ""));
     }
 
     // Calculate the Euclidean distance between two colors

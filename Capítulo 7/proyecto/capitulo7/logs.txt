@@ -1,0 +1,10 @@
+********************** Error date: Mon Jun 20 17:43:05 CEST 2022
+javax.imageio.IIOException: Can't read input file!
+	at java.desktop/javax.imageio.ImageIO.read(ImageIO.java:1308)
+	at capitulo7.vista.PanelCentral.<init>(PanelCentral.java:49)
+	at capitulo7.vista.Vista.initComponents(Vista.java:55)
+	at capitulo7.vista.Vista.<init>(Vista.java:35)
+	at capitulo7.main.inicio(main.java:20)
+	at capitulo7.main.main(main.java:24)
+********************** End error report
+
