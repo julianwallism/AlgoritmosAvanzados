@@ -38,6 +38,7 @@ public class Vista extends JFrame implements PorEventos {
             labelPais.setText("País: " + this.prog.getModelo().getPais());
             tiempo.setText("Tiempo: " + this.prog.getModelo().getTiempo() + " ms");
         } else if (s.startsWith("Unit test terminados")) {
+            barraProgreso.setIndeterminate(false);
             muestraResultados();
         }
     }
@@ -68,8 +69,8 @@ public class Vista extends JFrame implements PorEventos {
                 JOptionPane.showMessageDialog(this, "La base de datos no ha sido cargada, se paciente", "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
-            this.prog.notificar("Ejecuta muestreo");
             barraProgreso.setIndeterminate(true);
+            this.prog.notificar("Ejecuta muestreo");
         });
 
         botonUnitTest.addActionListener((ActionEvent e) -> {
@@ -77,6 +78,7 @@ public class Vista extends JFrame implements PorEventos {
                 JOptionPane.showMessageDialog(this, "La base de datos no ha sido cargada, se paciente", "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
+            barraProgreso.setIndeterminate(true);
             this.prog.notificar("Ejecuta unit tests");
         });
 
@@ -140,12 +142,13 @@ public class Vista extends JFrame implements PorEventos {
         String[] paisesReales = this.prog.getModelo().getPaisesReales();
         String[] paisesPredichos = this.prog.getModelo().getPaisesPredichos();
         String[] resultados = this.prog.getModelo().getResultados();
-
-        textArea.append("Paises reales | Paises predichos | Resultado\n");
+        float[] tiempos = this.prog.getModelo().getTiempoUnitTest();
+        int correctas = this.prog.getModelo().getCorrectas();
+        textArea.append("Real \t| Predicho \t| Tiempo \t| Resultado\n");
         for (int i = 0; i < paisesReales.length; i++) {
-            textArea.append(paisesReales[i] + " | " + paisesPredichos[i] + " | " + resultados[i] + "\n");
+            textArea.append(paisesReales[i] + "\t| " + paisesPredichos[i] + "\t| " + tiempos[i] + " s\t| " + resultados[i] + "\n");
         }
-
+        textArea.append("Total correctas: \t "+ correctas+ " de 196 ("+(float) 100*correctas/196+"%)");
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setPreferredSize(new Dimension(500, 500));
         dialog.add(scrollPane);

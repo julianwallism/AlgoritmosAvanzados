@@ -1,20 +1,23 @@
-package capitulo7.modelo.Colores;
+package capitulo7.modelo;
 
 import java.awt.Color;
 
 public class LUT {
 
-    // Create the lower raange and upper range arrays in hsv values for the colors
-    // (Red green blue orange yellow magenta white and black) have in to account
-    // that h goes from 0 to 360 and s and v go from 0 to 1.
-    private final int RED = 0;
-    private final int GREEN = 1;
-    private final int BLUE = 2;
-    private final int ORANGE = 3;
-    private final int YELLOW = 4;
-    private final int MAGENTA = 5;
-    private final int WHITE = 6;
-    private final int BLACK = 7;
+    private static final int BLACK = 0;
+    private static final int WHITE = 1;
+    public static final int RED = 2;
+    public static final int ORANGE = 3;
+    public static final int YELLOW = 4;
+    public static final int GREEN_1 = 5;
+    public static final int GREEN_2 = 6;
+    public static final int GREEN_3 = 7;
+    public static final int BLUE_1 = 8;
+    public static final int BLUE_2 = 9;
+    public static final int BLUE_3 = 10;
+    public static final int PURPLE = 11;
+    public static final int PINK = 12;
+    public static final int MAGENTA = 13;
 
     public static final int RED_VALUE = 0;
     public static final int ORANGE_VALUE = 30;
@@ -33,45 +36,51 @@ public class LUT {
 
     public LUT() {
     }
-
+    
+    /**
+     * Dado un color por parámetro decide que color de los 14 coloroes que tenemos es
+     * basandonse en sus valores HSV
+     * @param color
+     * @return 
+     */
     public int lookUpColor(Color color) {
         // Given a color, return the index of the closest color in the LUT.
-        int[] hsv = new int[3];
+        float[] hsv = new float[3];
         Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsv);
-        int h = hsv[0];
-        int s = hsv[1];
-        int v = hsv[2];
+        float h = hsv[0]*360;
+        float s = hsv[1]*100;
+        float v = hsv[2]*100;
         int res = -1;
-
-        if (v == 0) {
+        if (v < 5) {
             res = BLACK;
-        } else if (h == 0 && s == 0 && v == 100) {
+        } else if ( s < 5 && v > 95) {
             res = WHITE;
-        } else if (h >= RED_VALUE - VARIATION && h <= RED_VALUE + VARIATION) {
+        } else if (h >= 345 || h <= RED_VALUE + VARIATION) { // El rojo es un caso especial porque está en el borde de 0 y 360
             res = RED;
         } else if (h >= ORANGE_VALUE - VARIATION && h <= ORANGE_VALUE + VARIATION) {
             res = ORANGE;
         } else if (h >= YELLOW_VALUE - VARIATION && h <= YELLOW_VALUE + VARIATION) {
             res = YELLOW;
         } else if (h >= GREEN_VALUE_1 - VARIATION && h <= GREEN_VALUE_1 + VARIATION) {
-            res = GREEN;
+            res = GREEN_1;
         } else if (h >= GREEN_VALUE_2 - VARIATION && h <= GREEN_VALUE_2 + VARIATION) {
-            res = GREEN;
+            res = GREEN_2;
         } else if (h >= GREEN_VALUE_3 - VARIATION && h <= GREEN_VALUE_3 + VARIATION) {
-            res = GREEN;
+            res = GREEN_3;
         } else if (h >= BLUE_VALUE_1 - VARIATION && h <= BLUE_VALUE_1 + VARIATION) {
-            res = BLUE;
+            res = BLUE_1;
         } else if (h >= BLUE_VALUE_2 - VARIATION && h <= BLUE_VALUE_2 + VARIATION) {
-            res = BLUE;
+            res = BLUE_2;
         } else if (h >= BLUE_VALUE_3 - VARIATION && h <= BLUE_VALUE_3 + VARIATION) {
-            res = BLUE;
+            res = BLUE_3;
         } else if (h >= PURPLE_VALUE - VARIATION && h <= PURPLE_VALUE + VARIATION) {
-            res = MAGENTA;
+            res = PURPLE;
         } else if (h >= PINK_VALUE - VARIATION && h <= PINK_VALUE + VARIATION) {
-            res = MAGENTA;
+            res = PINK;
         } else if (h >= MAGENTA_VALUE - VARIATION && h <= MAGENTA_VALUE + VARIATION) {
             res = MAGENTA;
         }
+
         return res;
 
     }

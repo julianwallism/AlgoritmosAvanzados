@@ -12,8 +12,9 @@ import java.io.IOException;
 
 import capitulo7.PorEventos;
 import capitulo7.main;
+import capitulo7.modelo.LUT;
 import java.awt.Color;
-import ltimbase.dades.colores.Paleta;
+import java.util.Locale;
 
 /**
  * @authors Víctor Blanes, Dawid Roch y Julià Wallis
@@ -58,14 +59,14 @@ public class Control extends Thread implements PorEventos {
     private String muestreo(BufferedImage imagen) {
         int porcentajeMuestreo = prog.getModelo().getPorcentajeMuestreo();
         int N_muestreo = (imagen.getWidth() * imagen.getHeight() * porcentajeMuestreo) / 100;
-        double[] colores = new double[7];
-        Paleta p = new Paleta();
+        double[] colores = new double[14];
+        LUT lut = new LUT();
 
         for (int i = 0; i < N_muestreo; i++) {
             int x = (int) (Math.random() * imagen.getWidth());
             int y = (int) (Math.random() * imagen.getHeight());
             Color color = new Color(imagen.getRGB(x, y));
-            int idx = p.analizarColor(color);
+            int idx = lut.lookUpColor(color);
             colores[idx]++;
         }
 
@@ -80,7 +81,13 @@ public class Control extends Thread implements PorEventos {
         return pais;
     }
 
-    // Find the minimum distance between the color given and the colors in the bd
+    /**
+     * Método que devuleve el país de la base de datos que tiene menor distancia
+     * al array de colores pasado por parámetro
+     * 
+     * @param colores
+     * @return 
+     */
     private String menorDistancia(double[] colores) {
         HashMap bd = prog.getModelo().getBD();
         String pais = "";
@@ -96,7 +103,12 @@ public class Control extends Thread implements PorEventos {
         return pais;
     }
 
-    // Calculate the Euclidean distance between two colors
+    /**
+     * Método que calcula la distancia euclidiana entre el array de colores 1 y el 2
+     * @param colores1
+     * @param colores2
+     * @return 
+     */
     private double distanciaEuclidiana(double[] colores1, double[] colores2) {
         double suma = 0;
         for (int i = 0; i < 7; i++) {
@@ -105,14 +117,22 @@ public class Control extends Thread implements PorEventos {
         return Math.sqrt(suma);
     }
 
+    /**
+     * Método que ejecuta la predicción para todos las banderas guardadas. 
+     * 
+     * Esto nos sirve para poder ver holísticamente el rendimiento de nuestro 
+     * programa
+     * 
+     * Guardamos los resultados en el modelo
+     */
     private void unitTest() {
-        // num of files in flags/
         int numFiles = new File("flags/").listFiles().length;
         String[] resultados = new String[numFiles];
         String[] paisesReales = new String[numFiles];
         String[] paisesPredichos = new String[numFiles];
         float[] tiempo = new float[numFiles];
         String paisPredict, paisReal;
+        int correctas= 0;
         int idx = 0;
         try {
             for (File f : new File("flags/").listFiles()) {
@@ -120,9 +140,13 @@ public class Control extends Thread implements PorEventos {
                     long start = System.currentTimeMillis();
                     BufferedImage imagen = ImageIO.read(f);
                     paisPredict = muestreo(imagen);
-                    paisReal = f.getName();
+
+                    Locale loc = new Locale("", f.getName().substring(0, f.getName().lastIndexOf(".")));
+                    paisReal = loc.getDisplayCountry();
+
                     if (paisPredict.equals(paisReal)) {
                         resultados[idx] = "✅";
+                        correctas++;
                     } else {
                         resultados[idx] = "🚫";
                     }
@@ -130,9 +154,9 @@ public class Control extends Thread implements PorEventos {
                     paisesPredichos[idx] = paisPredict;
                     tiempo[idx] = (float) (System.currentTimeMillis() - start) / 1000;
                     idx++;
-                    System.out.println(idx);
                 }
             }
+            prog.getModelo().setCorrectas(correctas);
             prog.getModelo().setResultados(resultados);
             prog.getModelo().setPaisesReales(paisesReales);
             prog.getModelo().setPaisesPredichos(paisesPredichos);

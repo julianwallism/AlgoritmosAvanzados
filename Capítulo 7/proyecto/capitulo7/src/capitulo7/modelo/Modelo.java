@@ -4,7 +4,6 @@ import static capitulo7.Error.informaError;
 import capitulo7.PorEventos;
 import capitulo7.main;
 import java.awt.Color;
-import ltimbase.dades.colores.Paleta;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import javax.imageio.ImageIO;
 
 /**
@@ -28,6 +28,7 @@ public class Modelo implements PorEventos {
     private String[] resultados, paisesPredichos, paisesReales;
     private float[] tiempoUnitTest;
     private float tiempo;
+    private int correctas;
 
     public HashMap getBD() {
         return bd;
@@ -101,12 +102,19 @@ public class Modelo implements PorEventos {
         this.tiempo = tiempo;
     }
 
+    public int getCorrectas() {
+        return correctas;
+    }
+
+    public void setCorrectas(int correctas) {
+        this.correctas = correctas;
+    }
+
     /**
      * Método que carga la base de datos de países.
      *
-     * Si el base de datos ya esta cargada no hace nada.
-     * Si no esta cargada y no existe la crea y la graba.
-     * Si no esta cargada y existe la lee.
+     * Si el base de datos ya esta cargada no hace nada. Si no esta cargada y no
+     * existe la crea y la graba. Si no esta cargada y existe la lee.
      *
      */
     private void cargarBD() {
@@ -122,7 +130,6 @@ public class Modelo implements PorEventos {
                     for (File f : new File("flags/").listFiles()) {
                         if (f.getName().endsWith(".png")) {
                             procesarBandera(f);
-                            System.out.println(i++);
                         }
                     }
                     // Guardamos la base de datos en un archivo
@@ -138,18 +145,12 @@ public class Modelo implements PorEventos {
     }
 
     /**
-     * Método que pasado un fichero de bandera, lo procesa y guarda el porcentaje
-     * de colores que tiene la bandera
+     * Método que pasado un fichero de bandera, lo procesa y guarda el
+     * porcentaje de colores que tiene la bandera
      *
-     * Para hacerlo usamos la clase auxiliar dada por el profesor que nos aproxima
-     * los colores de la bandera a:
-     * - Azul
-     * - Rojo
-     * - Verde
-     * - Blanco
-     * - Negro
-     * - Naranja
-     * - Amarillo
+     * Para hacerlo usamos la clase auxiliar dada por el profesor que nos
+     * aproxima los colores de la bandera a: - Azul - Rojo - Verde - Blanco -
+     * Negro - Naranja - Amarillo
      *
      * Una vez tenemos los porcentajes de colores los guardamos en el hashMap
      * con el nombre del fichero como llave y los porcentajes como valor.
@@ -158,22 +159,25 @@ public class Modelo implements PorEventos {
      */
     private void procesarBandera(File f) {
         try {
-            Paleta p = new Paleta();
-            double[] colores = new double[7];
+            LUT lut = new LUT();
+            double[] colores = new double[14];
             BufferedImage img = ImageIO.read(f);
             for (int i = 0; i < img.getWidth(); i++) {
                 for (int j = 0; j < img.getHeight(); j++) {
                     Color c = new Color(img.getRGB(i, j));
-                    int idx = p.analizarColor(c);
+                    int idx = lut.lookUpColor(c);
                     colores[idx]++;
                 }
             }
             // Divide por el número de pixeles
             for (int i = 0; i < colores.length; i++) {
-                colores[i] /= img.getWidth() * img.getHeight();
+                colores[i] /= (img.getWidth() * img.getHeight());
             }
 
-            bd.put(f.getName(), colores);
+            Locale loc = new Locale("", f.getName().substring(0, f.getName().lastIndexOf(".")));
+            String nombre = loc.getDisplayCountry();
+
+            bd.put(nombre, colores);
         } catch (Exception ex) {
             informaError(ex);
         }
