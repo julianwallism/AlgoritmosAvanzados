@@ -3,6 +3,7 @@ package capitulo7.vista;
 import capitulo7.PorEventos;
 import capitulo7.main;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -14,10 +15,11 @@ import javax.swing.event.ChangeListener;
 public class Vista extends JFrame implements PorEventos {
 
     private final main prog;
-    private JButton botonEjecutar;
+    private JButton botonEjecutar, botonUnitTest;
     private JSpinner muestreo;
-    private JLabel labelPais, labelMuestreo;
+    private JLabel labelPais, labelMuestreo, imagenBandera, tiempo;
     private PanelCentral pCentral;
+    private JFileChooser fileChooser;
     private JProgressBar barraProgreso;
     private JSeparator separador;
 
@@ -34,6 +36,9 @@ public class Vista extends JFrame implements PorEventos {
         if (s.startsWith("Ejecución terminada")) {
             barraProgreso.setIndeterminate(false);
             labelPais.setText("País: " + this.prog.getModelo().getPais());
+            tiempo.setText("Tiempo: " + this.prog.getModelo().getTiempo() + " ms");
+        } else if (s.startsWith("Unit test terminados")) {
+            muestraResultados();
         }
     }
 
@@ -42,7 +47,10 @@ public class Vista extends JFrame implements PorEventos {
         barraProgreso = new JProgressBar();
         botonEjecutar = new JButton("Adivinar país");
         botonEjecutar.setBackground(new Color(255, 255, 255));
+        botonUnitTest = new JButton("Unit test");
+        botonUnitTest.setBackground(new Color(255, 255, 255));
         labelPais = new JLabel();
+        tiempo = new JLabel("Tiempo: ");
         pCentral = new PanelCentral(prog);
         labelMuestreo = new JLabel("% de muestreo: ");
         muestreo = new JSpinner(new SpinnerNumberModel(20, 1, 100, 5));
@@ -54,10 +62,24 @@ public class Vista extends JFrame implements PorEventos {
                 prog.getModelo().setPorcentajeMuestreo(num);
             }
         });
+
         botonEjecutar.addActionListener((ActionEvent e) -> {
-            this.prog.notificar("Ejecutar");
+            if (prog.getModelo().getBD() == null) {
+                JOptionPane.showMessageDialog(this, "La base de datos no ha sido cargada, se paciente", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            this.prog.notificar("Ejecuta muestreo");
             barraProgreso.setIndeterminate(true);
         });
+
+        botonUnitTest.addActionListener((ActionEvent e) -> {
+            if (prog.getModelo().getBD() == null) {
+                JOptionPane.showMessageDialog(this, "La base de datos no ha sido cargada, se paciente", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            this.prog.notificar("Ejecuta unit tests");
+        });
+
         labelPais.setText("País: " + this.prog.getModelo().getPais());
         barraProgreso.setBackground(new Color(255, 255, 255));
         barraProgreso.setForeground(new Color(127, 127, 127));
@@ -69,12 +91,14 @@ public class Vista extends JFrame implements PorEventos {
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(10)
                                 .addComponent(botonEjecutar)
-                                .addGap(100)
-                                .addComponent(labelMuestreo)
-                                .addGap(10)
-                                .addComponent(muestreo, GroupLayout.PREFERRED_SIZE, 50, 50)
-                                .addGap(25)
+                                .addGap(25, 25, 25)
+                                .addComponent(botonUnitTest)
+                                .addGap(25, 25, 25)
+                                .addComponent(muestreo)
+                                .addGap(100, 100, 100)
                                 .addComponent(labelPais)
+                                .addGap(25, 25, 25)
+                                .addComponent(tiempo)
                                 .addGap(10))
                         .addComponent(barraProgreso, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
                                 Short.MAX_VALUE)
@@ -87,11 +111,12 @@ public class Vista extends JFrame implements PorEventos {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(botonEjecutar, GroupLayout.PREFERRED_SIZE, 52,
                                                 GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(labelMuestreo, GroupLayout.PREFERRED_SIZE, 52,
+                                        .addComponent(botonUnitTest, GroupLayout.PREFERRED_SIZE, 52,
                                                 GroupLayout.PREFERRED_SIZE)
                                         .addComponent(muestreo, GroupLayout.PREFERRED_SIZE, 25,
                                                 GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(labelPais))
+                                        .addComponent(labelPais)
+                                        .addComponent(tiempo))
                                 .addGap(10)
                                 .addComponent(separador, javax.swing.GroupLayout.PREFERRED_SIZE, 10,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -104,5 +129,28 @@ public class Vista extends JFrame implements PorEventos {
         this.pack();
         this.setResizable(false);
         this.setVisible(true);
+    }
+
+    private void muestraResultados() {
+        JDialog dialog = new JDialog(Vista.this, "Informacion", true);
+        JTextArea textArea = new JTextArea();
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        String[] paisesReales = this.prog.getModelo().getPaisesReales();
+        String[] paisesPredichos = this.prog.getModelo().getPaisesPredichos();
+        String[] resultados = this.prog.getModelo().getResultados();
+
+        textArea.append("Paises reales | Paises predichos | Resultado\n");
+        for (int i = 0; i < paisesReales.length; i++) {
+            textArea.append(paisesReales[i] + " | " + paisesPredichos[i] + " | " + resultados[i] + "\n");
+        }
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(500, 500));
+        dialog.add(scrollPane);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
     }
 }

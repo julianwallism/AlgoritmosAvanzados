@@ -23,8 +23,11 @@ public class Modelo implements PorEventos {
     private final main prog;
     private String pais = "";
     private BufferedImage imagen = null;
-    private HashMap bd;
+    private HashMap bd = null;
     private int porcentajeMuestreo = 20;
+    private String[] resultados, paisesPredichos, paisesReales;
+    private float[] tiempoUnitTest;
+    private float tiempo;
 
     public HashMap getBD() {
         return bd;
@@ -58,20 +61,74 @@ public class Modelo implements PorEventos {
         this.imagen = imagen;
     }
 
+    public String[] getResultados() {
+        return resultados;
+    }
+
+    public void setResultados(String[] resultados) {
+        this.resultados = resultados;
+    }
+
+    public String[] getPaisesPredichos() {
+        return paisesPredichos;
+    }
+
+    public void setPaisesPredichos(String[] paisesPredichos) {
+        this.paisesPredichos = paisesPredichos;
+    }
+
+    public String[] getPaisesReales() {
+        return paisesReales;
+    }
+
+    public void setPaisesReales(String[] paisesReales) {
+        this.paisesReales = paisesReales;
+    }
+
+    public float[] getTiempoUnitTest() {
+        return tiempoUnitTest;
+    }
+
+    public void setTiempoUnitTest(float[] tiempoUnitTest) {
+        this.tiempoUnitTest = tiempoUnitTest;
+    }
+
+    public float getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(float tiempo) {
+        this.tiempo = tiempo;
+    }
+
+    /**
+     * Método que carga la base de datos de países.
+     *
+     * Si el base de datos ya esta cargada no hace nada.
+     * Si no esta cargada y no existe la crea y la graba.
+     * Si no esta cargada y existe la lee.
+     *
+     */
     private void cargarBD() {
         try {
+            // Si no tenemos la base de datos cargada, la cargamos
             if (bd == null) {
+                // Si la base de datos no existe, la creamos
                 File af = new File("basedatos.txt");
-                if (!af.exists()) { // la base de datos no está hecha
+                if (!af.exists()) {
                     bd = new HashMap<>();
-                    // For each file in the directory call the function to process it
+                    int i = 0;
+                    // Para cada bandera llamamos a la función que la carga.
                     for (File f : new File("flags/").listFiles()) {
                         if (f.getName().endsWith(".png")) {
                             procesarBandera(f);
+                            System.out.println(i++);
                         }
                     }
+                    // Guardamos la base de datos en un archivo
                     grabarBD();
                 } else {
+                    // Si la base de datos existe, la leemos
                     leerBD();
                 }
             }
@@ -80,6 +137,25 @@ public class Modelo implements PorEventos {
         }
     }
 
+    /**
+     * Método que pasado un fichero de bandera, lo procesa y guarda el porcentaje
+     * de colores que tiene la bandera
+     *
+     * Para hacerlo usamos la clase auxiliar dada por el profesor que nos aproxima
+     * los colores de la bandera a:
+     * - Azul
+     * - Rojo
+     * - Verde
+     * - Blanco
+     * - Negro
+     * - Naranja
+     * - Amarillo
+     *
+     * Una vez tenemos los porcentajes de colores los guardamos en el hashMap
+     * con el nombre del fichero como llave y los porcentajes como valor.
+     *
+     * @param f
+     */
     private void procesarBandera(File f) {
         try {
             Paleta p = new Paleta();
@@ -103,6 +179,9 @@ public class Modelo implements PorEventos {
         }
     }
 
+    /**
+     * Método que lee la base de datos de un archivo
+     */
     private void leerBD() {
         try {
             FileInputStream fis = new FileInputStream("basedatos.txt");
@@ -114,6 +193,9 @@ public class Modelo implements PorEventos {
         }
     }
 
+    /**
+     * Método que graba la base de datos en un archivo
+     */
     private void grabarBD() {
         try {
             FileOutputStream fos = new FileOutputStream("basedatos.txt");
@@ -127,7 +209,9 @@ public class Modelo implements PorEventos {
 
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Ejecutar")) {
+        if (s.startsWith("Ejecuta muestreo")) {
+            cargarBD();
+        } else if (s.startsWith("Ejecuta unit test")) {
             cargarBD();
         }
     }
