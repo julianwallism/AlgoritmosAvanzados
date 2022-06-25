@@ -18,7 +18,7 @@ public class main implements PorEventos {
         mod = new Modelo(this);
         con = new Control(this);
         vis = new Vista("Práctica Capitulo 7 - Víctor Blanes, Dawid Roch y Julià Wallis", this);
-        testDeRendimiento();
+        // testDeRendimiento();
     }
 
     public static void main(String[] args) {
@@ -62,7 +62,7 @@ public class main implements PorEventos {
             fw.write(csv);
             fw.close();
         } catch (Exception e) {
-            System.out.println("Error al escribir el fichero");
+            System.err.println("Error al escribir el fichero");
         }
         System.out.println("Test de rendimiento finalizado");
     }
