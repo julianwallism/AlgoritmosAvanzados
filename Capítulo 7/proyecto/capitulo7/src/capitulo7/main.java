@@ -74,7 +74,7 @@ public class main implements PorEventos {
             mod.notificar(s);
             con.notificar(s);
         } else if (s.startsWith("Ejecución terminada") || s.startsWith("Unit test terminados")) {
-           // vis.notificar(s);
+            vis.notificar(s);
         }
     }
 }
