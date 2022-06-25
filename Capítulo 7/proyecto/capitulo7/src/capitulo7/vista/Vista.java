@@ -64,13 +64,23 @@ public class Vista extends JFrame implements PorEventos {
         });
 
         botonEjecutar.addActionListener((ActionEvent e) -> {
-            barraProgreso.setIndeterminate(true);
-            this.prog.notificar("Ejecuta muestreo");
+            if (prog.getModelo().getImagen() == null) {
+                JOptionPane.showMessageDialog(this, "Por favor, selecciona una imagen antes de continuar.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                barraProgreso.setIndeterminate(true);
+                this.prog.notificar("Ejecuta muestreo");
+            }
         });
 
         botonUnitTest.addActionListener((ActionEvent e) -> {
-            barraProgreso.setIndeterminate(true);
-            this.prog.notificar("Ejecuta unit tests");
+            if (prog.getModelo().getImagen() == null) {
+                JOptionPane.showMessageDialog(this, "Por favor, selecciona una imagen antes de continuar.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                barraProgreso.setIndeterminate(true);
+                this.prog.notificar("Ejecuta unit tests");
+            }
         });
 
         labelPais.setText("País: " + this.prog.getModelo().getPais());
@@ -89,7 +99,7 @@ public class Vista extends JFrame implements PorEventos {
                                 .addGap(25)
                                 .addComponent(labelMuestreo)
                                 .addGap(5)
-                                .addComponent(muestreo)
+                                .addComponent(muestreo, 50, 50, 50)
                                 .addGap(50)
                                 .addComponent(labelPais)
                                 .addGap(25)
