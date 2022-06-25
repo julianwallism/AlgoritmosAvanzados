@@ -165,14 +165,14 @@ public class Control extends Thread implements PorEventos {
     // Método notificar de la intefaz por eventos
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Ejecuta muestreo")) {
+        if (s.startsWith("Ejecuta control muestreo")) {
             if (!this.executat) {
                 this.start();
                 this.executat = true;
             } else {
                 this.donali = true;
             }
-        } else if (s.startsWith("Ejecuta unit test")) {
+        } else if (s.startsWith("Ejecuta control unit tests")) {
             unitTest();
         }
     }

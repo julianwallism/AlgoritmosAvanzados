@@ -64,19 +64,11 @@ public class Vista extends JFrame implements PorEventos {
         });
 
         botonEjecutar.addActionListener((ActionEvent e) -> {
-            if (prog.getModelo().getBD() == null) {
-                JOptionPane.showMessageDialog(this, "La base de datos no ha sido cargada, se paciente", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
             barraProgreso.setIndeterminate(true);
             this.prog.notificar("Ejecuta muestreo");
         });
 
         botonUnitTest.addActionListener((ActionEvent e) -> {
-            if (prog.getModelo().getBD() == null) {
-                JOptionPane.showMessageDialog(this, "La base de datos no ha sido cargada, se paciente", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
             barraProgreso.setIndeterminate(true);
             this.prog.notificar("Ejecuta unit tests");
         });
@@ -92,15 +84,15 @@ public class Vista extends JFrame implements PorEventos {
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(10)
                                 .addComponent(botonEjecutar)
-                                .addGap(25, 25, 25)
+                                .addGap(25)
                                 .addComponent(botonUnitTest)
-                                .addGap(25, 25, 25)
+                                .addGap(25)
                                 .addComponent(labelMuestreo)
-                                .addGap(25, 25, 25)
+                                .addGap(5)
                                 .addComponent(muestreo)
-                                .addGap(100, 100, 100)
+                                .addGap(50)
                                 .addComponent(labelPais)
-                                .addGap(25, 25, 25)
+                                .addGap(25)
                                 .addComponent(tiempo)
                                 .addGap(10))
                         .addComponent(barraProgreso, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
@@ -118,8 +110,7 @@ public class Vista extends JFrame implements PorEventos {
                                                 GroupLayout.PREFERRED_SIZE)
                                         .addComponent(labelMuestreo, GroupLayout.PREFERRED_SIZE, 52,
                                                 GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(muestreo, GroupLayout.PREFERRED_SIZE, 25,
-                                                GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(muestreo, 25, 25, 25)
                                         .addComponent(labelPais)
                                         .addComponent(tiempo))
                                 .addGap(10)

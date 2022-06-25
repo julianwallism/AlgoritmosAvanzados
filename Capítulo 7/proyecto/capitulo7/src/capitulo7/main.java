@@ -70,11 +70,12 @@ public class main implements PorEventos {
     // Función para gestionar el patrón de eventos centralizado
     @Override
     public void notificar(String s) {
-        if (s.startsWith("Ejecuta muestreo") || s.startsWith("Ejecuta unit test")) {
+    if (s.startsWith("Ejecuta muestreo") || s.startsWith("Ejecuta unit tests")) {
             mod.notificar(s);
-            con.notificar(s);
         } else if (s.startsWith("Ejecución terminada") || s.startsWith("Unit test terminados")) {
             vis.notificar(s);
+        } else if (s.startsWith("Ejecuta control")) {
+            con.notificar(s);
         }
     }
 }

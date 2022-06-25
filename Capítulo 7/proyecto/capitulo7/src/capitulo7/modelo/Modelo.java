@@ -215,8 +215,10 @@ public class Modelo implements PorEventos {
     public void notificar(String s) {
         if (s.startsWith("Ejecuta muestreo")) {
             cargarBD();
-        } else if (s.startsWith("Ejecuta unit test")) {
+            prog.notificar("Ejecuta control muestreo");
+        } else if (s.startsWith("Ejecuta unit tests")) {
             cargarBD();
+            prog.notificar("Ejecuta control unit tests");
         }
     }
 }
