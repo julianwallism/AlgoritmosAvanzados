@@ -47,7 +47,7 @@ public class Vista extends JFrame implements PorEventos {
         barraProgreso = new JProgressBar();
         botonEjecutar = new JButton("Adivinar país");
         botonEjecutar.setBackground(new Color(255, 255, 255));
-        botonUnitTest = new JButton("Unit test");
+        botonUnitTest = new JButton("Ejecutar unit tests");
         botonUnitTest.setBackground(new Color(255, 255, 255));
         labelPais = new JLabel();
         tiempo = new JLabel("Tiempo: ");
@@ -102,7 +102,7 @@ public class Vista extends JFrame implements PorEventos {
                                 .addComponent(muestreo, 50, 50, 50)
                                 .addGap(50)
                                 .addComponent(labelPais)
-                                .addGap(25)
+                                .addGap(10)
                                 .addComponent(tiempo)
                                 .addGap(10))
                         .addComponent(barraProgreso, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
