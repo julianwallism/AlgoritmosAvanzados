@@ -17,9 +17,8 @@ public class Vista extends JFrame implements PorEventos {
     private final main prog;
     private JButton botonEjecutar, botonUnitTest;
     private JSpinner muestreo;
-    private JLabel labelPais, labelMuestreo, imagenBandera, tiempo;
+    private JLabel labelPais, labelMuestreo, tiempo;
     private PanelCentral pCentral;
-    private JFileChooser fileChooser;
     private JProgressBar barraProgreso;
     private JSeparator separador;
 
@@ -96,6 +95,8 @@ public class Vista extends JFrame implements PorEventos {
                                 .addGap(25, 25, 25)
                                 .addComponent(botonUnitTest)
                                 .addGap(25, 25, 25)
+                                .addComponent(labelMuestreo)
+                                .addGap(25, 25, 25)
                                 .addComponent(muestreo)
                                 .addGap(100, 100, 100)
                                 .addComponent(labelPais)
@@ -114,6 +115,8 @@ public class Vista extends JFrame implements PorEventos {
                                         .addComponent(botonEjecutar, GroupLayout.PREFERRED_SIZE, 52,
                                                 GroupLayout.PREFERRED_SIZE)
                                         .addComponent(botonUnitTest, GroupLayout.PREFERRED_SIZE, 52,
+                                                GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(labelMuestreo, GroupLayout.PREFERRED_SIZE, 52,
                                                 GroupLayout.PREFERRED_SIZE)
                                         .addComponent(muestreo, GroupLayout.PREFERRED_SIZE, 25,
                                                 GroupLayout.PREFERRED_SIZE)

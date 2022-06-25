@@ -1,15 +1,11 @@
 package capitulo7.control;
 
 import static capitulo7.Error.informaError;
-
 import java.util.HashMap;
-
 import javax.imageio.ImageIO;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import capitulo7.PorEventos;
 import capitulo7.main;
 import capitulo7.modelo.LUT;
@@ -33,7 +29,6 @@ public class Control extends Thread implements PorEventos {
         try {
             while (true) {
                 if (donali) {
-                    // Count time
                     long startTime = System.currentTimeMillis();
                     muestreo(prog.getModelo().getImagen());
                     long time = System.currentTimeMillis() - startTime;
@@ -162,10 +157,9 @@ public class Control extends Thread implements PorEventos {
             prog.getModelo().setPaisesPredichos(paisesPredichos);
             prog.getModelo().setTiempoUnitTest(tiempo);
             prog.notificar("Unit test terminados");
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            informaError(ex);
         }
-
     }
 
     // Método notificar de la intefaz por eventos
@@ -182,5 +176,4 @@ public class Control extends Thread implements PorEventos {
             unitTest();
         }
     }
-
 }
