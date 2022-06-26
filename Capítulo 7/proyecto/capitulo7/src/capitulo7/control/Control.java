@@ -65,7 +65,7 @@ public class Control extends Thread implements PorEventos {
             colores[idx]++;
         }
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 14; i++) {
             colores[i] /= N_muestreo;
         }
 
@@ -106,7 +106,7 @@ public class Control extends Thread implements PorEventos {
      */
     private double distanciaEuclidiana(double[] colores1, double[] colores2) {
         double suma = 0;
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 14; i++) {
             suma += Math.pow(colores1[i] - colores2[i], 2);
         }
         return Math.sqrt(suma);
