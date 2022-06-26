@@ -74,13 +74,8 @@ public class Vista extends JFrame implements PorEventos {
         });
 
         botonUnitTest.addActionListener((ActionEvent e) -> {
-            if (prog.getModelo().getImagen() == null) {
-                JOptionPane.showMessageDialog(this, "Por favor, selecciona una imagen antes de continuar.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            } else {
-                barraProgreso.setIndeterminate(true);
-                this.prog.notificar("Ejecuta unit tests");
-            }
+            barraProgreso.setIndeterminate(true);
+            this.prog.notificar("Ejecuta unit tests");
         });
 
         labelPais.setText("País: " + this.prog.getModelo().getPais());
